@@ -1,0 +1,1 @@
+(()=>{"use strict";var e=new(function(){function e(){}return Object.defineProperty(e.prototype,"log",{get:function(){return this.text},enumerable:!1,configurable:!0}),e.text="Это крутой класс на JS",e}());e.log,console.log(e.log()),console.log(!0),console.log("new string")})();

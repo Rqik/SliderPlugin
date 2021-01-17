@@ -42,6 +42,7 @@ const plugins = () => {
 
     if (isDev) {
         // only enable hot in development
+        
         base.push(new webpack.HotModuleReplacementPlugin());
     }
 
@@ -51,7 +52,7 @@ const plugins = () => {
 
 
 module.exports = {
-    // target: "web",
+    target: process.env.NODE_ENV === "development" ? "web" : "browserslist",
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
     entry: './index.ts',
@@ -139,15 +140,11 @@ module.exports = {
 
             {
                 test: /\.(js|jsx|tsx|ts)$/,
-                exclude: /node_modules/,
                 use: [
-                    {
-                        loader: 'babel-loader'
-                    },
-                    {
-                        loader: 'ts-loader'
-                    }
-                ]
+                    'babel-loader',
+                    'ts-loader'
+                ],
+                exclude: /node_modules/,
 
             }
 

@@ -1,14 +1,13 @@
 export class Test {
-  static text = 'Это крутой класс на JS'
+  info = 'Это крутой класс на JS'
 
-    get log() {
-    return this.text;
+  get text() {
+    return this.info;
   }
-
+  set text(name) {
+    this.info = name
+  }
 }
 
 let s = new Test()
-s.log
-
-console.log(s.log());
-
+s.text = 'asdsd'

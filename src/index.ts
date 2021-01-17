@@ -20,6 +20,3 @@ const contact: [string, number] = ['arsen', 1231424]
 
 let Variable: any = 32
 Variable = 'new string'
-
-console.log(isFetching)
-console.log(Variable)

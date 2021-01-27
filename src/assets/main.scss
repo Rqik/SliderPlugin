@@ -1,42 +1,129 @@
 @import '~normalize.css';
 
-body{
+body {
   position: relative;
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 100px;
+  label{
+    display: flex;
+    flex-direction: column;
+  }
+  input{
+    width: 100px;
+  }
+  .control-panel{
+    margin-left: 100px;
+    display: flex;
+    flex-direction: row;
+   
+    gap: 20px;
+  }
 }
+
 $green: #1BC47D;
 
-.slider_rqik{
+.slider_rqik, .slider_rqik2{
   position: relative;
-  margin:  200px  320px;
+  margin: 100px 120px;
   width: 400px;
   box-sizing: border-box;
+}
 
-  .slider__range{
+  .slider__range {
     width: 100%;
     height: 10px;
     background-color: $green;
-    border-radius:1rem;
-  }
-    .slider__range_button{
-      width: 30px;
-      height: 30px;
-      border-radius: 50% ;
-      background-color: #e69464;
-      position: absolute;
-      border: 2px solid rgb(107, 107, 107);
-      opacity: 0.3;
-      cursor: pointer;
-      box-sizing: border-box;
+    border-radius: 1rem;
+    z-index: 0;
+    cursor: pointer;
 
-      &-left{
-        top: -10px;
-        left: -100px;
+  }
+  .interval_point{
+    position: absolute;
+    top: 15px;
+    width: 100%;
+    display: flex;
+    padding: 0;
+    justify-content: space-between;
+    list-style: none;
+    &-item{
+      position: relative;
+      // position: absolute;
+      left: 0;
+      text-align: center;
+      cursor: pointer;
+      width: 0;
+      &::before{position: absolute;
+        top: -100%;
+        left:50%;
+        // right: 0;
+        transform:translate(-50%, -50%);
+        content: '';
+        width: 2px;
+        height: 20px;
+        background-color: gray;
       }
-      &-right{
-        top: -10px;
-        right: 0;
+
+      &:first-child{
+
+        &::before{position: absolute;
+          top: -100%;
+          left:1px;
+        }
+      }
+      &:last-child{
+        &::before{position: absolute;
+          top: -100%;
+          left: auto;
+          right: 0;
+        }
       }
     }
-}
+  }
+  .slider__range_active{
+    position: absolute;
+    background-color: #025da8;
+    top: 0;
+    left: 0;
+    right: 10px;
+    height: 10px;
+    z-index: 1;
+  }
+  .slider__current_value{
+    
+    padding: 5px 8px;
+    height: 20px;
+    position: absolute;
+    top: -40px;
+    text-align: center;
+    background-color: #bfd6cd;
+    border: 1px solid #a82902;
+    border-radius: 2px;
+  }
+  .slider__range_button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #e69464;
+    position: absolute;
+    border: 2px solid rgb(107, 107, 107);
+    opacity: 0.3;
+    cursor: pointer;
+    box-sizing: border-box;
+    z-index: 3;
+ 
+    &-left {
+      top: -10px;
+      left: -100px;
+    }
+
+    &-right {
+      top: -10px;
+      right: 0;
+      opacity: .6;
+    }
+  }

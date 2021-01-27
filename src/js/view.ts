@@ -1,99 +1,206 @@
 interface viewObject {
-  selector: string
+  selector: string,
+    minValue ? : number,
+    maxValue ? : number,
 }
 interface buttonSlider {
   left: HTMLElement,
     right: HTMLElement
 }
 
-class View {
+export default class View {
 
   slider: HTMLElement
-  sliderLeft?: number
+  sliderLeft ? : number 
   button: buttonSlider = {
     left: document.createElement('div'),
     right: document.createElement('div')
   }
-  sliderRange: HTMLElement = document.createElement('div') 
-  clickHandler: any
+  currentValLeft: HTMLElement = document.createElement('div')
+  currentValRight: HTMLElement = document.createElement('div')
+  buttonWidth: number = 10
+  sliderRange: HTMLElement = document.createElement('div')
+  sliderActiveZone: HTMLElement = document.createElement('div')
+  clickHandler: any = this.onMouseMove.bind(this)
   currentButton: HTMLElement = this.button.left
-  shiftX?: string
+  shiftXl  : number = 1
+  shiftXr: number = 1
+  
 
-  constructor(options: viewObject) {
-    this.slider = <HTMLElement>document.querySelector(options.selector)
-    this.clickHandler = this.onMouseMove.bind(this)
+  minValue: number
+  maxValue: number
+  constructor(selector: string, minValue ? : number,
+    maxValue ? : number , show: boolean = true) {
+    this.slider = < HTMLElement > document.querySelector(selector)
+    this.minValue = minValue || -1000
+    this.maxValue = maxValue || 1200
+   
+    if (show) {
+      
+      this.currentValLeft.className = 'slider__current_value'
+      this.sliderRange.appendChild(this.currentValLeft)
+      
+
+      this.currentValRight.className = 'slider__current_value'
+      this.sliderRange.appendChild( this.currentValRight)
+    }
+    //расчеты лучше в процентах от 100%
   }
 
-
-  sliderInit() {
-    this.button.left.className ="slider__range_button  slider__range_button-left"
+  addClass() {
+    this.button.left.className = "slider__range_button  slider__range_button-left"
     this.button.right.className = "slider__range_button  slider__range_button-right"
     this.sliderRange.className = "slider__range"
-    this.slider.appendChild( this.button.left)
-    this.slider.appendChild(this.button.right)
-    this.slider.appendChild( this.sliderRange)
-    this.button.left.addEventListener('mousedown', this.buttonAction.bind(this))
-    this.button.right.addEventListener('mousedown', this.buttonAction.bind(this))
+    this.sliderActiveZone.className = "slider__range_active"
   }
 
+  addElem() {
+    this.sliderRange.appendChild(this.button.left)
+    this.sliderRange.appendChild(this.button.right)
+    this.sliderRange.appendChild(this.sliderActiveZone)
+    this.slider.appendChild(this.sliderRange)
+    this.slider.appendChild(this.valueInterval(this.minValue , this.maxValue, 5));
+  }
+  addAction() {
+    this.button.left.addEventListener('mousedown', this.buttonAction.bind(this))
+    this.button.right.addEventListener('mousedown', this.buttonAction.bind(this))
+    this.slider.addEventListener('click', this.movePoint.bind(this))
+  }
 
+  sliderInit() {
+    this.addClass()
+    this.addElem()
+    this.addAction()
+    this.initMove()
+  }
+
+  valueInterval(minValue: number, maxValue: number, interval: number): HTMLElement {
+    //interval это кол подписей минимум 2
+    let result = document.createElement('ul')
+    result.className = 'interval_point'
+
+  
+    let count: number = (maxValue - minValue) / interval
+    for ( let i = 0 ; i <= interval; i++) {
+
+      let li = document.createElement('li')
+      li.className = 'interval_point-item'
+      li.textContent = `${i*count+minValue}`
+      result.appendChild(li)
+    }
+
+  
+  
+    return result
+  }
   buttonAction(e: MouseEvent): void {
-   
+
     document.addEventListener('mousemove', this.clickHandler)
     document.addEventListener('mouseup', this.remove.bind(this))
-    if (e.currentTarget == this.button.left) {
+    if (e.currentTarget === this.button.left) {
       this.currentButton = this.button.left
     } else {
       this.currentButton = this.button.right
-      
     }
 
-   
-    this.button.left.ondragstart = ()=>false;
-    this.button.right.ondragstart = ()=>false;
- 
+
+    this.button.left.ondragstart = () => false;
+    this.button.right.ondragstart = () => false;
+
   }
+  initMove() {
+    // сброс позиций кнопок
+
+    setTimeout(() => {
+      this.moveButton(0)
+      this.currentButton = this.button.right     
+      this.moveButton(900000)
+    }, 0)
+
+  }
+  onMouseMove(e: MouseEvent , step: number = 10) {
+   
+    this.sliderLeft = this.slider.getBoundingClientRect().left
+    
+    //если изменяется на шаг то вызываю мув
+    this.moveButton(e.pageX);
+
+    if (step <= 1) {
+      this.moveButton(e.pageX);
+    
+
+    } else {
+    this.moveButton(Math.round(e.pageX / step) * step);
+    
+      
+    }
  
-  onMouseMove(e: MouseEvent) {
-  
-    this.moveButton(e.pageX );
+    
   }
   remove() {
-    console.log('clss');
     document.removeEventListener('mousemove', this.clickHandler);
     document.onmouseup = null;
   }
-  moveButton(posX: number, elem?: HTMLElement,): void {
-    this.sliderLeft =  this.slider.getBoundingClientRect().left
-    let offWidth = this.currentButton.offsetWidth / 2
-   
-   
-    console.log(this.sliderLeft, this.slider.getBoundingClientRect().left);
+  moveButton(posX: number ): void {
+    this.sliderLeft = this.slider.getBoundingClientRect().left
     
-    this.currentButton.style.left= posX - this.sliderLeft - offWidth + 'px'
+    let widthSlider = this.sliderRange.offsetWidth
+    this.buttonWidth = this.currentButton.offsetWidth / 2
+    
+    this.currentButton.style.left = posX  - this.sliderLeft - this.buttonWidth + 'px'
 
     // если меньше левой точки slider 
-    if (+this.currentButton.style.left.replace(/px/gi, '') <= - offWidth) {
-      this.currentButton.style.left = -this.currentButton.offsetWidth / 2 + 'px'
+    if (+this.currentButton.style.left.replace(/px/gi, '') <= -this.buttonWidth) {
+      this.currentButton.style.left = -this.buttonWidth + 'px' 
     }
-    if (+this.currentButton.style.left.replace(/px/gi, '') >= this.sliderRange.getBoundingClientRect().width - offWidth) {
-      console.log('tuee');
-      
-      this.currentButton.style.left = this.sliderRange.getBoundingClientRect().width- offWidth + 'px'
+    // eсли больше ширины
+    if (+this.currentButton.style.left.replace(/px/gi, '') >=  widthSlider - this.buttonWidth) {
+      this.currentButton.style.left = widthSlider - this.buttonWidth + 'px'
     }
-    console.log(this.sliderRange.getBoundingClientRect().left);
-    console.log(+this.currentButton.style.left.replace(/px/gi, ''));
-    
-    
+    // ----
+    this.activeZoneAction()
+    //размеры для активной зоны
+    // ------
 
+    this.showCurentValue()
+    this.currentValLeft.style.left = this.shiftXl - (+this.currentValLeft.offsetWidth/2)+'px'
+    this.currentValRight.style.left = this.shiftXr - (+this.currentValRight.offsetWidth/2)+'px'
+
+  }
+
+
+  showCurentValue() {
+
+    
+    let point = this.sliderRange.offsetWidth / 100
+    let procent = this.shiftXl  / this.sliderRange.offsetWidth 
+    let procent2 = this.shiftXr  / this.sliderRange.offsetWidth 
+    let value = ((this.maxValue - this.minValue) * procent)+this.minValue
+    let value2 = ((this.maxValue - this.minValue) * procent2)+this.minValue
+    this.currentValLeft.textContent = `${value}`
+    this.currentValRight.textContent = `${value2}`
+    
+  }
+
+  activeZoneAction() {
+    this.shiftXl = +this.button.left.style.left.replace(/px/gi, '') + this.buttonWidth
+    this.shiftXr = +this.button.right.style.left.replace(/px/gi, '') + this.buttonWidth
+    if (this.shiftXl >= this.shiftXr) {
+      [this.shiftXl, this.shiftXr] = [this.shiftXr, this.shiftXl]
+    } 
+  this.sliderActiveZone.style.left = this.shiftXl  + 'px'
+    this.sliderActiveZone.style.width = this.shiftXr - +this.shiftXl + 'px'
+    
+   
+  }
+  movePoint(e: MouseEvent) {
+
+    this.onMouseMove(e);
   }
 
 }
 
-let viewModel = new View({
-  selector: '.slider_rqik'
-})
-viewModel.sliderInit()
+
 
 // document.onmouseup = null;
 // console.log(viewModel.moveButton(+100));
@@ -143,4 +250,3 @@ viewModel.sliderInit()
 //   moveButton(button, e.pageX, left);
 
 // }
-

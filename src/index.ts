@@ -5,5 +5,14 @@ import Model from './js/model'
 import './js/test'
 import './assets/main.scss'
 
-let app = new Present( new Model,new View('.slider_rqik'))
-let app2 = new Present( new Model,new View('.slider_rqik2'))
+
+
+
+
+// console.log(input.value);
+
+
+let app = new Present('.slider_rqik')
+let app2 = new Present('.slider_rqik2', 'vertical')
+let app3 = new Present('.slider_r2')
+

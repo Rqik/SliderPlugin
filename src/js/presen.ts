@@ -7,12 +7,23 @@ export default class Present {
   model: Model
   view: View
   options: setingOption = {
-   
+
   }
 
-  constructor(public selector: string , public rotate: rotate = 'horizontal' ) {
-    this.model = new Model({ minValue: this.options.min, maxValue: 100 , show:true})
-    this.view = new View({selector: selector, minValue: this.options.min, maxValue: 100 , show:true , rotate: rotate})
+  constructor(public selector: string, public rotate: rotate = 'horizontal', public range: range = 'one') {
+    this.model = new Model({
+      minValue: this.options.min,
+      maxValue: 100,
+      show: true
+    })
+    this.view = new View({
+      selector: selector,
+      minValue: this.options.min,
+      maxValue: 100,
+      show: true,
+      rotate,
+      range
+    })
     this.view.sliderInit()
     this.init()
 
@@ -24,14 +35,14 @@ export default class Present {
     let min = < HTMLInputElement > document.querySelector('#min')
     let max = < HTMLInputElement > document.querySelector('#max')
     let interval = < HTMLInputElement > document.querySelector('#interval')
-    let step = <HTMLInputElement>document.querySelector('#step')
-    
+    let step = < HTMLInputElement > document.querySelector('#step')
+
 
     min.addEventListener('input', (e) => {
       this.options.min = +(e.target as HTMLInputElement).value
       this.view.minValue = +(e.target as HTMLInputElement).value
       this.view.renderInterval()
-      
+
       console.log(this.selector);
     })
 
@@ -62,48 +73,12 @@ export default class Present {
 }
 
 export type rotate = 'vertical' | 'horizontal'
+export type range = 'one' | 'two'
+
 interface setingOption {
   min ? : number,
-    max ? : number,
-    interval ? : number,
-    step ? : number
+  max ? : number,
+  interval ? : number,
+  step?: number,
+  range?: range
 }
-
-
-
-
-// let min = <HTMLInputElement> document.querySelector('#min')
-// let max = <HTMLInputElement> document.querySelector('#max')
-// let interval = <HTMLInputElement> document.querySelector('#interval')
-// let step = <HTMLInputElement> document.querySelector('#step')
-// let options: setingOption = {
-//   min: +min.value,
-//   max: +max.value,
-//   interval: +interval.value,
-//   step: +step.value,
-// }
-// min.addEventListener('change', (e) => {
-//  options.min = +(e.target as HTMLInputElement).value
-//   console.log(options);
-// })
-
-// max.addEventListener('change', (e ) => {
-//   options.max = +(e.target as HTMLInputElement).value
-//    console.log(options);
-//  })
-
-// interval.addEventListener('change', (e ) => {
-//   options.interval = +(e.target as HTMLInputElement).value
-//    console.log(options);
-//  })
-
-// step.addEventListener('change', (e ) => {
-//   options.step = +(e.target as HTMLInputElement).value
-//    console.log(options);
-//  })
-
-
-// let viewModel = new View({
-//   selector: '.slider_rqik'
-// })
-// 

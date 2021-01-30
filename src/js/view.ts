@@ -1,13 +1,14 @@
 import {
-  rotate
+  rotate, range
 } from './presen';
 
 interface viewObject {
   selector: string,
     minValue ? : number,
     maxValue ? : number,
-    show: boolean,
-    rotate: rotate
+  show: boolean,
+  range: range,
+    rotate: rotate,
 
 }
 interface buttonSlider {
@@ -31,8 +32,8 @@ export default class View {
   clickHandler: any = this.onMouseMove.bind(this)
   currentButton: HTMLElement = this.button.left
 
-  shiftXl: number = 1
-  shiftXr: number = 1
+  shiftXl: number = 0
+  shiftXr: number = 0
 
 
   minValue: number
@@ -41,7 +42,7 @@ export default class View {
   stepSize: number = 2
   intervalComponent: HTMLUListElement = document.createElement('ul')
 
-  range: boolean = false
+  range: range
   // constructor( selector: string, minValue ?: number,
   //   maxValue?: number = this.minValue, show: boolean = true) {
 
@@ -53,13 +54,14 @@ export default class View {
     this.minValue = state.minValue || 0
     this.maxValue = state.maxValue || 1200
     this.rotate = state.rotate
-
+    this.range = state.range
     if (state.show) {
 
-      this.currentValLeft.className = 'slider__current_value'
-      this.sliderRange.appendChild(this.currentValLeft)
-
-
+      if (this.range === 'two') {
+        this.currentValLeft.className = 'slider__current_value'
+        this.sliderRange.appendChild(this.currentValLeft)
+      }
+    
       this.currentValRight.className = 'slider__current_value'
       this.sliderRange.appendChild(this.currentValRight)
       this.renderInterval()
@@ -68,7 +70,10 @@ export default class View {
   }
 
   addClass() {
-    this.button.left.className = "slider__range_button  slider__range_button-left"
+    if (this.range === 'two') {
+      this.button.left.className = "slider__range_button  slider__range_button-left"
+    }
+    
     this.button.right.className = "slider__range_button  slider__range_button-right"
     this.sliderRange.className = "slider__range"
     this.sliderActiveZone.className = "slider__range_active"
@@ -80,14 +85,19 @@ export default class View {
   }
 
   addElem() {
-    this.sliderRange.appendChild(this.button.left)
+    if (this.range === 'two') { 
+      this.sliderRange.appendChild(this.button.left)
+    }
     this.sliderRange.appendChild(this.button.right)
     this.sliderRange.appendChild(this.sliderActiveZone)
     this.slider.appendChild(this.sliderRange)
     this.slider.appendChild(this.intervalComponent);
   }
   addAction() {
-    this.button.left.addEventListener('mousedown', this.buttonAction.bind(this))
+    if (this.range == 'two') { 
+
+      this.button.left.addEventListener('mousedown', this.buttonAction.bind(this))
+    }
     this.button.right.addEventListener('mousedown', this.buttonAction.bind(this))
     this.slider.addEventListener('click', this.movePoint.bind(this))
   }
@@ -124,14 +134,20 @@ export default class View {
 
     document.addEventListener('mousemove', this.clickHandler)
     document.addEventListener('mouseup', this.remove.bind(this))
+
+    // ********* 
+    // *** нелогичность с left когда range one*** 
+    // ********* 
+    
     if (e.currentTarget === this.button.left) {
       this.currentButton = this.button.left
     } else {
       this.currentButton = this.button.right
     }
 
-
-    this.button.left.ondragstart = () => false;
+    if (this.range == 'two') { 
+      this.button.left.ondragstart = () => false;
+    }
     this.button.right.ondragstart = () => false;
 
   }
@@ -157,8 +173,6 @@ export default class View {
         this.moveButton(e.pageX);
 
       } else {
-
-
         this.moveButton(Math.round(e.pageX / this.stepSize) * this.stepSize);
       }
 
@@ -190,11 +204,11 @@ export default class View {
     let heightSlider = this.sliderRange.offsetHeight
     this.buttonWidth = this.currentButton.offsetWidth / 2
     if (this.rotate === 'horizontal') {
-      this.sliderIdent = this.slider.getBoundingClientRect().left
+      this.sliderIdent = this.slider.offsetLeft
 
 
       this.currentButton.style.left = pos - this.sliderIdent - this.buttonWidth + 'px'
-      this.currentButton.style.top =  - heightSlider + 'px'
+      this.currentButton.style.top = -heightSlider + 'px'
       // если меньше левой точки slider 
       if (+this.currentButton.style.left.replace(/px/gi, '') <= -this.buttonWidth) {
         this.currentButton.style.left = -this.buttonWidth + 'px'
@@ -204,13 +218,14 @@ export default class View {
         this.currentButton.style.left = widthSlider - this.buttonWidth + 'px'
       }
     } else if (this.rotate === 'vertical') {
-      this.sliderIdent = this.slider.getBoundingClientRect().top
-      this.currentButton.style.left =  - widthSlider + 'px'
+
+      this.sliderIdent = this.slider.offsetTop
+      console.log(this.sliderIdent + ' sss ' + pos + ' os ' + this.slider.offsetTop);
+      this.currentButton.style.left = -widthSlider + 'px'
       this.currentButton.style.top = pos - this.sliderIdent - this.buttonWidth + 'px'
       if (+this.currentButton.style.top.replace(/px/gi, '') <= -this.buttonWidth) {
         this.currentButton.style.top = -this.buttonWidth + 'px'
       }
-
       if (+this.currentButton.style.top.replace(/px/gi, '') >= heightSlider - this.buttonWidth) {
         this.currentButton.style.top = heightSlider - this.buttonWidth + 'px'
       }
@@ -223,34 +238,42 @@ export default class View {
 
     this.showCurentValue()
     if (this.rotate === 'horizontal') {
+
+      if (this.range == 'two') {
       this.currentValLeft.style.left = this.shiftXl - (+this.currentValLeft.offsetWidth / 2) + 'px'
+        
+      }
       this.currentValRight.style.left = this.shiftXr - (+this.currentValRight.offsetWidth / 2) + 'px'
-  
+
+
     } else {
-      this.currentValLeft.style.top = this.shiftXl - (+this.currentValLeft.offsetHeight / 2) + 'px'
+      if (this.range == 'two') { 
+        this.currentValLeft.style.top = this.shiftXl - (+this.currentValLeft.offsetHeight / 2) + 'px'
+        this.currentValLeft.style.left = -(+this.currentValLeft.offsetWidth + 20) + 'px'
+      }
       this.currentValRight.style.top = this.shiftXr - (+this.currentValRight.offsetHeight / 2) + 'px'
-  
+      this.currentValRight.style.left = -(+this.currentValRight.offsetWidth + 20) + 'px'
     }
- 
+
   }
 
 
   showCurentValue() {
-
+    let point, procent, procent2, value, value2
     if (this.rotate == 'horizontal') {
-      let point = this.sliderRange.offsetWidth / 100
-      let procent = this.shiftXl / this.sliderRange.offsetWidth
-      let procent2 = this.shiftXr / this.sliderRange.offsetWidth
-      let value = ((this.maxValue - this.minValue) * procent) + this.minValue
-      let value2 = ((this.maxValue - this.minValue) * procent2) + this.minValue
+      point = this.sliderRange.offsetWidth / 100
+      procent = this.shiftXl / this.sliderRange.offsetWidth
+      procent2 = this.shiftXr / this.sliderRange.offsetWidth
+      value = ((this.maxValue - this.minValue) * procent) + this.minValue
+      value2 = ((this.maxValue - this.minValue) * procent2) + this.minValue
       this.currentValLeft.textContent = `${value}`
       this.currentValRight.textContent = `${value2}`
     } else if (this.rotate === 'vertical') {
-      let point = this.sliderRange.offsetHeight / 100
-      let procent = this.shiftXl / this.sliderRange.offsetHeight
-      let procent2 = this.shiftXr / this.sliderRange.offsetHeight
-      let value = ((this.maxValue - this.minValue) * procent) + this.minValue
-      let value2 = ((this.maxValue - this.minValue) * procent2) + this.minValue
+      point = this.sliderRange.offsetHeight / 100
+      procent = this.shiftXl / this.sliderRange.offsetHeight
+      procent2 = this.shiftXr / this.sliderRange.offsetHeight
+      value = ((this.maxValue - this.minValue) * procent) + this.minValue
+      value2 = ((this.maxValue - this.minValue) * procent2) + this.minValue
       this.currentValLeft.textContent = `${value}`
       this.currentValRight.textContent = `${value2}`
     }
@@ -258,8 +281,14 @@ export default class View {
   }
 
   activeZoneAction() {
+
+
+
+
     if (this.rotate === 'horizontal') {
-      this.shiftXl = +this.button.left.style.left.replace(/px/gi, '') + this.buttonWidth
+      if (this.range == 'two') {
+        this.shiftXl = +this.button.left.style.left.replace(/px/gi, '') + this.buttonWidth
+      }
       this.shiftXr = +this.button.right.style.left.replace(/px/gi, '') + this.buttonWidth
       if (this.shiftXl >= this.shiftXr) {
         [this.shiftXl, this.shiftXr] = [this.shiftXr, this.shiftXl]
@@ -268,7 +297,11 @@ export default class View {
       this.sliderActiveZone.style.width = this.shiftXr - +this.shiftXl + 'px'
 
     } else if (this.rotate === 'vertical') {
-      this.shiftXl = +this.button.left.style.top.replace(/px/gi, '') + this.buttonWidth
+        
+      if (this.range == 'two') { 
+
+        this.shiftXl = +this.button.left.style.top.replace(/px/gi, '') + this.buttonWidth
+      }
       this.shiftXr = +this.button.right.style.top.replace(/px/gi, '') + this.buttonWidth
       if (this.shiftXl >= this.shiftXr) {
         [this.shiftXl, this.shiftXr] = [this.shiftXr, this.shiftXl]

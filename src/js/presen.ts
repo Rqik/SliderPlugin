@@ -10,27 +10,25 @@ export default class Present {
 
   }
 
-  constructor(public selector: string, public rotate: rotate = 'horizontal', public range: range = 'one') {
-    this.model = new Model({
-      minValue: this.options.min,
-      maxValue: 100,
-      show: true
-    })
-    this.view = new View({
-      selector: selector,
-      minValue: this.options.min,
-      maxValue: 100,
-      show: true,
-      rotate,
-      range
-    })
+  constructor(public selector: string) {
+    this.model = new Model(selector)
+    this.view = new View(this.model.stateCurrent)
     this.view.sliderInit()
-    this.init()
-
   }
 
+  sliderMode(options: object) {
+    this.model.edit(options)
+    this.view.editView( this.model.stateCurrent)
+    this.view.sliderInit()
+    this.start()
+    
+  }
+  start() {
+     this.view.installMove(this.model.stateCurrent.currentVal[0], this.model.stateCurrent.currentVal[1])
+    
+  }
 
-  init() {
+  input() {
 
     let min = < HTMLInputElement > document.querySelector('#min')
     let max = < HTMLInputElement > document.querySelector('#max')
@@ -40,7 +38,7 @@ export default class Present {
 
     min.addEventListener('input', (e) => {
       this.options.min = +(e.target as HTMLInputElement).value
-      this.view.minValue = +(e.target as HTMLInputElement).value
+      // this.view.minValue = +(e.target as HTMLInputElement).value
       this.view.renderInterval()
 
       console.log(this.selector);
@@ -48,21 +46,21 @@ export default class Present {
 
     max.addEventListener('input', (e) => {
       this.options.max = +(e.target as HTMLInputElement).value
-      this.view.maxValue = +(e.target as HTMLInputElement).value
+      // this.view.maxValue = +(e.target as HTMLInputElement).value
       this.view.renderInterval()
       console.log(this.options);
     })
 
     interval.addEventListener('change', (e) => {
       this.options.interval = +(e.target as HTMLInputElement).value
-      this.view.intervalSize = +(e.target as HTMLInputElement).value
+      // this.view.intervalCount = +(e.target as HTMLInputElement).value
       this.view.renderInterval()
       console.log(this.options);
     })
 
     step.addEventListener('change', (e) => {
       this.options.step = +(e.target as HTMLInputElement).value
-      this.view.stepSize = +(e.target as HTMLInputElement).value
+      // this.view.stepSize = +(e.target as HTMLInputElement).value
       this.view.addAction()
       console.log(this.options);
     })

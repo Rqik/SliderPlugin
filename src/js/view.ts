@@ -34,13 +34,13 @@ export default class View {
 
   intervalComponent: HTMLUListElement = document.createElement('ul')
 
- 
+
   state: IState
   constructor(state: IState) {
 
     this.state = state
     this.slider = < HTMLElement > document.querySelector(this.state.selector)
-  
+
   }
   editView(newState: IState) {
     this.state = {
@@ -50,7 +50,7 @@ export default class View {
 
   buttonLeftExpose() {
     this.button.left.className = "slider__range_button  slider__range_button-left"
-    this.button.left.addEventListener('mousedown', this.buttonAction.bind(this))
+
     this.sliderRange.append(this.button.left)
     if (this.state.show) {
       this.currentValLeft.className = 'slider__current_value'
@@ -82,10 +82,7 @@ export default class View {
     this.sliderRange.append(this.sliderActiveZone)
     this.slider.append(this.sliderRange)
   }
-  addAction() {
-    this.button.right.addEventListener('mousedown', this.buttonAction.bind(this))
-    this.slider.addEventListener('click', this.movePoint.bind(this))
-  }
+
 
   sliderInit() {
     if (this.state.range === 'two') {
@@ -100,7 +97,6 @@ export default class View {
     }
     this.addClass()
     this.addElem()
-    this.addAction()
     this.initMove(0, 9999999)
   }
 
@@ -135,6 +131,7 @@ export default class View {
     // ********* 
 
     if (e.currentTarget === this.button.left) {
+      
       this.currentButton = this.button.left
     } else {
       this.currentButton = this.button.right
@@ -147,27 +144,26 @@ export default class View {
 
   }
   // установка значений
-  installMove(min: number , max: number) {
+  installMove(min: number, max: number) {
     let pixel: number = 1
     this.sliderIdent = this.slider.offsetLeft
     if (this.state.rotate === 'horizontal') {
       pixel = this.sliderRange.offsetWidth / (this.state.maxValue - this.state.minValue)
       this.sliderIdent = this.slider.offsetLeft
-      
-    }
-    else { 
-      pixel = this.sliderRange.offsetHeight/ (this.state.maxValue - this.state.minValue)
+
+    } else {
+      pixel = this.sliderRange.offsetHeight / (this.state.maxValue - this.state.minValue)
       this.sliderIdent = this.slider.offsetTop
     }
-      
-    let res = pixel * min + this.sliderIdent 
-    let res2 = pixel * max + this.sliderIdent 
-      
+
+    let res = pixel * min + this.sliderIdent
+    let res2 = pixel * max + this.sliderIdent
+
     this.initMove(res, res2)
   }
   // сброс позиций кнопок
-  initMove(min: number , max: number) {
-   
+  initMove(min: number, max: number) {
+
     setTimeout(() => {
       this.currentButton = this.button.left
       this.moveButton(min)
@@ -207,23 +203,24 @@ export default class View {
     document.onmouseup = null;
   }
   moveButton(pos: number): void {
-  let widthSlider = this.sliderRange.offsetWidth
-   let heightSlider = this.sliderRange.offsetHeight
-    
+    let widthSlider = this.sliderRange.offsetWidth
+    let heightSlider = this.sliderRange.offsetHeight
+
     this.buttonWidth = this.currentButton.offsetWidth / 2
     if (this.state.rotate === 'horizontal') {
       this.sliderIdent = this.slider.offsetLeft
 
-
-      this.currentButton.style.left = pos - this.sliderIdent- this.buttonWidth + 'px'
+      this.currentButton.style.left = pos - this.sliderIdent - this.buttonWidth + 'px'
       this.currentButton.style.top = -heightSlider + 'px'
       // если меньше левой точки slider 
       if (+this.currentButton.style.left.replace(/px/gi, '') <= -this.buttonWidth) {
         this.currentButton.style.left = -this.buttonWidth + 'px'
+
       }
       // eсли больше ширины
       if (+this.currentButton.style.left.replace(/px/gi, '') >= widthSlider - this.buttonWidth) {
         this.currentButton.style.left = widthSlider - this.buttonWidth + 'px'
+
       }
     } else if (this.state.rotate === 'vertical') {
 
@@ -248,20 +245,22 @@ export default class View {
       this.showCurentValue()
     }
 
-   
+
 
   }
 
+  currentVal(elem: HTMLElement, num: number) {
+    num = ((this.state.maxValue - this.state.minValue) * num) + this.state.minValue
+    elem.textContent = `${Math.round(num*(10**this.state.round))/(10**this.state.round)}`
+  }
 
   showCurentValue() {
-    let point, procent: number = 0,
-      procent2: number = 0,
-      value, value2
+    let value, value2
     if (this.state.rotate === 'horizontal') {
-      point = this.sliderRange.offsetWidth / 100
-      procent = this.shiftXl / this.sliderRange.offsetWidth
-      procent2 = this.shiftXr / this.sliderRange.offsetWidth
-      
+
+      this.state.procent = this.shiftXl / this.sliderRange.offsetWidth
+      this.state.procent2 = this.shiftXr / this.sliderRange.offsetWidth
+
       if (this.state.range === 'two') {
         this.currentValLeft.style.left = this.shiftXl - (+this.currentValLeft.offsetWidth / 2) + 'px'
 
@@ -269,11 +268,11 @@ export default class View {
       this.currentValRight.style.left = this.shiftXr - (+this.currentValRight.offsetWidth / 2) + 'px'
 
     } else if (this.state.rotate === 'vertical') {
-      point = this.sliderRange.offsetHeight / 100
-      procent = this.shiftXl / this.sliderRange.offsetHeight
-      procent2 = this.shiftXr / this.sliderRange.offsetHeight
+      this.state.procent = this.shiftXl / this.sliderRange.offsetHeight
+      this.state.procent2 = this.shiftXr / this.sliderRange.offsetHeight
 
       if (this.state.range === 'two') {
+
         this.currentValLeft.style.top = this.shiftXl - (+this.currentValLeft.offsetHeight / 2) + 'px'
         this.currentValLeft.style.left = -(+this.currentValLeft.offsetWidth + 15) + 'px'
       }
@@ -281,13 +280,13 @@ export default class View {
       this.currentValRight.style.left = -(+this.currentValRight.offsetWidth + 15) + 'px'
 
     }
-    value = ((this.state.maxValue - this.state.minValue) * procent) + this.state.minValue
-    value2 = ((this.state.maxValue - this.state.minValue) * procent2) + this.state.minValue
-    this.currentValLeft.textContent = `${Math.round(value*(10**this.state.round))/(10**this.state.round)}`
-    this.currentValRight.textContent = `${Math.ceil(value2*(10**this.state.round))/(10**this.state.round)}`
-
+    if (this.currentButton === this.button.left) {
+      this.currentVal(this.currentValLeft,  this.state.procent)
+    } else {
+      this.currentVal(this.currentValRight, this.state.procent2)
+    }
   }
-
+  
   activeZoneAction() {
 
     if (this.state.rotate === 'horizontal') {
@@ -307,8 +306,8 @@ export default class View {
 
         this.shiftXl = +this.button.left.style.top.replace(/px/gi, '') + this.buttonWidth
       }
-      this.shiftXr = +this.button.right.style.top.replace(/px/gi, '') + this.buttonWidth
-      if (this.shiftXl >= this.shiftXr) {
+      this.shiftXr = +this.button.right.style.top.replace(/px/gi, '') + +this.buttonWidth
+      if (this.shiftXl > this.shiftXr) {
         [this.shiftXl, this.shiftXr] = [this.shiftXr, this.shiftXl]
       }
       this.sliderActiveZone.style.top = this.shiftXl + 'px'
@@ -316,8 +315,6 @@ export default class View {
     }
 
   }
-  movePoint(e: MouseEvent) {
-    this.onMouseMove(e);
-  }
+
 
 }

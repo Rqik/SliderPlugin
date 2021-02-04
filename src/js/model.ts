@@ -20,7 +20,7 @@ export default class Model {
     minValue:  0, // минимальное значение
     maxValue:  100, // максимальное значение
     show: false, // показыватьть текущее значение над указателем
-    range: 'two',  // 1 или 2 указателя
+    range: 'one',  // 1 или 2 указателя
     rotate: 'horizontal', // ориентация vertical horizontal
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
@@ -30,6 +30,7 @@ export default class Model {
   }
   constructor(selector: string) {
     this.state.selector = selector
+    
   }
 
   /// для редактирования state 

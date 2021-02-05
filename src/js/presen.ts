@@ -14,18 +14,30 @@ export default class Present {
     this.model = new Model(selector)
     this.view = new View(this.model.stateCurrent)
     this.view.sliderInit()
+    this.init()
+    this.start()
+  }
+
+
+  init() {
+    this.view.newObserver.subscribe((data: object | Function | any) => {
+    
+        this.model.edit(data)
+      
+      this.view.editView(this.model.stateCurrent)
+    })
   }
 
   sliderMode(options: object) {
     this.model.edit(options)
-    this.view.editView( this.model.stateCurrent)
+    this.view.editView(this.model.stateCurrent)
     this.view.sliderInit()
     this.start()
-    
+
   }
   start() {
-     this.view.installMove(this.model.stateCurrent.currentVal[0], this.model.stateCurrent.currentVal[1])
-    
+    this.view.installMove(this.model.stateCurrent.currentVal[0], this.model.stateCurrent.currentVal[1])
+
   }
 
   input() {
@@ -38,7 +50,6 @@ export default class Present {
 
     min.addEventListener('input', (e) => {
       this.options.min = +(e.target as HTMLInputElement).value
-      // this.view.minValue = +(e.target as HTMLInputElement).value
       this.view.renderInterval()
 
       console.log(this.selector);
@@ -46,21 +57,18 @@ export default class Present {
 
     max.addEventListener('input', (e) => {
       this.options.max = +(e.target as HTMLInputElement).value
-      // this.view.maxValue = +(e.target as HTMLInputElement).value
       this.view.renderInterval()
       console.log(this.options);
     })
 
     interval.addEventListener('change', (e) => {
       this.options.interval = +(e.target as HTMLInputElement).value
-      // this.view.intervalCount = +(e.target as HTMLInputElement).value
       this.view.renderInterval()
       console.log(this.options);
     })
 
     step.addEventListener('change', (e) => {
       this.options.step = +(e.target as HTMLInputElement).value
-      // this.view.stepSize = +(e.target as HTMLInputElement).value
       this.view.addAction()
       console.log(this.options);
     })
@@ -75,8 +83,8 @@ export type range = 'one' | 'two'
 
 interface setingOption {
   min ? : number,
-  max ? : number,
-  interval ? : number,
-  step?: number,
-  range?: range
+    max ? : number,
+    interval ? : number,
+    step ? : number,
+    range ? : range
 }

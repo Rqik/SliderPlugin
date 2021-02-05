@@ -273,10 +273,6 @@ export default class View {
     //размеры для активной зоны
     // ------
 
-
-
-
-
   }
 
   currentValueText(value1: string, value2 ? : string) {

@@ -16,3 +16,4 @@ let app = new Present('.slider_rqik' )
 let app3 = new Present('.slider_r2').sliderMode({rotate: 'vertical' , show: true, showInterval: true})
 
 app.sliderMode({ show: true, showInterval: true , })
+

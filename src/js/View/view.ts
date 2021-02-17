@@ -1,17 +1,10 @@
 import {
-  rotate,
-  range
-} from './presen';
+  IState, buttonSlider
+} from '../interface';
 
-import Observer from './observer'
-import {
-  IState
-} from './model'
 
-interface buttonSlider {
-  left: HTMLElement,
-    right: HTMLElement
-}
+import Observer from '../observer'
+
 
 export default class View {
 
@@ -25,6 +18,8 @@ export default class View {
   currentValRight: HTMLElement = document.createElement('div')
   sliderRange: HTMLElement = document.createElement('div')
   sliderActiveZone: HTMLElement = document.createElement('div')
+  intervalComponent: HTMLUListElement = document.createElement('ul')
+
   buttonWidth: number = 10
   clickHandler: any = this.onMouseMove.bind(this)
   currentButton: HTMLElement = this.button.left
@@ -33,7 +28,6 @@ export default class View {
   shiftXr: number = 0
 
 
-  intervalComponent: HTMLUListElement = document.createElement('ul')
 
   newObserver: Observer
   state: IState
@@ -67,6 +61,9 @@ export default class View {
     this.slider.append(this.intervalComponent);
     this.renderInterval()
 
+  } 
+  renderInterval() {
+    this.valueInterval(this.state.minValue, this.state.maxValue, this.state.intervalCount)
   }
   addClass() {
     this.button.right.className = "slider__range_button  slider__range_button-right"
@@ -129,9 +126,7 @@ export default class View {
 
   }
 
-  renderInterval() {
-    this.valueInterval(this.state.minValue, this.state.maxValue, this.state.intervalCount)
-  }
+ 
 
   valueInterval(minValue: number, maxValue: number, count: number): HTMLElement {
     //interval это кол подписей минимум 2
@@ -256,7 +251,6 @@ export default class View {
       this.currentButton.style.top = -this.state.heightSlider + 'px'
 
     } else if (this.state.rotate === 'vertical') {
-
       this.currentButton.style.left = -this.state.widthSlider + 'px'
       this.currentButton.style.top = `calc(${pos}% - ${this.buttonWidth}px)`
 
@@ -285,12 +279,9 @@ export default class View {
   }
   showCurentValue() {
     
-  
-
     this.currentValLeft.textContent =  this.state.currentText1()
     this.currentValRight.textContent = this.state.currentText2()
   
-
     if (this.state.rotate === 'horizontal') {
 
       if (this.state.range === 'two') {

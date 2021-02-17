@@ -1,7 +1,7 @@
 @import '~normalize.css';
 @import './fonts/montserrat.css';
 @import './variables.scss';
-
+@import './slider.scss';
 body {
   position: relative;
   width: 100%;
@@ -25,12 +25,10 @@ body {
     margin-left: 100px;
     display: flex;
     flex-direction: row;
-
     gap: 20px;
   }
 }
 
-$green: #1BC47D;
 .heys{
   border: 1px solid black;
   width: 400px;
@@ -45,9 +43,9 @@ $green: #1BC47D;
   margin-top: 90px;
   margin-bottom: 0;
   width:400px;
-  height: 200px;
+  height: 100px;
   box-sizing: border-box;
-  width: 100%;
+  // width: 100%;
 
 }
 .slider_rqik2 {
@@ -74,188 +72,4 @@ $green: #1BC47D;
   position: relative;
   box-sizing: border-box;
 
-}
-
-.slider__range {
-  width: 100%;
-  height: 6px;
-  background-color: $green;
-  border-radius: 1rem;
-  cursor: pointer;
-  background-color: white;
-  border: 0.5px solid $grey-border;
-  z-index: 2;
-}
-
-
-
-
-.interval_point {
-  position: absolute;
-  top: 8px;
-  width: 100%;
-  display: flex;
-  padding: 0;
-  justify-content: space-between;
-  flex-direction: row;
-  list-style: none;
-
-  &-item {
-    font-family: 'Montserrat';
-    font-weight: normal;
-    font-size: 14px;
-    color: $orange;
-    position: relative;
-    left: 0;
-    text-align: center;
-    cursor: pointer;
-    width: 0;
-
-    &::before {
-      z-index: -1;
-      position: absolute;
-      top: -70%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      content: '';
-      width: 1px;
-      height: 14px;
-      background-color: $grey2;
-    }
-
-    &:first-child {
-
-      &::before {
-        position: absolute;
-        left: 1px;
-      }
-    }
-
-    &:last-child {
-      &::before {
-        position: absolute;
-        left: auto;
-        right: 0;
-      }
-    }
-  }
-}
-
-.slider__range_active {
-  position: absolute;
-  background: $orange-gradient;
-  border-radius: 14px;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 5px;
-  height: 7px;
-  z-index: 1;
-}
-
-.slider__current_value {
-  display: inline-block;
-  background-color: $orange;
-  font-family: 'Montserrat';
-  font-weight: bold;
-  font-size: 13px;
-  color: white;
-  background-color: $orange;
-  border-radius: 14px;
-  border:2px solid white;
-  padding: 3px 8px ;
-  margin: auto;
-  height: 20px;
-  line-height: 20px;
-  position: absolute;
-  top: -40px;
-  text-align: center;
-  box-shadow: $inner-shadow;
-  user-select: none;
-}
-
-.slider__range_button {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  position: absolute;
-  cursor: pointer;
-  box-sizing: border-box;
-  z-index: 30;
-  border: -1px solid transparent;
-  border-radius: 50%;
-  padding: 0;
-  box-shadow: $shadow-orange;
-  background: linear-gradient(180deg, #FFFFFF 0%, #F7DDC5 100%) center;
-  transition:  box-shadow .3s ease-in-out;
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-    margin: 2px;
-    border-radius: 50%;
-    background-color: $orange;
-
-  }
-  &:hover{
-    box-shadow: $shadow-orange2;
-   
-  }
-  &-left {
-    // top: -10px;
-  }
-
-  &-right {
-    // top: -10px;
-  }
-}
-
-
-.slider__range.slider__range_vertical {
-
-  height: 100%;
-  width: 6px;
-
-  .slider__range_active {
-    bottom: 0;
-    top: 0;
-    height: 100%;
-    width: 7px;
-    background: $orange-gradient2;
-  }
-
-}
-
-.interval_point.interval_point_vertical {
-  flex-direction: column;
-  justify-content: space-between;
-  top: 0;
-  left: 20px;
-  width: 20px;
-  height: 100%;
-  margin: 0;
-
-  .interval_point-item {
-    position: relative;
-    text-align: center;
-    width: 100%;
-    height: 0;
-    display: inline-block;
-
-    &::before {
-      top: 50%;
-      left: 0;
-      right: 0;
-      transform: translate(-100%, -50%);
-      width: 14px;
-      height: 1px;
-      background-color: $grey2;
-    }
-
-
-  }
 }

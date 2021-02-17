@@ -1,19 +1,7 @@
 import {
-  rotate,
-  range
-} from './presen';
-export interface IState {
-  selector: string,
-    minValue: number,
-    maxValue: number,
-    show: boolean,
-    showInterval: boolean,
-    range: range,
-    rotate: rotate,
-    intervalCount: number,
-    stepSize: number,
-    [k: string]: any
-}
+  IState
+} from '../interface';
+
 
 export default class Model {
   state: IState = {
@@ -46,7 +34,7 @@ export default class Model {
     }
   }
 
-  constructor(selector: string) {
+  constructor(selector: string = 'slider_rqik' ) {
     this.state.selector = selector
     this.state.shiftRight
 

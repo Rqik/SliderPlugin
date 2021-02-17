@@ -2,6 +2,7 @@ import Present from './js/Presenter/presenter'
 
 import './assets/main.scss'
 
+import './js/View/subView'
 
 
 

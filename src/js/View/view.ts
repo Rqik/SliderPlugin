@@ -2,7 +2,7 @@ import {
   IState, buttonSlider
 } from '../interface';
 
-
+import { LeftButton, RigthButton, Interval , SliderRange} from './subView'
 import Observer from '../observer'
 
 
@@ -16,8 +16,7 @@ export default class View {
   }
   currentValLeft: HTMLElement = document.createElement('div')
   currentValRight: HTMLElement = document.createElement('div')
-  sliderRange: HTMLElement = document.createElement('div')
-  sliderActiveZone: HTMLElement = document.createElement('div')
+  sliderRange: HTMLElement 
   intervalComponent: HTMLUListElement = document.createElement('ul')
 
   buttonWidth: number = 10
@@ -31,26 +30,36 @@ export default class View {
 
   newObserver: Observer
   state: IState
+  slideClass: any
+  br: any
+  bl: any
   constructor(state: IState) {
-
+    
     this.state = state
     this.slider = < HTMLElement > document.querySelector(this.state.selector)
     this.newObserver = new Observer()
+    this.slideClass = new SliderRange(this.state.rotate)
+    this.sliderRange = this.slideClass.sliderRange
+    let br = new RigthButton()
+    let bl = new LeftButton()
+    this.button.left = bl.button
+    this.button.right = br.button
   }
   editView(newState: IState) {
     this.state = {
       ...newState
     }
+    // this.s = new SliderRange(this.state.rotate)
   }
 
   buttonLeftExpose() {
-    this.button.left.className = "slider__range_button  slider__range_button-left"
+    // this.button.left.className = "slider__range_button  slider__range_button-left"
     this.button.left.addEventListener('mousedown', this.buttonAction.bind(this))
-    this.sliderRange.append(this.button.left)
-    if (this.state.show) {
-      this.currentValLeft.className = 'slider__current_value'
-      this.sliderRange.append(this.currentValLeft)
-    }
+    // this.sliderRange.append(this.button.left)
+    // if (this.state.show) {
+    //   this.currentValLeft.className = 'slider__current_value'
+    //   this.sliderRange.append(this.currentValLeft)
+    // }
   }
   intervalExpose() {
     this.intervalComponent.className = 'interval_point'
@@ -66,19 +75,19 @@ export default class View {
     this.valueInterval(this.state.minValue, this.state.maxValue, this.state.intervalCount)
   }
   addClass() {
-    this.button.right.className = "slider__range_button  slider__range_button-right"
-    this.sliderRange.className = "slider__range"
-    this.sliderActiveZone.className = "slider__range_active"
+    // this.button.right.className = "slider__range_button  slider__range_button-right"
+    // this.sliderRange.className = "slider__range"
+    // this.sliderActiveZone.className = "slider__range_active"
 
-    if (this.state.rotate == 'vertical') {
-      this.sliderRange.classList.add('slider__range_vertical')
-    }
+    // if (this.state.rotate == 'vertical') {
+    //   this.sliderRange.classList.add('slider__range_vertical')
+    // }
   }
 
   addElem() {
     this.sliderRange.append(this.button.right)
-    this.sliderRange.append(this.sliderActiveZone)
-    this.slider.append(this.sliderRange)
+    this.slider.append(this.slideClass.edit(this.state.rotate))
+   
   }
   addAction() {
     this.button.right.addEventListener('mousedown', this.buttonAction.bind(this))
@@ -109,7 +118,7 @@ export default class View {
   }
   sliderInit() {
     if (this.state.range === 'two') {
-      this.buttonLeftExpose()
+      this.sliderRange.append(this.button.left)
     }
     if (this.state.showInterval) {
       this.intervalExpose()
@@ -297,26 +306,15 @@ export default class View {
       }
       this.currentValRight.style.top = `calc(${this.state.shiftXr}% - ${this.currentValLeft.offsetHeight / 2}px)`
       this.currentValRight.style.left = -(+this.currentValRight.offsetWidth + 15) + 'px'
-
     }
 
   }
 
   activeZoneAction() {
-    if (this.state.rotate === 'horizontal') {
-
-      this.sliderActiveZone.style.left = this.state.shiftXl + '%'
-      this.sliderActiveZone.style.width = this.state.shiftXr - +this.state.shiftXl + '%'
-
-    } else if (this.state.rotate === 'vertical') {
-
-      this.sliderActiveZone.style.top = this.state.shiftXl + '%'
-      this.sliderActiveZone.style.height = this.state.shiftXr - +this.state.shiftXl + '%'
-    }
+    this.slideClass.activeZone(this.state.shiftXl , this.state.shiftXr)
   }
   movePoint(e: MouseEvent) {
     this.onMouseMove(e);
-
   }
 
 }

@@ -1,35 +1,23 @@
 import {
-  rotate,
-  range
-} from './presen';
-export interface IState {
-  selector: string,
-    minValue: number,
-    maxValue: number,
-    show: boolean,
-    showInterval: boolean,
-    range: range,
-    rotate: rotate,
-    intervalCount: number,
-    stepSize: number,
-    [k: string]: any
-}
+  IState
+} from '../interface';
+
 
 export default class Model {
   state: IState = {
 
     selector: 'slider_rqik', // селектор
-    minValue: 0, // минимальное значение
-    maxValue: 100, // максимальное значение
+    minValue: -10, // минимальное значение
+    maxValue: 120, // максимальное значение
     range: 'two', // 1 или 2 указателя
     rotate: 'horizontal', // ориентация vertical horizontal
     show: false, // показыватьть текущее значение над указателем
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
-    stepSize: 1, // шаг движения указателя
-    currentVal: [0, 10], // установка значений
+    stepSize: 1, // шаг движения указателя в px
+    currentVal: [0, 50], // установка значений в процентах
     round: 1, // округление,
-    pixelSize: '6',
+    pixelSize: '62',
     shiftXl: 0,
     shiftXr: 20,
     value1: function () {
@@ -46,7 +34,7 @@ export default class Model {
     }
   }
 
-  constructor(selector: string) {
+  constructor(selector: string = 'slider_rqik' ) {
     this.state.selector = selector
     this.state.shiftRight
 

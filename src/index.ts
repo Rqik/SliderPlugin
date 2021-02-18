@@ -1,10 +1,8 @@
-import Present from './js/presen'
-import View from './js/view';
-import Model from './js/model'
+import Present from './js/Presenter/presenter'
 
-import './js/test'
 import './assets/main.scss'
 
+import './js/View/subView'
 
 
 
@@ -17,3 +15,37 @@ let app3 = new Present('.slider_r2').sliderMode({rotate: 'vertical' , show: true
 
 app.sliderMode({ show: true, showInterval: true , })
 
+// input() {
+
+//   let min = < HTMLInputElement > document.querySelector('#min')
+//   let max = < HTMLInputElement > document.querySelector('#max')
+//   let interval = < HTMLInputElement > document.querySelector('#interval')
+//   let step = < HTMLInputElement > document.querySelector('#step')
+
+
+//   min.addEventListener('input', (e) => {
+//     this.options.min = +(e.target as HTMLInputElement).value
+//     this.view.renderInterval()
+
+//     console.log(this.selector);
+//   })
+
+//   max.addEventListener('input', (e) => {
+//     this.options.max = +(e.target as HTMLInputElement).value
+//     this.view.renderInterval()
+//     console.log(this.options);
+//   })
+
+//   interval.addEventListener('change', (e) => {
+//     this.options.interval = +(e.target as HTMLInputElement).value
+//     this.view.renderInterval()
+//     console.log(this.options);
+//   })
+
+//   step.addEventListener('change', (e) => {
+//     this.options.step = +(e.target as HTMLInputElement).value
+//     this.view.addAction()
+//     console.log(this.options);
+//   })
+
+// }

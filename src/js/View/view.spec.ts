@@ -60,8 +60,7 @@ describe('View test', () => {
     expect(view.renderInterval).toBeDefined()
     expect(view.renderInterval).not.toBeUndefined()
 
-    expect(view.addClass).toBeDefined()
-    expect(view.addClass).not.toBeUndefined()
+  
 
     expect(view.addElem).toBeDefined()
     expect(view.addElem).not.toBeUndefined()
@@ -72,7 +71,6 @@ describe('View test', () => {
     // const ViewMock = View as jest.MockedClass<typeof View>
     const view = new View(st)
     view.intervalExpose = jest.fn()
-    view.addClass = jest.fn()
     view.addElem = jest.fn()
     view.addAction = jest.fn()
     view.initMove = jest.fn()

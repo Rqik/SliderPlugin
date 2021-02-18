@@ -7,17 +7,17 @@ export default class Model {
   state: IState = {
 
     selector: 'slider_rqik', // селектор
-    minValue: 0, // минимальное значение
-    maxValue: 100, // максимальное значение
+    minValue: -10, // минимальное значение
+    maxValue: 120, // максимальное значение
     range: 'two', // 1 или 2 указателя
     rotate: 'horizontal', // ориентация vertical horizontal
     show: false, // показыватьть текущее значение над указателем
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
-    stepSize: 1, // шаг движения указателя
-    currentVal: [0, 10], // установка значений
+    stepSize: 1, // шаг движения указателя в px
+    currentVal: [0, 50], // установка значений в процентах
     round: 1, // округление,
-    pixelSize: '6',
+    pixelSize: '62',
     shiftXl: 0,
     shiftXr: 20,
     value1: function () {

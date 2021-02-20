@@ -78,6 +78,7 @@
 }
 
 .slider__current_value {
+  box-sizing: border-box;
   display: inline-block;
   background-color: $orange;
   font-family: 'Montserrat';
@@ -89,7 +90,7 @@
   border:2px solid white;
   padding: 3px 8px ;
   margin: auto;
-  height: 20px;
+  min-height: 20px;
   line-height: 20px;
   position: absolute;
   top: -40px;

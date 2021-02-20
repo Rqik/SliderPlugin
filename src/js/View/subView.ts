@@ -61,6 +61,8 @@ export class Interval {
       return this.interval;
     }
     let interval: number = (maxValue - minValue) / count;
+    console.log(interval+ minValue);
+    
     for (let i = 0; i <= count; i++) {
       let li = document.createElement("li");
       li.className = "interval_point-item";

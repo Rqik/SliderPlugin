@@ -19,20 +19,17 @@ export default class View {
   clickHandler: any = this.onMouseMove.bind(this);
   currentButton: HTMLElement = this.button.left;
 
-  shiftXl: number = 0;
-  shiftXr: number = 0;
-
   newObserver: Observer;
   state: IState;
   slideClass: SliderRange;
 
   constructor(state: IState) {
     this.state = state;
-
     this.slider = <HTMLElement>document.querySelector(this.state.selector);
     this.newObserver = new Observer();
     this.slideClass = new SliderRange(this.state.rotate);
     this.sliderRange = this.slideClass.sliderRange;
+
   }
   editView(newState: IState) {
     this.state = {
@@ -53,6 +50,7 @@ export default class View {
       this.currentValLeft.className = "slider__current_value";
       this.sliderRange.append(this.currentValLeft);
     }
+
   }
   intervalExpose() {
     this.slider.append(this.interval.interval);
@@ -82,6 +80,7 @@ export default class View {
     // });
   }
   resizeSLider() {
+
     if (
       this.state.widthSlider !== this.sliderRange.offsetWidth ||
       this.state.heightSlider !== this.sliderRange.offsetHeight
@@ -100,7 +99,6 @@ export default class View {
           pixelSize: this.sliderRange.offsetHeight,
         });
       }
-      this.buttonWidth = this.currentButton.offsetWidth / 2;
     }
   }
   sliderInit() {
@@ -108,6 +106,8 @@ export default class View {
     this.addElem();
     this.addAction();
     this.resizeSLider();
+    this.buttonWidth = this.button.right.offsetWidth / 2;
+
   }
   show() {
     if (this.state.range === "two") {
@@ -152,12 +152,18 @@ export default class View {
     } else if (this.state.rotate === "vertical") {
       this.sliderIdent = this.slider.offsetTop;
     }
-    this.initMove(min, max);
+
+    this.initMove(this.mathValueCalc(min), this.mathValueCalc(max));
+  }
+  mathValueCalc(num: number): number{
+    return ( num - this.state.minValue)/ (this.state.maxValue - this.state.minValue) * 100
   }
   // сброс позиций кнопок
   initMove(min: number, max: number) {
+
     Promise.resolve().then(() => {
       this.currentButton = this.button.left;
+      
       this.moveButton(min);
       this.currentButton = this.button.right;
       this.moveButton(max);
@@ -196,7 +202,7 @@ export default class View {
     if (pos >= 100) {
       pos = 100;
     }
-
+    
     if (this.currentButton === this.button.left) {
       this.newObserver.broadcast({
         shiftXl: pos,
@@ -207,16 +213,16 @@ export default class View {
       });
     }
     if (this.state.rotate === "horizontal") {
-      this.currentButton.style.left = `calc(${pos}% - ${this.buttonWidth}px)`; // pos - this.sliderIdent - this.buttonWidth + 'px'
+      
+      this.currentButton.style.left = `calc(${pos}% - ${this.buttonWidth}px)`;
       this.currentButton.style.top = -this.state.heightSlider + "px";
 
     } else if (this.state.rotate === "vertical") {
       this.currentButton.style.left = -this.state.widthSlider + "px";
       this.currentButton.style.top = `calc(${pos}% - ${this.buttonWidth}px)`;
-      
     }
     if (this.state.show) {
-      this.currentValueText(this.state.currentVal[1], this.state.currentVal[0]);
+      this.currentValueText(this.state.currentVal1, this.state.currentVal2);
       this.showCurentValue();
 
     }
@@ -243,13 +249,17 @@ export default class View {
     if (this.state.rotate === "horizontal") {
       if (this.currentButton === this.button.left) {
         this.currentValLeft.style.left = `calc(${this.state.shiftXl}% - ${
-          this.currentValLeft.offsetWidth / 2
-        }px)`;
+        this.currentValLeft.offsetWidth / 2
+          }px)`;
+        
       } else {
+        console.log(this.currentValRight.style.left);
         this.currentValRight.style.left = `calc(${this.state.shiftXr}% - ${
-          this.currentValRight.offsetWidth / 2
+          this.currentValRight.offsetWidth/2
         }px)`;
+        
       }
+      
     } else if (this.state.rotate === "vertical") {
       if (this.currentButton === this.button.left) {
         this.currentValLeft.style.top = `calc(${this.state.shiftXl}% - ${
@@ -272,5 +282,6 @@ export default class View {
   }
   movePoint(e: MouseEvent) {
     this.onMouseMove(e);
+
   }
 }

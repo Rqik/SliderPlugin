@@ -3,12 +3,11 @@
 .slider__range {
   width: 100%;
   height: 6px;
-  background-color: $green;
   border-radius: 1rem;
   cursor: pointer;
   background-color: white;
   border: 0.5px solid $grey-border;
-  z-index: 2;
+  z-index: 10;
 }
 
 
@@ -16,52 +15,38 @@
 
 .interval_point {
   position: absolute;
-  top: 8px;
+  top: 9px;
   width: 100%;
   display: flex;
   padding: 0;
   justify-content: space-between;
   flex-direction: row;
   list-style: none;
+  margin: 0;
+  cursor: pointer;
 
   &-item {
     font-family: 'Montserrat';
     font-weight: normal;
     font-size: 14px;
-    color: $orange;
     position: relative;
+    top: -2px;
     left: 0;
     text-align: center;
-    cursor: pointer;
-    width: 0;
+    z-index: 1;
+    width: 1px;
+    height: 14px;
+    background-color: $grey2;
 
-    &::before {
-      z-index: -1;
+    span {
       position: absolute;
-      top: -70%;
+      color: $orange;
+      transform: translate(-50%, 50%);
+      top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      content: '';
-      width: 1px;
-      height: 14px;
-      background-color: $grey2;
+      
     }
 
-    &:first-child {
-
-      &::before {
-        position: absolute;
-        left: 1px;
-      }
-    }
-
-    &:last-child {
-      &::before {
-        position: absolute;
-        left: auto;
-        right: 0;
-      }
-    }
   }
 }
 
@@ -87,8 +72,8 @@
   color: white;
   background-color: $orange;
   border-radius: 14px;
-  border:2px solid white;
-  padding: 3px 8px ;
+  border: 2px solid white;
+  padding: 3px 8px;
   margin: auto;
   min-height: 20px;
   line-height: 20px;
@@ -112,7 +97,8 @@
   padding: 0;
   box-shadow: $shadow-orange;
   background: linear-gradient(180deg, #FFFFFF 0%, #F7DDC5 100%) center;
-  transition:  box-shadow .3s ease-in-out;
+  transition: box-shadow .3s ease-in-out;
+
   &::before {
     content: '';
     position: absolute;
@@ -126,17 +112,12 @@
     background-color: $orange;
 
   }
-  &:hover{
+
+  &:hover {
     box-shadow: $shadow-orange2;
-   
-  }
-  &-left {
-    // top: -10px;
+
   }
 
-  &-right {
-    // top: -10px;
-  }
 }
 
 
@@ -159,28 +140,32 @@
   flex-direction: column;
   justify-content: space-between;
   top: 0;
-  left: 20px;
+  left: 7px;
   width: 20px;
   height: 100%;
-  margin: 0;
 
   .interval_point-item {
     position: relative;
-    text-align: center;
-    width: 100%;
+    top: 0;
     height: 0;
     display: inline-block;
+    width: 10px;
+    height: 1px;
+    background-color: $grey2;
 
-    &::before {
-      top: 50%;
-      left: 0;
-      right: 0;
-      transform: translate(-100%, -50%);
-      width: 14px;
-      height: 1px;
-      background-color: $grey2;
+    &:last-child {
+      top: 1px;
     }
 
+    span {
+      right: 0;
+      text-align: center;
+      position: absolute;
+      color: $orange;
+      transform: translate(100%, -50%);
+      top: 50%;
+      right: -50%;
+    }
 
   }
 }

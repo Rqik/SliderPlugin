@@ -2,58 +2,77 @@ import { rotate } from "./../interface";
 
 export class Button {
   button: HTMLElement = document.createElement("div");
+  widthButton: number = 110
   constructor() {
     this.init();
+    this.width()
   }
   init() {
     this.button.className = "slider__range_button";
   }
+ 
+  addEvent(type: string, action: Function) {
+    this.button.addEventListener(type, function test(e) {
+      action(e)
+    })
+  }
+  width() {
+    return this.widthButton = this.button.offsetWidth / 2;
+  }
+  positionHorizontal(pos: string| number , heightSlider: string| number) {
+    this.button.style.left = `calc(${pos}% - ${this.widthButton}px)`;
+    this.button.style.top = -heightSlider + "px";
+  }
 }
 
-export class RigthButton extends Button {
+export class CurrentValue {
+  currentVal: HTMLElement = document.createElement("div");
   constructor() {
-    super();
+    this.init();
   }
   init() {
-    super.init();
-    this.button.classList.add("slider__range_button-right");
-    return this.button;
+    this.currentVal.className = "slider__current_value";
   }
+
+  text(text: string | number) {
+    this.currentVal.textContent = `${text}`;
+  }
+
+  positionHorizont(shiftX: string | number) {
+    this.currentVal.style.left = `calc(${shiftX}% - ${
+      this.currentVal.offsetWidth / 2
+    }px)`;
+  }
+  positionVertical(shiftX: string | number) {
+    this.currentVal.style.top = `calc(${shiftX}% - ${
+      this.currentVal.offsetHeight / 2
+    }px)`;
+    this.currentVal.style.left =
+      -(+this.currentVal.offsetWidth + 15) + "px";
+  }
+
 }
 
-// let s = new RigthButton()
-// console.log(s);
-
-export class LeftButton extends Button {
-  constructor() {
-    super();
-  }
-  init() {
-    super.init();
-    this.button.classList.add("slider__range_button-left");
-    return this.button;
-  }
-}
 
 export class Interval {
   interval: HTMLUListElement = document.createElement("ul");
   rotate: rotate = "horizontal";
 
   constructor() {
-    this.init()
+    this.init();
   }
   init() {
     this.interval.className = "interval_point";
 
-    if (this.rotate == 'vertical') {
-      this.interval.classList.add('interval_point_vertical')
+    if (this.rotate == "vertical") {
+      this.interval.classList.add("interval_point_vertical");
     }
-    // this.renderInterval()
   }
   valueInterval(
     minValue: number,
     maxValue: number,
-    count: number
+    count: number,
+    round: number
   ): HTMLElement {
     //interval это кол подписей минимум 2
     this.interval.textContent = "";
@@ -61,12 +80,12 @@ export class Interval {
       return this.interval;
     }
     let interval: number = (maxValue - minValue) / count;
-    console.log(interval+ minValue);
-    
+    let sum;
     for (let i = 0; i <= count; i++) {
       let li = document.createElement("li");
       li.className = "interval_point-item";
-      li.textContent = `${i * interval + minValue}`;
+      sum = Math.round((i * interval + minValue) * 10 ** round) / 10 ** round;
+      li.innerHTML = `<span>${sum} </span>`;
       this.interval.append(li);
     }
 

@@ -1,35 +1,36 @@
-import { IState, buttonSlider } from "../interface";
+import { IState } from "../interface";
 
-import { LeftButton, RigthButton, Interval, SliderRange } from "./subView";
+import { Interval, SliderRange, CurrentValue, Button } from "./subView";
 import Observer from "../observer";
 
 export default class View {
   slider: HTMLElement;
   sliderIdent: number = 0;
-  button: buttonSlider = {
-    left: new LeftButton().button,
-    right: new RigthButton().button,
-  };
-  currentValLeft: HTMLElement = document.createElement("div");
-  currentValRight: HTMLElement = document.createElement("div");
+  buttonLeft: Button = new Button();
+  buttonRight: Button = new Button();
+
+  currentValLeft: CurrentValue = new CurrentValue();
+  currentValRight: CurrentValue = new CurrentValue();
   sliderRange: HTMLElement;
-  intervalComponent: HTMLUListElement = document.createElement("ul");
   interval: Interval = new Interval();
   buttonWidth: number = 10;
   clickHandler: any = this.onMouseMove.bind(this);
-  currentButton: HTMLElement = this.button.left;
-
+  currentButton: HTMLElement = this.buttonLeft.button; // абстрактный тумблер
+  tumblerB: boolean = false;
   newObserver: Observer;
+  eventObserver: Observer;
   state: IState;
   slideClass: SliderRange;
 
   constructor(state: IState) {
     this.state = state;
     this.slider = <HTMLElement>document.querySelector(this.state.selector);
+    this.slider.style.position = "relative";
     this.newObserver = new Observer();
+    this.eventObserver = new Observer();
     this.slideClass = new SliderRange(this.state.rotate);
     this.sliderRange = this.slideClass.sliderRange;
-
+    this.sliderInit();
   }
   editView(newState: IState) {
     this.state = {
@@ -41,46 +42,35 @@ export default class View {
   }
 
   buttonLeftExpose() {
-    this.button.left.addEventListener(
-      "mousedown",
-      this.buttonAction.bind(this)
-    );
-    this.sliderRange.append(this.button.left);
+    this.sliderRange.append(this.buttonLeft.button);
     if (this.state.show) {
-      this.currentValLeft.className = "slider__current_value";
-      this.sliderRange.append(this.currentValLeft);
+      this.sliderRange.append(this.currentValLeft.currentVal);
     }
-
   }
   intervalExpose() {
-    this.slider.append(this.interval.interval);
     this.renderInterval();
+    this.slider.append(this.interval.interval);
   }
   renderInterval() {
     this.interval.valueInterval(
       this.state.minValue,
       this.state.maxValue,
-      this.state.intervalCount
+      this.state.intervalCount,
+      this.state.round
     );
   }
 
   addElem() {
-    this.sliderRange.append(this.button.right);
+    this.sliderRange.append(this.buttonRight.button);
     this.slider.append(this.sliderRange);
   }
   addAction() {
-    this.button.right.addEventListener(
-      "mousedown",
-      this.buttonAction.bind(this)
-    );
+    this.buttonRight.addEvent("mousedown", this.buttonAction.bind(this));
     this.slider.addEventListener("click", this.resizeSLider.bind(this));
     this.slider.addEventListener("click", this.movePoint.bind(this));
-    // this.newObserver.broadcast({
-    //   procent: this.sliderRange.offsetWidth,
-    // });
+    this.buttonLeft.addEvent("mousedown", this.buttonAction.bind(this));
   }
   resizeSLider() {
-
     if (
       this.state.widthSlider !== this.sliderRange.offsetWidth ||
       this.state.heightSlider !== this.sliderRange.offsetHeight
@@ -101,13 +91,19 @@ export default class View {
       }
     }
   }
+  reRender() {
+    this.slider.innerHTML = "";
+    this.show();
+    this.addElem();
+    this.resizeSLider();
+    this.buttonWidth = this.buttonRight.width();
+  }
   sliderInit() {
     this.show();
     this.addElem();
     this.addAction();
     this.resizeSLider();
-    this.buttonWidth = this.button.right.offsetWidth / 2;
-
+    this.buttonWidth = this.buttonRight.width();
   }
   show() {
     if (this.state.range === "two") {
@@ -117,29 +113,27 @@ export default class View {
       this.intervalExpose();
     }
     if (this.state.show) {
-      this.currentValRight.className = "slider__current_value";
-      this.sliderRange.append(this.currentValRight);
+      this.sliderRange.append(this.currentValRight.currentVal);
+    } else {
+      this.currentValLeft.currentVal.remove()
+      this.currentValRight.currentVal.remove()
     }
   }
- 
+
   buttonAction(e: MouseEvent): void {
     document.addEventListener("mousemove", this.clickHandler);
     document.addEventListener("mouseup", this.remove.bind(this));
 
-    // *********
-    // *** нелогичность с left когда range one***
-    // *********
-
-    if (e.currentTarget === this.button.left) {
-      this.currentButton = this.button.left;
+    this.currentButton = <HTMLElement>e.currentTarget;
+    if (this.currentButton === this.buttonLeft.button) {
+      this.tumblerB = true;
     } else {
-      this.currentButton = this.button.right;
+      this.tumblerB = false;
     }
-
     if (this.state.range == "two") {
-      this.button.left.ondragstart = () => false;
+      this.buttonLeft.button.ondragstart = () => false;
     }
-    this.button.right.ondragstart = () => false;
+    this.buttonRight.button.ondragstart = () => false;
   }
   remove() {
     document.removeEventListener("mousemove", this.clickHandler);
@@ -155,17 +149,21 @@ export default class View {
 
     this.initMove(this.mathValueCalc(min), this.mathValueCalc(max));
   }
-  mathValueCalc(num: number): number{
-    return ( num - this.state.minValue)/ (this.state.maxValue - this.state.minValue) * 100
+  mathValueCalc(num: number): number {
+    return (
+      ((num - this.state.minValue) /
+        (this.state.maxValue - this.state.minValue)) *
+      100
+    );
   }
   // сброс позиций кнопок
   initMove(min: number, max: number) {
-
     Promise.resolve().then(() => {
-      this.currentButton = this.button.left;
-      
+      this.currentButton = this.buttonLeft.button;
+      this.tumblerB = true;
       this.moveButton(min);
-      this.currentButton = this.button.right;
+      this.currentButton = this.buttonRight.button;
+      this.tumblerB = false;
       this.moveButton(max);
     });
   }
@@ -202,29 +200,27 @@ export default class View {
     if (pos >= 100) {
       pos = 100;
     }
-    
-    if (this.currentButton === this.button.left) {
+
+    if (this.tumblerB) {
       this.newObserver.broadcast({
         shiftXl: pos,
       });
-    } else if (this.currentButton === this.button.right) {
+
+    } else {
       this.newObserver.broadcast({
         shiftXr: pos,
       });
     }
     if (this.state.rotate === "horizontal") {
-      
       this.currentButton.style.left = `calc(${pos}% - ${this.buttonWidth}px)`;
       this.currentButton.style.top = -this.state.heightSlider + "px";
-
     } else if (this.state.rotate === "vertical") {
       this.currentButton.style.left = -this.state.widthSlider + "px";
       this.currentButton.style.top = `calc(${pos}% - ${this.buttonWidth}px)`;
     }
     if (this.state.show) {
-      this.currentValueText(this.state.currentVal1, this.state.currentVal2);
+      this.currentValueText();
       this.showCurentValue();
-
     }
     if (this.state.shiftXl >= this.state.shiftXr) {
       [this.state.shiftXl, this.state.shiftXr] = [
@@ -238,41 +234,25 @@ export default class View {
     // ------
   }
 
-  currentValueText(value1: string, value2?: string) {
-    if (this.currentButton === this.button.left) {
-      this.currentValLeft.textContent = this.state.currentText1();
+  currentValueText() {
+    if (this.tumblerB) {
+      this.currentValLeft.text(this.state.currentVal2);
     } else {
-      this.currentValRight.textContent = this.state.currentText2();
+      this.currentValRight.text(this.state.currentVal1);
     }
   }
   showCurentValue() {
     if (this.state.rotate === "horizontal") {
-      if (this.currentButton === this.button.left) {
-        this.currentValLeft.style.left = `calc(${this.state.shiftXl}% - ${
-        this.currentValLeft.offsetWidth / 2
-          }px)`;
-        
+      if (this.tumblerB) {
+        this.currentValLeft.positionHorizont(this.state.shiftXl);
       } else {
-        console.log(this.currentValRight.style.left);
-        this.currentValRight.style.left = `calc(${this.state.shiftXr}% - ${
-          this.currentValRight.offsetWidth/2
-        }px)`;
-        
+        this.currentValRight.positionHorizont(this.state.shiftXr);
       }
-      
     } else if (this.state.rotate === "vertical") {
-      if (this.currentButton === this.button.left) {
-        this.currentValLeft.style.top = `calc(${this.state.shiftXl}% - ${
-          this.currentValLeft.offsetHeight / 2
-        }px)`;
-        this.currentValLeft.style.left =
-          -(+this.currentValLeft.offsetWidth + 15) + "px";
+      if (this.tumblerB) {
+        this.currentValLeft.positionVertical(this.state.shiftXl);
       } else {
-        this.currentValRight.style.top = `calc(${this.state.shiftXr}% - ${
-          this.currentValLeft.offsetHeight / 2
-        }px)`;
-        this.currentValRight.style.left =
-          -(+this.currentValRight.offsetWidth + 15) + "px";
+        this.currentValRight.positionVertical(this.state.shiftXr);
       }
     }
   }
@@ -282,6 +262,5 @@ export default class View {
   }
   movePoint(e: MouseEvent) {
     this.onMouseMove(e);
-
   }
 }

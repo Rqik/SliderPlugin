@@ -58,11 +58,11 @@ describe("Model test", () => {
       intervalCount: "211",
       currentVal2: "290",
     });
+
     expect(model.state.minValue).not.toEqual("222");
     expect(model.state.minValue).toEqual(222);
     expect(model.state.maxValue).not.toEqual("222");
     expect(model.state.maxValue).toEqual(222);
-
     expect(model.state.intervalCount).not.toEqual("211");
     expect(model.state.intervalCount).toEqual(211);
 
@@ -71,6 +71,11 @@ describe("Model test", () => {
 
     expect(model.state.round).not.toEqual("144");
     expect(model.state.round).toEqual(144);
+
+    model.edit = jest.fn();
+    model.editMode({ minValue: "222" });
+    expect(model.edit).toHaveBeenCalled();
+    expect(model.edit).toHaveBeenCalledTimes(1);
   });
   test("leftvalue function ", () => {
     model.edit(state);

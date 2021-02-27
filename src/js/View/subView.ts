@@ -116,7 +116,10 @@ export class SliderRange {
     }
   }
   activeZone(left: number, rigth: number) {
+    // console.log('left = ' + left + ' rigth = ' + rigth);
+    
     if (this.rotate == "horizontal") {
+      
       this.sliderActiveZone.style.left = left + "%";
       this.sliderActiveZone.style.width = rigth - left + "%";
     } else {

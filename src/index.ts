@@ -13,7 +13,7 @@ setTimeout(() => {
 } , 4000)
 setTimeout(() => {
   s.data({ rotate: 'horizontal'})
-} , 6000)
+} , 2000)
 
 
  new SliderPlag('.slider2').data({rotate: 'horizontal'})

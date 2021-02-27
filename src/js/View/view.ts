@@ -2,6 +2,7 @@ import { IState } from "../interface";
 
 import { Interval, SliderRange, CurrentValue, Button } from "./subView";
 import Observer from "../observer";
+import { loadPartialConfig } from "@babel/core";
 
 export default class View {
   slider: HTMLElement;
@@ -88,6 +89,12 @@ export default class View {
       }
     }
   }
+  removeStyle(el: any) {
+    let s = el.querySelectorAll("[style]");
+    s.forEach((el: HTMLElement) => {
+      el.removeAttribute("style");
+    });
+  }
   reRender() {
     this.slider.innerHTML = "";
     this.show();
@@ -96,6 +103,7 @@ export default class View {
     this.buttonWidth = this.buttonRight.width();
   }
   sliderInit() {
+    this.removeStyle(this.slider);
     this.show();
     this.addElem();
     this.addAction();
@@ -122,7 +130,6 @@ export default class View {
     document.addEventListener("mouseup", this.remove.bind(this));
 
     this.currentButton = <HTMLElement>e.currentTarget;
-    // (e.currentTarget);
 
     if (this.currentButton == this.buttonLeft.button) {
       this.tumblerB = true;
@@ -209,6 +216,7 @@ export default class View {
         shiftXr: pos,
       });
     }
+
     if (this.state.rotate === "horizontal") {
       this.currentButton.style.left = `calc(${pos}% - ${this.buttonWidth}px)`;
       this.currentButton.style.top = -this.state.heightSlider + "px";
@@ -220,6 +228,7 @@ export default class View {
       this.currentValueText();
       this.showCurentValue();
     }
+
     if (this.state.shiftXl >= this.state.shiftXr) {
       [this.state.shiftXl, this.state.shiftXr] = [
         this.state.shiftXr,

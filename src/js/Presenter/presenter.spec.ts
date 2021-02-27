@@ -36,17 +36,22 @@ describe("Presenter test", () => {
     present.start = jest.fn();
     present.view.editView = jest.fn();
     present.model.edit = jest.fn();
+    present.model.stateCurrent.rotate = "horizontal";
 
+    present.sliderMode({ rotate: "horizontal" });
+    expect(present.init).not.toHaveBeenCalled();
+    expect(present.start).toHaveBeenCalled();
+    expect(present.start).toHaveBeenCalledTimes(1);
+   
+    present.model.stateCurrent.rotate = "vertical";
     present.sliderMode({ rotate: "horizontal" });
     expect(present.init).toHaveBeenCalled();
     expect(present.init).toHaveBeenCalledTimes(1);
 
-    expect(present.start).toHaveBeenCalled();
-    expect(present.start).toHaveBeenCalledTimes(1);
     expect(present.view.editView).toHaveBeenCalled();
-    expect(present.view.editView).toHaveBeenCalledTimes(1);
+    expect(present.view.editView).toHaveBeenCalledTimes(2);
     expect(present.model.edit).toHaveBeenCalled();
-    expect(present.model.edit).toHaveBeenCalledTimes(1);
+    expect(present.model.edit).toHaveBeenCalledTimes(2);
   });
   test("unsubscribe ", () => {
     let kek = jest.fn((el) => {

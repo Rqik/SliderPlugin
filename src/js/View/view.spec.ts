@@ -91,8 +91,12 @@ describe("View test", () => {
       view.addElem = jest.fn();
       view.addAction = jest.fn();
       view.resizeSLider = jest.fn();
-
+      view.removeStyle = jest.fn();
       view.sliderInit();
+
+      expect(view.removeStyle).toHaveBeenCalled();
+      expect(view.removeStyle).toHaveBeenCalledTimes(1);
+      expect(view.removeStyle).toHaveBeenLastCalledWith(view.slider);
 
       expect(view.show).toHaveBeenCalled();
       expect(view.show).toHaveBeenCalledTimes(1);
@@ -107,6 +111,17 @@ describe("View test", () => {
       expect(view.resizeSLider).toHaveBeenCalledTimes(1);
     });
 
+    test("removeStyle clear attribute style", () => {
+      let tes = document.createElement("div");
+      let chil = document.createElement("div");
+      tes.append(chil);
+      tes.style.width = "500px";
+      chil.style.height = "500px";
+      expect(tes.style.width).toBe("500px");
+
+      view.removeStyle(tes);
+      expect(JSON.stringify(chil.attributes)).toEqual("{}");
+    });
     test("call sliderInit", () => {
       let init = jest.spyOn(view, "sliderInit");
       view.sliderInit();

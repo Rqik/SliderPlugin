@@ -7,54 +7,53 @@ export default class Present {
   model: Model;
   view: View;
   options: setingOption = {};
-
+  rotate: rotate;
+  subFunction: Function = this.modify.bind(this);
   constructor(public selector: string) {
     this.model = new Model(selector);
     this.view = new View(this.model.stateCurrent);
-
+    this.rotate = this.model.stateCurrent.rotate;
     this.init();
   }
 
+  modify(data: object | Function | any) {
+    this.model.edit(data);
+
+    switch (Object.keys(data)[0]) {
+      case "shiftXl":
+        this.model.leftVal();
+        break;
+      case "shiftXr":
+        this.model.rightVal();
+        break;
+      default:
+        this.model.edit(data);
+        break;
+    }
+    this.view.editView(this.model.stateCurrent);
+  }
   init() {
-    this.view.newObserver.subscribe((data: object | Function | any) => {
-      this.model.edit(data);
-      this.view.editView(this.model.stateCurrent);
-
-      switch (Object.keys(data)[0]) {
-        case "shiftXl":
-          this.model.leftVal();
-          break;
-        case "shiftXr":
-          this.model.rightVal();
-          break;
-        default:
-          this.model.edit(data);
-          this.view.editView(this.model.stateCurrent);
-          break;
-      }
-    });
-
+    this.view.newObserver.subscribe(this.subFunction);
+    this.view.sliderInit();
     this.start();
   }
 
   sliderMode(options: object) {
-    let rotate = this.model.stateCurrent.rotate;
     this.model.edit(options);
-
-    if (rotate !== this.model.stateCurrent.rotate) {
-      this.view = new View(this.model.stateCurrent);
-    }
     this.view.editView(this.model.stateCurrent);
-    this.init();
-    this.start();
+    if (this.rotate !== this.model.stateCurrent.rotate) {
+      this.rotate = this.model.stateCurrent.rotate;
+      this.view.newObserver.unsubscribe(this.subFunction);
+      this.init();
+    } else {
+      this.start();
+    }
   }
   start() {
     this.view.reRender();
-
     this.view.installMove(
       this.model.stateCurrent.currentVal1,
       this.model.stateCurrent.currentVal2
     );
-    this.view.editView(this.model.stateCurrent);
   }
 }

@@ -2,26 +2,20 @@ import { rotate } from "./../interface";
 
 export class Button {
   button: HTMLElement = document.createElement("div");
-  widthButton: number = 110
+  widthButton: number = 110;
   constructor() {
     this.init();
-    this.width()
+    this.width();
   }
   init() {
     this.button.className = "slider__range_button";
   }
- 
+
   addEvent(type: string, action: Function) {
-    this.button.addEventListener(type, function test(e) {
-      action(e)
-    })
+    this.button.addEventListener(type, (e) => action(e));
   }
   width() {
-    return this.widthButton = this.button.offsetWidth / 2;
-  }
-  positionHorizontal(pos: string| number , heightSlider: string| number) {
-    this.button.style.left = `calc(${pos}% - ${this.widthButton}px)`;
-    this.button.style.top = -heightSlider + "px";
+    return (this.widthButton = this.button.offsetWidth / 2);
   }
 }
 
@@ -47,12 +41,9 @@ export class CurrentValue {
     this.currentVal.style.top = `calc(${shiftX}% - ${
       this.currentVal.offsetHeight / 2
     }px)`;
-    this.currentVal.style.left =
-      -(+this.currentVal.offsetWidth + 15) + "px";
+    this.currentVal.style.left = -(+this.currentVal.offsetWidth + 15) + "px";
   }
-
 }
-
 
 export class Interval {
   interval: HTMLUListElement = document.createElement("ul");
@@ -92,13 +83,8 @@ export class Interval {
     return this.interval;
   }
   edit(rotate: rotate) {
-    if (rotate === "vertical") {
-      this.rotate = rotate;
-      this.interval.classList.add("interval_point_vertical");
-    } else if (rotate === "horizontal") {
-      this.rotate = rotate;
-      this.interval.classList.remove("interval_point_vertical");
-    }
+    this.rotate = rotate;
+    this.init();
   }
 }
 

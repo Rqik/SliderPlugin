@@ -9,7 +9,7 @@ export interface IState {
   intervalCount: number;
   stepSize: number;
   currentVal1: number;
-  currentVal2: number; 
+  currentVal2: number;
   [k: string]: any;
 }
 export type rotate = "vertical" | "horizontal";
@@ -22,5 +22,3 @@ export interface setingOption {
   step?: number;
   range?: range;
 }
-
-

@@ -1,3 +1,4 @@
+import { rotate } from "./../interface";
 import View from "../View/view";
 import Model from "../Model/model";
 import { setingOption } from "../interface";
@@ -18,12 +19,12 @@ export default class Present {
     this.view.newObserver.subscribe((data: object | Function | any) => {
       this.model.edit(data);
       this.view.editView(this.model.stateCurrent);
-     
+
       switch (Object.keys(data)[0]) {
-        case 'shiftXl':
+        case "shiftXl":
           this.model.leftVal();
           break;
-        case 'shiftXr':
+        case "shiftXr":
           this.model.rightVal();
           break;
         default:
@@ -31,20 +32,23 @@ export default class Present {
           this.view.editView(this.model.stateCurrent);
           break;
       }
-      
-      
     });
 
     this.start();
   }
 
   sliderMode(options: object) {
+    let rotate = this.model.stateCurrent.rotate;
     this.model.edit(options);
+
+    if (rotate !== this.model.stateCurrent.rotate) {
+      this.view = new View(this.model.stateCurrent);
+    }
     this.view.editView(this.model.stateCurrent);
+    this.init();
     this.start();
   }
   start() {
-    this.view.reRender();
     this.view.reRender();
 
     this.view.installMove(

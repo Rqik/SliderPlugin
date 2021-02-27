@@ -1,4 +1,9 @@
 import Present from '../Presenter/presenter'
+
+$(function () {
+  console.log('jq');
+  
+})
 export class SliderPlag {
   sliders: NodeList
   presents?: any = []

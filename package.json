@@ -8,11 +8,11 @@
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "start": "cross-env NODE_ENV=development webpack serve --mode development --open",
     "watch": "cross-env NODE_ENV=development webpack --mode development --watch",
-    "test": "jest  --coverage"
+    "test": "jest  --coverage",
+    "testW": "jest  --watch",
+    "testCW": "jest  --coverage --watch"
   },
-  "jest": {
-    "collectCoverage": true
-  },
+  "jest": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Rqik/SliderPlugin.git"

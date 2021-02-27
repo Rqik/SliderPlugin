@@ -18,7 +18,6 @@ export default class View {
   currentButton: HTMLElement = this.buttonLeft.button; // абстрактный тумблер
   tumblerB: boolean = false;
   newObserver: Observer;
-  eventObserver: Observer;
   state: IState;
   slideClass: SliderRange;
 
@@ -27,7 +26,6 @@ export default class View {
     this.slider = <HTMLElement>document.querySelector(this.state.selector);
     this.slider.style.position = "relative";
     this.newObserver = new Observer();
-    this.eventObserver = new Observer();
     this.slideClass = new SliderRange(this.state.rotate);
     this.sliderRange = this.slideClass.sliderRange;
     this.sliderInit();
@@ -38,7 +36,6 @@ export default class View {
     };
     this.slideClass.edit(this.state.rotate);
     this.interval.edit(this.state.rotate);
-    // this.s = new SliderRange(this.state.rotate)
   }
 
   buttonLeftExpose() {
@@ -115,8 +112,8 @@ export default class View {
     if (this.state.show) {
       this.sliderRange.append(this.currentValRight.currentVal);
     } else {
-      this.currentValLeft.currentVal.remove()
-      this.currentValRight.currentVal.remove()
+      this.currentValLeft.currentVal.remove();
+      this.currentValRight.currentVal.remove();
     }
   }
 
@@ -125,11 +122,14 @@ export default class View {
     document.addEventListener("mouseup", this.remove.bind(this));
 
     this.currentButton = <HTMLElement>e.currentTarget;
-    if (this.currentButton === this.buttonLeft.button) {
+    // (e.currentTarget);
+
+    if (this.currentButton == this.buttonLeft.button) {
       this.tumblerB = true;
     } else {
       this.tumblerB = false;
     }
+
     if (this.state.range == "two") {
       this.buttonLeft.button.ondragstart = () => false;
     }
@@ -139,7 +139,6 @@ export default class View {
     document.removeEventListener("mousemove", this.clickHandler);
     document.onmouseup = null;
   }
-  // установка значений
   installMove(min: number, max: number) {
     if (this.state.rotate === "horizontal") {
       this.sliderIdent = this.slider.offsetLeft;
@@ -205,7 +204,6 @@ export default class View {
       this.newObserver.broadcast({
         shiftXl: pos,
       });
-
     } else {
       this.newObserver.broadcast({
         shiftXr: pos,

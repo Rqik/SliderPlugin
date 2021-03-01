@@ -16,7 +16,7 @@ export default class View {
   interval: Interval = new Interval();
   buttonWidth: number = 10;
   clickHandler: any = this.onMouseMove.bind(this);
-  currentButton: HTMLElement = this.buttonLeft.button; // абстрактный тумблер
+  currentButton: HTMLElement = this.buttonRight.button; // абстрактный тумблер
   tumblerB: boolean = false;
   newObserver: Observer;
   state: IState;
@@ -44,6 +44,10 @@ export default class View {
     if (this.state.show) {
       this.sliderRange.append(this.currentValLeft.currentVal);
     }
+  }
+  buttonLeftRemove() {
+    this.buttonLeft.button.remove();
+    this.currentValLeft.currentVal.remove();
   }
   intervalExpose() {
     this.renderInterval();
@@ -77,18 +81,9 @@ export default class View {
         widthSlider: this.sliderRange.offsetWidth,
         heightSlider: this.sliderRange.offsetHeight,
       });
-
-      if (this.state.rotate === "horizontal") {
-        this.newObserver.broadcast({
-          pixelSize: this.sliderRange.offsetWidth,
-        });
-      } else if (this.state.rotate === "vertical") {
-        this.newObserver.broadcast({
-          pixelSize: this.sliderRange.offsetHeight,
-        });
-      }
     }
   }
+
   removeStyle(el: any) {
     let s = el.querySelectorAll("[style]");
     s.forEach((el: HTMLElement) => {
@@ -113,9 +108,13 @@ export default class View {
   show() {
     if (this.state.range === "two") {
       this.buttonLeftExpose();
+    } else {
+      this.buttonLeftRemove();
     }
     if (this.state.showInterval) {
       this.intervalExpose();
+    } else {
+      this.interval.interval.remove;
     }
     if (this.state.show) {
       this.sliderRange.append(this.currentValRight.currentVal);
@@ -136,11 +135,7 @@ export default class View {
     } else {
       this.tumblerB = false;
     }
-
-    if (this.state.range == "two") {
-      this.buttonLeft.button.ondragstart = () => false;
-    }
-    this.buttonRight.button.ondragstart = () => false;
+    this.currentButton.ondragstart = () => false;
   }
   remove() {
     document.removeEventListener("mousemove", this.clickHandler);
@@ -152,8 +147,10 @@ export default class View {
     } else if (this.state.rotate === "vertical") {
       this.sliderIdent = this.slider.offsetTop;
     }
-
-    this.initMove(this.mathValueCalc(min), this.mathValueCalc(max));
+    if (this.state.range == 'two') {
+      this.initMove(this.mathValueCalc(min), this.mathValueCalc(max));
+    }
+    this.initMove(this.mathValueCalc(this.state.minValue), this.mathValueCalc(max));
   }
   mathValueCalc(num: number): number {
     return (
@@ -164,29 +161,30 @@ export default class View {
   }
   // сброс позиций кнопок
   initMove(min: number, max: number) {
-    Promise.resolve().then(() => {
-      this.currentButton = this.buttonLeft.button;
-      this.tumblerB = true;
-      this.moveButton(min);
-      this.currentButton = this.buttonRight.button;
-      this.tumblerB = false;
-      this.moveButton(max);
-    });
+    this.currentButton = this.buttonLeft.button;
+    this.tumblerB = true;
+    this.moveButton(min);
+    this.currentButton = this.buttonRight.button;
+    this.tumblerB = false;
+    this.moveButton(max);
   }
   onMouseMove(e: MouseEvent) {
     let perc: number = 0;
     if (this.state.rotate === "horizontal") {
-      //если изменяется на шаг то вызываю мув
       perc = this.mathPercent(e.pageX);
     } else if (this.state.rotate === "vertical") {
-      //если изменяется на шаг то вызываю мув
       perc = this.mathPercent(e.pageY);
     }
-    if (this.state.stepSize <= 1) {
-      this.moveButton(perc);
-    } else {
+    if (!!this.state.stepSizePerc) {
+      this.moveButton(this.mathStepPercent(perc));
+    } else if (this.state.stepSize > 1) {
       this.moveButton(this.mathOperation(perc));
+    } else {
+      this.moveButton(perc);
     }
+  }
+  mathStepPercent(num: number): number {
+    return Math.round(num / this.state.stepSizePerc) * this.state.stepSizePerc;
   }
   //перевод в проценты
   mathPercent(num: number): number {
@@ -202,11 +200,9 @@ export default class View {
   moveButton(pos: number): void {
     if (pos <= 0) {
       pos = 0;
-    }
-    if (pos >= 100) {
+    } else if (pos >= 100) {
       pos = 100;
     }
-
     if (this.tumblerB) {
       this.newObserver.broadcast({
         shiftXl: pos,
@@ -229,12 +225,6 @@ export default class View {
       this.showCurentValue();
     }
 
-    if (this.state.shiftXl >= this.state.shiftXr) {
-      [this.state.shiftXl, this.state.shiftXr] = [
-        this.state.shiftXr,
-        this.state.shiftXl,
-      ];
-    }
     // ----
     this.activeZoneAction();
     //размеры для активной зоны
@@ -265,7 +255,11 @@ export default class View {
   }
 
   activeZoneAction() {
-    this.slideClass.activeZone(this.state.shiftXl, this.state.shiftXr);
+    if (this.state.shiftXl > this.state.shiftXr) {
+      this.slideClass.activeZone(this.state.shiftXr, this.state.shiftXl);
+    } else {
+      this.slideClass.activeZone(this.state.shiftXl, this.state.shiftXr);
+    }
   }
   movePoint(e: MouseEvent) {
     this.onMouseMove(e);

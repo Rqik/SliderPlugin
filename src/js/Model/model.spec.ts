@@ -17,6 +17,10 @@ let state: IState = {
   pixelSize: "6",
   shiftXl: 123,
   shiftXr: 210.221,
+  currentMin: 10, // установка значений в числах
+  currentMax: 40, // установка значений в числах
+  stepSizePerc: 0,// шаг движения указателя в %
+
 };
 
 let state2: IState = {
@@ -35,6 +39,9 @@ let state2: IState = {
   pixelSize: "6",
   shiftXl: 132.22,
   shiftXr: 210.221,
+  currentMin: 10, // установка значений в числах
+  currentMax: 40, // установка значений в числах
+  stepSizePerc: 0,// шаг движения указателя в %
 };
 
 describe("Model test", () => {

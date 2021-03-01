@@ -18,6 +18,7 @@ let state: IState = {
   pixelSize: "6",
   shiftXl: 0,
   shiftXr: 200,
+  stepSizePerc: 0
 };
 
 let state2: IState = {
@@ -36,6 +37,7 @@ let state2: IState = {
   pixelSize: "6",
   shiftXl: 0,
   shiftXr: 200,
+  stepSizePerc: 0
 };
 
 jest.mock("../observer.ts");
@@ -169,7 +171,7 @@ describe("View test", () => {
       view.state.heightSlider = 100;
       view.state.shiftXl = 1000;
       view.state.shiftXr = 10;
-
+      view.state.tumblerB = false;
       view.currentValueText = jest.fn();
       view.showCurentValue = jest.fn();
       view.activeZoneAction = jest.fn();
@@ -187,13 +189,10 @@ describe("View test", () => {
       expect(view.newObserver.broadcast).toHaveBeenCalled();
       expect(view.newObserver.broadcast).toHaveBeenCalledWith({ shiftXr: 0 });
 
-      expect(view.state.shiftXl).toBeLessThan(view.state.shiftXr);
-      expect(view.state.shiftXl).toBeLessThanOrEqual(473);
-      expect(view.state.shiftXl).toEqual(10);
-
-      expect(view.state.shiftXr).toBeGreaterThan(view.state.shiftXl);
-      expect(view.state.shiftXr).toBeGreaterThanOrEqual(900);
-      expect(view.state.shiftXr).toEqual(1000);
+      expect(view.state.shiftXl).toBeGreaterThan(view.state.shiftXr);
+      expect(view.state.shiftXr).toBeLessThanOrEqual(473);
+      expect(view.state.shiftXr).toBeLessThan(view.state.shiftXl);
+      expect(view.state.shiftXr).toBeLessThanOrEqual(900);
 
       view.tumblerB = true;
       view.moveButton(1230);
@@ -305,6 +304,12 @@ describe("View test", () => {
       view.state.shiftXr = 100;
       view.state.shiftXl = 10;
 
+      view.activeZoneAction();
+      expect(view.slideClass.sliderActiveZone.style.left).toEqual("10%");
+      expect(view.slideClass.sliderActiveZone.style.width).toEqual("90%");
+      expect(view.slideClass.sliderActiveZone.style.width).not.toEqual("91%");
+      view.state.shiftXr = 10;
+      view.state.shiftXl = 100;
       view.activeZoneAction();
       expect(view.slideClass.sliderActiveZone.style.left).toEqual("10%");
       expect(view.slideClass.sliderActiveZone.style.width).toEqual("90%");
@@ -521,6 +526,15 @@ describe("View test", () => {
       expect(second).not.toEqual(1000 / 400);
     });
 
+    test("mathStepPercent function", () => {
+      view.state.stepSizePerc = 25;
+      let array = [0, 10, 20, 22.23123, 38.22132, 40.23232, 50.212, 49.99, 100];
+      array = array.map((el) => {
+        return view.mathStepPercent(el);
+      });
+
+      expect(array).toEqual([0, 0, 25, 25, 50, 50, 50, 50, 100]);
+    });
     test("mathOperation function", () => {
       let array = [
         0,
@@ -549,14 +563,16 @@ describe("View test", () => {
       view.mathPercent = jest.fn();
       view.moveButton = jest.fn();
       view.mathOperation = jest.fn();
+      view.mathStepPercent = jest.fn();
       view.state.stepSize = 1;
-
+      view.state.stepSizePerc = 0;
       view.onMouseMove(event);
 
       expect(view.mathPercent).toHaveBeenCalled();
       expect(view.mathPercent).toHaveBeenCalledTimes(1);
       expect(view.moveButton).toHaveBeenCalled();
       expect(view.moveButton).toHaveBeenCalledTimes(1);
+      expect(view.mathStepPercent).not.toHaveBeenCalled();
       expect(view.mathOperation).not.toHaveBeenCalled();
       expect(view.mathOperation).not.toHaveBeenCalledTimes(1);
       view.state.rotate = "horizontal";
@@ -568,6 +584,12 @@ describe("View test", () => {
       expect(view.moveButton).toHaveBeenCalledTimes(2);
       expect(view.mathOperation).toHaveBeenCalled();
       expect(view.mathOperation).toHaveBeenCalledTimes(1);
+      expect(view.mathStepPercent).not.toHaveBeenCalled();
+
+      view.state.stepSizePerc = 10;
+      view.onMouseMove(event);
+      expect(view.mathStepPercent).toHaveBeenCalled();
+      expect(view.mathStepPercent).toHaveBeenCalledTimes(1);
     });
 
     test("movePoint function ", () => {

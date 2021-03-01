@@ -27,7 +27,7 @@ declare global {
       getData() {
         let res: any = [];
         arr.map((el: any, ind: any) => {
-          res.push(el.presents);
+          res = [...res , el.getData()];
         });
 
         return res;
@@ -52,21 +52,15 @@ class SliderPlag {
     this.sliders.classList.add(className);
     let pr = new Present(`.${className}`);
     pr.sliderMode(opt);
-    this.presents = [...this.presents, pr];
+    this.presents =  pr;
     return this;
   }
 
   data(data: object) {
-    this.presents.forEach((element: Present) => {
-      element.sliderMode(data);
-    });
+    this.presents.sliderMode(data);
     return this;
   }
   getData() {
-    let state: any = [];
-    this.presents.forEach((element: Present) => {
-      state = [...state, element.model.stateCurrent];
-    });
-    return state;
+    return  this.presents.state();
   }
 }

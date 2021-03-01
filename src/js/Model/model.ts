@@ -10,11 +10,11 @@ export default class Model {
     show: true, // показыватьть текущее значение над указателем
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
+    stepSizePerc: 0,// шаг движения указателя в %
     stepSize: 1, // шаг движения указателя в px
     currentVal1: 50, // установка значений в числах
     currentVal2: 0, // установка значений в числах
     round: 1, // округление,
-    stepSizePerc: 0,// шаг движения указателя в %
     shiftXl: 0,
     shiftXr: 0,
   };

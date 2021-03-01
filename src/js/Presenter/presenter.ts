@@ -15,7 +15,9 @@ export default class Present {
     this.rotate = this.model.stateCurrent.rotate;
     this.init();
   }
-
+  state() {
+    return this.model.stateCurrent
+  }
   modify(data: object | Function | any) {
     this.model.edit(data);
     switch (Object.keys(data)[0]) {

@@ -23,8 +23,8 @@ runChange($("#form2"), "stepSize", plug2);
 runChange($("#form2"), "stepSizePerc", plug2);
 
 let plug3 = $(".plug3").sliderRqik();
-let plug4 = $(".plug4").sliderRqik();
-plug3.data({ currentVal1: 50, maxValue: 1122 });
+let plug4 = $(".plug4").sliderRqik()
+// plug3.data({ currentVal1: 50, maxValue: 1122 });
 
 $(".plug1").on("click", function () {
   inputChange(
@@ -40,15 +40,16 @@ $(".plug1").on("click", function () {
 });
 
 
+
 checkChange($("#form3"), "rotate", ["vertical", "horizontal"], plug3);
 checkChange($("#form3"), "showInterval", [true, false], plug3);
 checkChange($("#form3"), "show", [true, false], plug3);
 checkChange($("#form3"), "range", ['two', 'one'], plug3);
 
-checkChange($("#form4"), "rotate", ["vertical", "horizontal"], plug4);
-checkChange($("#form4"), "showInterval", [true, false], plug4);
-checkChange($("#form4"), "show", [true, false], plug4);
-checkChange($("#form4"), "range", [ 'two' , 'one'], plug4);
+// checkChange($("#form4"), "rotate", ["vertical", "horizontal"], plug4);
+// checkChange($("#form4"), "showInterval", [true, false], plug4);
+// checkChange($("#form4"), "show", [true, false], plug4);
+// checkChange($("#form4"), "range", [ 'two' , 'one'], plug4);
 
 function checkChange(elem: JQuery, nameAtr: string, value: any, plugItem: any) {
   elem.find(`input[name='${nameAtr}']`).on("click", function () {

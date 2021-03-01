@@ -46,10 +46,10 @@ checkChange($("#form3"), "showInterval", [true, false], plug3);
 checkChange($("#form3"), "show", [true, false], plug3);
 checkChange($("#form3"), "range", ['two', 'one'], plug3);
 
-// checkChange($("#form4"), "rotate", ["vertical", "horizontal"], plug4);
-// checkChange($("#form4"), "showInterval", [true, false], plug4);
-// checkChange($("#form4"), "show", [true, false], plug4);
-// checkChange($("#form4"), "range", [ 'two' , 'one'], plug4);
+checkChange($("#form4"), "rotate", ["vertical", "horizontal"], plug4);
+checkChange($("#form4"), "showInterval", [true, false], plug4);
+checkChange($("#form4"), "show", [true, false], plug4);
+checkChange($("#form4"), "range", [ 'two' , 'one'], plug4);
 
 function checkChange(elem: JQuery, nameAtr: string, value: any, plugItem: any) {
   elem.find(`input[name='${nameAtr}']`).on("click", function () {

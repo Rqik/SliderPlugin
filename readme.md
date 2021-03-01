@@ -1,6 +1,6 @@
-SliderRqik
+[SliderRqik] (https://rqik.github.io/SliderPlugin/dist/)
 ======
-
+# [Демо](https://rqik.github.io/SliderPlugin/dist/)
 ## Способ подключения 
 
 ```javascript

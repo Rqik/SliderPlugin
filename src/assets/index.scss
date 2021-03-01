@@ -9,16 +9,14 @@
   width: 100%;
 
   .nav-panel {
-    // box-sizing: content-box;
     background-color: #ffffffce;
     height: 100vh;
     font-family: Montserrat;
     font-style: normal;
     font-weight: 500;
     font-size: 24px;
-    line-height: 126.9%;
-    /* or 30px */
-    // position: fixed;
+    line-height: 146.9%;
+
     top: 0;
     // overflow-y: scroll;
     padding: 2rem;
@@ -44,6 +42,12 @@
         cursor: pointer;
         &:hover{
           background-color: $grey-border;
+        }
+        a{
+          font-family: inherit;
+          text-decoration: none;
+          color: inherit;
+          width: 100%;
         }
       }
     }
@@ -91,6 +95,32 @@
     &-col{
       flex-direction: row;
       justify-content: flex-end;
+
+    }
+    H1,  h2 , h3, h4, p , a{
+      font-family: 'Montserrat', 'Roboto' , sans-serif;
+      font-style: normal;
+      line-height: 126.9%;
+    }
+    h1{
+      font-weight: 600;
+      line-height: 126.9%;
+    }
+    hr{
+      color: $color-c;
+      width: 100%;
+      border:none;
+      background-color: $color-c;
+       height:3px;
+      outline: none;
+    }
+   
+    .view_title{
+      font-family: 'Montserrat', 'Roboto' , sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 126.9%;
     }
   }
 

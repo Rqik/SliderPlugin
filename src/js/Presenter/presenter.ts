@@ -18,7 +18,6 @@ export default class Present {
 
   modify(data: object | Function | any) {
     this.model.edit(data);
-
     switch (Object.keys(data)[0]) {
       case "shiftXl":
         this.model.leftVal();
@@ -39,21 +38,25 @@ export default class Present {
   }
 
   sliderMode(options: object) {
-    this.model.edit(options);
+    this.model.editMode(options);
     this.view.editView(this.model.stateCurrent);
+    // console.log( options);
+
     if (this.rotate !== this.model.stateCurrent.rotate) {
       this.rotate = this.model.stateCurrent.rotate;
       this.view.newObserver.unsubscribe(this.subFunction);
+      this.view.removeStyle(this.view.slider)
       this.init();
     } else {
-      this.start();
     }
+    
+    this.start();
   }
   start() {
     this.view.reRender();
     this.view.installMove(
-      this.model.stateCurrent.currentVal1,
-      this.model.stateCurrent.currentVal2
+      this.model.state.currentVal2,
+      this.model.state.currentVal1
     );
   }
 }

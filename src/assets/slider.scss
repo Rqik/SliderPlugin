@@ -2,7 +2,7 @@
 
 .slider__range {
   width: 100%;
-  height: 6px;
+  height: 7px;
   border-radius: 1rem;
   cursor: pointer;
   background-color: white;
@@ -28,7 +28,7 @@
   &-item {
     font-family: 'Montserrat';
     font-weight: normal;
-    font-size: 14px;
+    font-size: 10px;
     position: relative;
     top: -2px;
     left: 0;
@@ -98,7 +98,12 @@
   box-shadow: $shadow-orange;
   background: linear-gradient(180deg, #FFFFFF 0%, #F7DDC5 100%) center;
   transition: box-shadow .3s ease-in-out;
-
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none; 
   &::before {
     content: '';
     position: absolute;
@@ -122,10 +127,8 @@
 
 
 .slider__range.slider__range_vertical {
-
   height: 100%;
-  width: 6px;
-
+  width: 7px;
   .slider__range_active {
     bottom: 0;
     top: 0;

@@ -8,6 +8,7 @@ export interface IState {
   rotate: rotate;
   intervalCount: number;
   stepSize: number;
+  stepSizePerc: number;
   currentVal1: number;
   currentVal2: number;
   [k: string]: any;

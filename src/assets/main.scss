@@ -37,6 +37,12 @@ body {
       width: 100px;
     }
   }
+  .checkbox-items{
+    label{
+      display: flex;
+      flex-direction: row;
+    }
+  }
 }
 
 .heys{
@@ -45,8 +51,13 @@ body {
   height: 200px;
   resize: both;
   overflow: auto;
-  padding: 15px 20px;
-
+  padding: 40px 40px;
+  margin: 20px 0 ;
+  max-width: 60vw;
+  background-color: white;
+  .slider_rqik2{
+    height: 100%;
+  }
 }
 .slider2{
   width: 400px;

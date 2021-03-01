@@ -19,14 +19,46 @@
     </div>
 
     <div class="view-panel">
+      <div class="view__slider">
+        <pre>
+        <code>
+  <span class="comment">// index.html</span>
+  &lt;div class=&quot;plug&quot;&gt;&lt;/div&gt;   
+
+  <span class="comment">// java.script</span>
+  $(".plug").sliderRqik();  
+        </code>
+      </pre>
+      </div>
+      <div class="view__slider">
+        <pre>
+        <code>
+  <span class="comment">// index.js</span>
+  $(".plug").sliderRqik({
+    minValue: 0,<span class="comment"> // минимальное значение</span>
+    maxValue: 100, <span class="comment">// максимальное значение</span>
+    range: "two", <span class="comment">// 1 или 2 указателя</span>
+    rotate: "horizontal", <span class="comment">// ориентация vertical horizontal</span>
+    show: true, < class="comment">// показыватьть текущее значение над указателем</span>
+    showInterval: true, <span class="comment">// показать интервал</span>
+    intervalCount: 4, span  class="comment">// количество интервалов</span>
+    stepSize: 1, <span class="comment">// шаг движения указателя в px</span>
+    currentVal1: 50, <span class="comment">// установка значений в числах</span>
+    currentVal2: 0, <span class="comment">// установка значений в числах</span>
+    round: 1,<span class="comment">// округление,</span>
+    stepSizePerc: 0,  <span class="comment">// шаг движения указателя в %</span>
+  }); 
+        </code>
+      </pre>
+      </div>
       <div class="view__slider view__slider-col">
         <div class="slider_rqik plug1"></div>
         <form id="form1" class="control-panel">
           <label>
-            min
+            Min
             <input type="text" name="minValue" value="0" /></label>
           <label>
-            max
+            Max
             <input type="text" name="maxValue" value="120" /></label>
 
           <label>
@@ -43,21 +75,20 @@
       <div class="view__slider view__slider-col">
         <div class="slider_rqik plug2"></div>
         <form id="form2" class="control-panel">
-       
           <label>
             Количество интервалов
             <input type="text" name="intervalCount" value="2" /></label>
           <label>
             Шаг в %
             <input type="text" name="stepSizePerc" /></label>
-            <label>
-              Шаг в px
-              <input type="text" name="stepSize" /></label>
+          <label>
+            Шаг в px
+            <input type="text" name="stepSize" /></label>
         </form>
       </div>
       <div class="view__slider">
-        <div class=" plug3 slider_rqik2"> </div>
-        <form id="form3" class="control-panel">
+        <div class="plug3 slider_rqik2"></div>
+        <form id="form3" class="control-panel checkbox-items">
           <label>
             Показать интервалы
             <input type="checkbox" name="showInterval" checked /></label>
@@ -66,20 +97,35 @@
             <input type="checkbox" name="show" checked /></label>
           <label>
             Ориентация
-            <span>
-              (Вертикальная/Горизонтальная)
-            </span>
+            <span> (Вертикальная/Горизонтальная) </span>
             <input type="checkbox" name="rotate" /></label>
 
-            <label>
-              Количество ползунков
-              Два/Один 
-              <input type="checkbox" name="range" checked /></label>
+          <label>
+            Количество ползунков Два/Один
+            <input type="checkbox" name="range" checked /></label>
         </form>
         <!-- <div>data-min-value="22" data-max-value="222" data-current-val2='90'</div> -->
       </div>
       <div class="view__slider">
-        <div class="slider_rqik2" data-min-value="2"></div>
+        <div class="heys">
+          <div class="slider_rqik2 plug4"></div>
+        </div>
+        <form id="form4" class="control-panel checkbox-items">
+          <label>
+            Показать интервалы
+            <input type="checkbox" name="showInterval" checked /></label>
+          <label>
+            Показать текущее значение над полузнком
+            <input type="checkbox" name="show" checked /></label>
+          <label>
+            Ориентация
+            <span> (Вертикальная/Горизонтальная) </span>
+            <input type="checkbox" name="rotate" /></label>
+
+          <label>
+            Количество ползунков Два/Один
+            <input type="checkbox" name="range" checked /></label>
+        </form>
       </div>
 
       <!-- <div class="slider_rqik2"></div>

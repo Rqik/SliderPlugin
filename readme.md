@@ -1,4 +1,4 @@
-[SliderRqik] (https://rqik.github.io/SliderPlugin/dist/)
+SliderRqik
 ======
 # [Демо](https://rqik.github.io/SliderPlugin/dist/)
 ## Способ подключения 

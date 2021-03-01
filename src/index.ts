@@ -30,12 +30,12 @@ $(".plug1").on("click", function () {
   inputChange(
     $("#form1"),
     "currentVal2",
-    plug1.getData()[0][0].model.stateCurrent.currentVal2
+    plug1.getData()[0].currentVal2
   );
   inputChange(
     $("#form1"),
     "currentVal1",
-    plug1.getData()[0][0].model.stateCurrent.currentVal1
+    plug1.getData()[0].currentVal1
   );
 });
 

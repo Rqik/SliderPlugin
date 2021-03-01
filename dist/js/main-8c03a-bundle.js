@@ -11559,8 +11559,8 @@ runChange($("#form2"), "stepSizePerc", plug2);
 let plug3 = $(".plug3").sliderRqik();
 let plug4 = $(".plug4").sliderRqik();
 $(".plug1").on("click", function () {
-  inputChange($("#form1"), "currentVal2", plug1.getData()[0][0].model.stateCurrent.currentVal2);
-  inputChange($("#form1"), "currentVal1", plug1.getData()[0][0].model.stateCurrent.currentVal1);
+  inputChange($("#form1"), "currentVal2", plug1.getData()[0].currentVal2);
+  inputChange($("#form1"), "currentVal1", plug1.getData()[0].currentVal1);
 });
 checkChange($("#form3"), "rotate", ["vertical", "horizontal"], plug3);
 checkChange($("#form3"), "showInterval", [true, false], plug3);

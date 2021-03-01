@@ -57,6 +57,22 @@
     align-items: center;
     align-content: center;
 
+    pre{
+      background-color: $background-color-b;
+      padding:20px;
+      display: flex;
+      color: $color-b;
+      width: 100%;
+      // flex-direction: row;
+      font-size: 13px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      // text-align: center;
+      .comment{
+        color: $color-c;
+        font-style: italic;
+      }
+    }
   }
 
   .view__slider{
@@ -67,7 +83,7 @@
     align-content: center;
     justify-content: flex-start;
     align-items: flex-start;
-    border: 1px solid black;
+    // border: 1px solid black;
     // height: 30%;
     padding: 40px;
     width: 100%;

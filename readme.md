@@ -13,6 +13,34 @@ _Eslint_
 _Prettier_  
 _Babel_
 
+## **Install**
+
+1. Clone
+
+```console
+git clone https://github.com/Rqik/SliderPlugin.git
+```
+
+2. Open
+
+```console
+cd SliderPlugin
+```
+
+3. Init
+
+```console
+npm install
+```
+
+4.  Run
+
+```console
+npm run start
+```
+
+---
+
 ## **Model - View - Presenter**
 
 **Model** -отвечает за текущее состояние слайдера, хранит в себе стартовые значения. Имеет методы для изменения текущего состояния и его возврата.
@@ -21,11 +49,14 @@ _Babel_
 
 **Presenter** - отвечает за инициализацию **View** и **Model**. Решает вопрос с передачей данных между компонентами. Подписывается на изменения во View и вызывает соответствующие методы в Model. Принимает в себя значения для инициализации которые передает в Model. Служит посредником. Вызывает методы перерисовки в View и изменения состояния.
 
----
+> _Для более удобного использования. Поверх Presenter
+> Используется class Slider для подключения нескольких Presenter
+> к DomElement имеющим одинаковый selector переданный при
+> инициализации._
 
-_Для более удобного использования. Поверх Presenter Используется class Slider для подключения нескольких Presenter к DomElement имеющим одинаковый selector переданный при инициализации._
+# [**Демо старница**](https://rqik.github.io/SliderPlugin/dist/)
 
-# [**Демо**](https://rqik.github.io/SliderPlugin/dist/)
+## https://rqik.github.io/SliderPlugin/dist
 
 ## Способ подключения
 

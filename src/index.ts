@@ -1,5 +1,4 @@
 import './assets/main.scss';
-
 import './js/View/subView';
 
 require('./js/Slider/slider');

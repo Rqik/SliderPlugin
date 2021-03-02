@@ -1,30 +1,30 @@
-import { fn } from "jquery";
-import Present from "../Presenter/presenter";
+import { fn } from 'jquery';
+import Present from '../Presenter/presenter';
 
-declare global { 
+declare global {
   interface JQuery {
     sliderRqik: any;
   }
 }
 (function ($) {
   $.fn.sliderRqik = function (options: object) {
-    let arr: any = [];
+    const arr: any = [];
 
     this.map((id, el) => {
-      let res = new SliderPlag(el, id);
+      const res = new SliderPlag(el, id);
       res.data(options);
       arr.push(res);
     });
 
-    let slider = {
+    const slider = {
       data(opt: object) {
-        arr.map(function (el: any) {
+        arr.map((el: any) => {
           el.data(opt);
         });
         return slider;
       },
       getData() {
-        let res: any = [];
+        const res: any = [];
         arr.map((el: any, ind: any) => {
           res.push(el.presents);
         });
@@ -35,11 +35,14 @@ declare global {
 
     return slider;
   };
-})(jQuery);
+}(jQuery));
 class SliderPlag {
   sliders: HTMLElement;
+
   presents?: any = [];
-  selector: string = "";
+
+  selector = '';
+
   constructor(element: HTMLElement, ind: number) {
     this.sliders = element;
     this.selector = this.sliders.className;
@@ -47,9 +50,9 @@ class SliderPlag {
   }
 
   start(selector: string, ind: number, opt: object) {
-    let className = `${selector.replace(/\W+/gi, "")}-${ind}_i-slider`;
+    const className = `${selector.replace(/\W+/gi, '')}-${ind}_i-slider`;
     this.sliders.classList.add(className);
-    let pr = new Present(`.${className}`);
+    const pr = new Present(`.${className}`);
     pr.sliderMode(opt);
     this.presents = [...this.presents, pr];
     return this;
@@ -61,6 +64,7 @@ class SliderPlag {
     });
     return this;
   }
+
   getData() {
     let state: any = [];
     this.presents.forEach((element: Present) => {
@@ -69,4 +73,3 @@ class SliderPlag {
     return state;
   }
 }
-

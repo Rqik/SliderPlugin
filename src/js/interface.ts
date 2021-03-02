@@ -13,8 +13,8 @@ export interface IState {
   currentVal2: number;
   [k: string]: any;
 }
-export type rotate = "vertical" | "horizontal";
-export type range = "one" | "two";
+export type rotate = 'vertical' | 'horizontal';
+export type range = 'one' | 'two';
 
 export interface setingOption {
   min?: number;

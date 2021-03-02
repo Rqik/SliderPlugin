@@ -1,16 +1,16 @@
-import { IState } from "../interface";
+import { IState } from '../interface';
 
 export default class Model {
   state: IState = {
-    selector: "sliderRqik", // селектор
+    selector: 'sliderRqik', // селектор
     minValue: 0, // минимальное значение
     maxValue: 100, // максимальное значение
-    range: "two", // 1 или 2 указателя
-    rotate: "horizontal", // ориентация vertical horizontal
+    range: 'two', // 1 или 2 указателя
+    rotate: 'horizontal', // ориентация vertical horizontal
     show: true, // показыватьть текущее значение над указателем
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
-    stepSizePerc: 0,// шаг движения указателя в %
+    stepSizePerc: 0, // шаг движения указателя в %
     stepSize: 1, // шаг движения указателя в px
     currentVal1: 50, // установка значений в числах
     currentVal2: 0, // установка значений в числах
@@ -19,7 +19,7 @@ export default class Model {
     shiftXr: 0,
   };
 
-  constructor(selector: string = "slider_rqik") {
+  constructor(selector = 'slider_rqik') {
     this.state.selector = selector;
   }
 
@@ -29,6 +29,7 @@ export default class Model {
       ...key,
     };
   }
+
   editMode<T extends object>(key: T): void {
     this.edit(key);
     this.state.minValue = Number(this.state.minValue);
@@ -45,13 +46,14 @@ export default class Model {
     const res = ((t.maxValue - t.minValue) * t.shiftXl) / 100 + t.minValue;
     t.currentVal2 = Math.round(res * 10 ** t.round) / 10 ** t.round;
   }
- 
+
   rightVal() {
     const t = this.state;
     const res = ((t.maxValue - t.minValue) * t.shiftXr) / 100 + t.minValue;
     t.currentVal1 = Math.round(res * 10 ** t.round) / 10 ** t.round;
     t.currentMax = t.currentVal1;
   }
+
   get stateCurrent(): IState {
     return this.state;
   }

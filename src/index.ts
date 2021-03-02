@@ -1,6 +1,3 @@
-import { data } from 'jquery';
-import { rotate } from './js/interface';
-
 import './assets/main.scss';
 
 import './js/View/subView';
@@ -14,39 +11,39 @@ const plug1 = $('.plug1').sliderRqik({
   range: ' two ',
 });
 
-runChange($('#form1'), 'maxValue', plug1);
-runChange($('#form1'), 'minValue', plug1);
-runChange($('#form1'), 'currentVal1', plug1);
-runChange($('#form1'), 'currentVal2', plug1);
-runChange($('#form1'), 'round', plug1);
-
 const plug2 = $('.plug2').sliderRqik({
   rotate: 'vertical',
   range: 'one',
   minValue: -100,
 });
-runChange($('#form2'), 'intervalCount', plug2);
-runChange($('#form2'), 'stepSize', plug2);
-runChange($('#form2'), 'stepSizePerc', plug2);
 
 const plug3 = $('.plug3').sliderRqik();
 const plug4 = $('.plug4').sliderRqik();
-// plug3.data({ currentVal1: 50, maxValue: 1122 });
+
+actionForm($('#form1'), plug1);
+actionForm($('#form2'), plug2);
+actionForm($('#form3'), plug3);
+actionForm($('#form4'), plug4);
 
 $('.plug1').on('click', () => {
   inputChange($('#form1'), 'currentVal2', plug1.getData()[0].currentVal2);
   inputChange($('#form1'), 'currentVal1', plug1.getData()[0].currentVal1);
 });
 
-checkChange($('#form3'), 'rotate', ['vertical', 'horizontal'], plug3);
-checkChange($('#form3'), 'showInterval', [true, false], plug3);
-checkChange($('#form3'), 'show', [true, false], plug3);
-checkChange($('#form3'), 'range', ['two', 'one'], plug3);
+$('.plug2').on('click', () => {
+  inputChange($('#form2'), 'currentVal2', plug2.getData()[0].currentVal2);
+  inputChange($('#form2'), 'currentVal1', plug2.getData()[0].currentVal1);
+});
 
-checkChange($('#form4'), 'rotate', ['vertical', 'horizontal'], plug4);
-checkChange($('#form4'), 'showInterval', [true, false], plug4);
-checkChange($('#form4'), 'show', [true, false], plug4);
-checkChange($('#form4'), 'range', ['two', 'one'], plug4);
+$('.plug3').on('click', () => {
+  inputChange($('#form3'), 'currentVal2', plug3.getData()[0].currentVal2);
+  inputChange($('#form3'), 'currentVal1', plug3.getData()[0].currentVal1);
+});
+
+$('.plug4').on('click', () => {
+  inputChange($('#form4'), 'currentVal2', plug4.getData()[0].currentVal2);
+  inputChange($('#form4'), 'currentVal1', plug4.getData()[0].currentVal1);
+});
 
 function checkChange(elem: JQuery, nameAtr: string, value: any, plugItem: any) {
   elem.find(`input[name='${nameAtr}']`).on('click', function () {
@@ -79,4 +76,19 @@ function runChange(elem: JQuery, nameAtr: string, plugItem: any) {
   plugItem.data({
     [nameAtr]: elem.find(`input[name='${nameAtr}']`).val(),
   });
+}
+function actionForm(form: JQuery, el: any) {
+  runChange(form, 'maxValue', el);
+  runChange(form, 'minValue', el);
+  runChange(form, 'currentVal1', el);
+  runChange(form, 'currentVal2', el);
+  runChange(form, 'round', el);
+  runChange(form, 'intervalCount', el);
+  runChange(form, 'stepSize', el);
+  runChange(form, 'stepSizePerc', el);
+
+  checkChange(form, 'rotate', ['vertical', 'horizontal'], el);
+  checkChange(form, 'showInterval', [true, false], el);
+  checkChange(form, 'show', [true, false], el);
+  checkChange(form, 'range', ['two', 'one'], el);
 }

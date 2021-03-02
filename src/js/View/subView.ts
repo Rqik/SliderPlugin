@@ -1,6 +1,6 @@
 import { rotate } from '../interface';
 
-export class Button {
+class Button {
   button: HTMLElement = document.createElement('div');
 
   widthButton = 110;
@@ -23,7 +23,7 @@ export class Button {
   }
 }
 
-export class CurrentValue {
+class CurrentValue {
   currentVal: HTMLElement = document.createElement('div');
 
   constructor() {
@@ -52,7 +52,7 @@ export class CurrentValue {
   }
 }
 
-export class Interval {
+class Interval {
   interval: HTMLUListElement = document.createElement('ul');
 
   rotate: rotate = 'horizontal';
@@ -99,7 +99,7 @@ export class Interval {
   }
 }
 
-export class SliderRange {
+class SliderRange {
   sliderRange: HTMLElement = document.createElement('div');
 
   sliderActiveZone: HTMLElement = document.createElement('div');
@@ -140,3 +140,5 @@ export class SliderRange {
     }
   }
 }
+
+export { Button, SliderRange, CurrentValue, Interval };

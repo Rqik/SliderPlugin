@@ -1,4 +1,4 @@
-export interface IState {
+interface IState {
   selector: string;
   minValue: number;
   maxValue: number;
@@ -11,15 +11,25 @@ export interface IState {
   stepSizePerc: number;
   currentVal1: number;
   currentVal2: number;
+  shiftXl: number;
+  shiftXr: number;
+  round: number;
   [k: string]: any;
 }
-export type rotate = 'vertical' | 'horizontal';
-export type range = 'one' | 'two';
 
-export interface setingOption {
+interface StateEl {
+  [k: string]: any;
+}
+type options = number | string | boolean;
+type rotate = 'vertical' | 'horizontal';
+type range = 'one' | 'two';
+
+interface setingOption {
   min?: number;
   max?: number;
   interval?: number;
   step?: number;
   range?: range;
 }
+
+export { setingOption, IState, rotate, range, options, StateEl };

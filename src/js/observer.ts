@@ -1,15 +1,17 @@
-export default class EventObsever {
+import { StateEl } from './interface';
+
+class EventObsever {
   observers: string[];
 
   constructor() {
     this.observers = [];
   }
 
-  subscribe(fn: any): any {
+  subscribe(fn: any): void {
     this.observers.push(fn);
   }
 
-  broadcast(data: string | number | {} | Function): any {
+  broadcast(data: StateEl): void {
     this.observers.forEach((subscriber: any) => {
       if (typeof subscriber === 'function') {
         subscriber(data);
@@ -17,7 +19,9 @@ export default class EventObsever {
     });
   }
 
-  unsubscribe(fn: any): any {
+  unsubscribe(fn: any): void {
     this.observers = this.observers.filter((subscriber) => subscriber !== fn);
   }
 }
+
+export { EventObsever };

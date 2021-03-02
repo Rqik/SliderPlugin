@@ -1,8 +1,7 @@
-import { rotate, setingOption } from '../interface';
-import View from '../View/view';
-import Model from '../Model/model';
-
-export default class Present {
+import { IState, rotate, setingOption, StateEl } from '../interface';
+import { View } from '../View/view';
+import { Model } from '../Model/model';
+class Present {
   model: Model;
 
   view: View;
@@ -11,7 +10,7 @@ export default class Present {
 
   rotate: rotate;
 
-  subFunction: Function = this.modify.bind(this);
+  subFunction: (data: StateEl) => void = this.modify.bind(this);
 
   constructor(public selector: string) {
     this.model = new Model(selector);
@@ -20,11 +19,11 @@ export default class Present {
     this.init();
   }
 
-  state() {
+  state(): IState {
     return this.model.stateCurrent;
   }
 
-  modify(data: object | Function | any) {
+  modify(data: StateEl): void {
     this.model.edit(data);
     switch (Object.keys(data)[0]) {
       case 'shiftXl':
@@ -40,13 +39,13 @@ export default class Present {
     this.view.editView(this.model.stateCurrent);
   }
 
-  init() {
+  init(): void {
     this.view.newObserver.subscribe(this.subFunction);
     this.view.sliderInit();
     this.start();
   }
 
-  sliderMode(options: object) {
+  sliderMode(options: StateEl): void {
     this.model.editMode(options);
     this.view.editView(this.model.stateCurrent);
     // console.log( options);
@@ -56,17 +55,17 @@ export default class Present {
       this.view.newObserver.unsubscribe(this.subFunction);
       this.view.removeStyle(this.view.slider);
       this.init();
-    } else {
     }
-
     this.start();
   }
 
-  start() {
+  start(): void {
     this.view.reRender();
     this.view.installMove(
       this.model.state.currentVal2,
-      this.model.state.currentVal1,
+      this.model.state.currentVal1
     );
   }
 }
+
+export { Present };

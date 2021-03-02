@@ -1,5 +1,5 @@
 import { IState } from '../interface';
-import Model from './model';
+import { Model } from './model';
 
 const state: IState = {
   selector: 'slider_rqik', // селектор
@@ -20,7 +20,6 @@ const state: IState = {
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
   stepSizePerc: 0, // шаг движения указателя в %
-
 };
 
 const state2: IState = {

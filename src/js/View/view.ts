@@ -1,12 +1,9 @@
-import { loadPartialConfig } from '@babel/core';
 import { IState } from '../interface';
 
-import {
-  Interval, SliderRange, CurrentValue, Button,
-} from './subView';
-import Observer from '../observer';
+import { Interval, SliderRange, CurrentValue, Button } from './subView';
+import { EventObsever as Observer } from '../observer';
 
-export default class View {
+class View {
   slider: HTMLElement;
 
   sliderIdent = 0;
@@ -25,7 +22,7 @@ export default class View {
 
   buttonWidth = 10;
 
-  clickHandler: any = this.onMouseMove.bind(this);
+  clickHandler: (e: MouseEvent) => void = this.onMouseMove.bind(this);
 
   currentButton: HTMLElement = this.buttonRight.button; // абстрактный тумблер
 
@@ -47,7 +44,7 @@ export default class View {
     this.sliderInit();
   }
 
-  editView(newState: IState) {
+  editView(newState: IState): void {
     this.state = {
       ...newState,
     };
@@ -55,48 +52,48 @@ export default class View {
     this.interval.edit(this.state.rotate);
   }
 
-  buttonLeftExpose() {
+  buttonLeftExpose(): void {
     this.sliderRange.append(this.buttonLeft.button);
     if (this.state.show) {
       this.sliderRange.append(this.currentValLeft.currentVal);
     }
   }
 
-  buttonLeftRemove() {
+  buttonLeftRemove(): void {
     this.buttonLeft.button.remove();
     this.currentValLeft.currentVal.remove();
   }
 
-  intervalExpose() {
+  intervalExpose(): void {
     this.renderInterval();
     this.slider.append(this.interval.interval);
   }
 
-  renderInterval() {
+  renderInterval(): void {
     this.interval.valueInterval(
       this.state.minValue,
       this.state.maxValue,
       this.state.intervalCount,
-      this.state.round,
+      this.state.round
     );
   }
 
-  addElem() {
+  addElem(): void {
     this.sliderRange.append(this.buttonRight.button);
     this.slider.append(this.sliderRange);
   }
 
-  addAction() {
+  addAction(): void {
     this.buttonRight.addEvent('mousedown', this.buttonAction.bind(this));
     this.slider.addEventListener('click', this.resizeSLider.bind(this));
     this.slider.addEventListener('click', this.movePoint.bind(this));
     this.buttonLeft.addEvent('mousedown', this.buttonAction.bind(this));
   }
 
-  resizeSLider() {
+  resizeSLider(): void {
     if (
-      this.state.widthSlider !== this.sliderRange.offsetWidth
-      || this.state.heightSlider !== this.sliderRange.offsetHeight
+      this.state.widthSlider !== this.sliderRange.offsetWidth ||
+      this.state.heightSlider !== this.sliderRange.offsetHeight
     ) {
       this.newObserver.broadcast({
         widthSlider: this.sliderRange.offsetWidth,
@@ -105,14 +102,14 @@ export default class View {
     }
   }
 
-  removeStyle(el: any) {
+  removeStyle(el: HTMLElement): void {
     const s = el.querySelectorAll('[style]');
-    s.forEach((el: HTMLElement) => {
+    s.forEach((el: Element) => {
       el.removeAttribute('style');
     });
   }
 
-  reRender() {
+  reRender(): void {
     this.slider.innerHTML = '';
     this.show();
     this.addElem();
@@ -120,7 +117,7 @@ export default class View {
     this.buttonWidth = this.buttonRight.width();
   }
 
-  sliderInit() {
+  sliderInit(): void {
     this.removeStyle(this.slider);
     this.show();
     this.addElem();
@@ -129,7 +126,7 @@ export default class View {
     this.buttonWidth = this.buttonRight.width();
   }
 
-  show() {
+  show(): void {
     if (this.state.range === 'two') {
       this.buttonLeftExpose();
     } else {
@@ -162,12 +159,12 @@ export default class View {
     this.currentButton.ondragstart = () => false;
   }
 
-  remove() {
+  remove(): void {
     document.removeEventListener('mousemove', this.clickHandler);
     document.onmouseup = null;
   }
 
-  installMove(min: number, max: number) {
+  installMove(min: number, max: number): void {
     if (this.state.rotate === 'horizontal') {
       this.sliderIdent = this.slider.offsetLeft;
     } else if (this.state.rotate === 'vertical') {
@@ -176,19 +173,22 @@ export default class View {
     if (this.state.range == 'two') {
       this.initMove(this.mathValueCalc(min), this.mathValueCalc(max));
     }
-    this.initMove(this.mathValueCalc(this.state.minValue), this.mathValueCalc(max));
+    this.initMove(
+      this.mathValueCalc(this.state.minValue),
+      this.mathValueCalc(max)
+    );
   }
 
   mathValueCalc(num: number): number {
     return (
-      ((num - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
-      * 100
+      ((num - this.state.minValue) /
+        (this.state.maxValue - this.state.minValue)) *
+      100
     );
   }
 
   // сброс позиций кнопок
-  initMove(min: number, max: number) {
+  initMove(min: number, max: number): void {
     this.currentButton = this.buttonLeft.button;
     this.tumblerB = true;
     this.moveButton(min);
@@ -197,7 +197,7 @@ export default class View {
     this.moveButton(max);
   }
 
-  onMouseMove(e: MouseEvent) {
+  onMouseMove(e: MouseEvent): void {
     let perc = 0;
     if (this.state.rotate === 'horizontal') {
       perc = this.mathPercent(e.pageX);
@@ -264,7 +264,7 @@ export default class View {
     // ------
   }
 
-  currentValueText() {
+  currentValueText(): void {
     if (this.tumblerB) {
       this.currentValLeft.text(this.state.currentVal2);
     } else {
@@ -272,7 +272,7 @@ export default class View {
     }
   }
 
-  showCurentValue() {
+  showCurentValue(): void {
     if (this.state.rotate === 'horizontal') {
       if (this.tumblerB) {
         this.currentValLeft.positionHorizont(this.state.shiftXl);
@@ -288,7 +288,7 @@ export default class View {
     }
   }
 
-  activeZoneAction() {
+  activeZoneAction(): void {
     if (this.state.shiftXl > this.state.shiftXr) {
       this.slideClass.activeZone(this.state.shiftXr, this.state.shiftXl);
     } else {
@@ -296,7 +296,9 @@ export default class View {
     }
   }
 
-  movePoint(e: MouseEvent) {
+  movePoint(e: MouseEvent): void {
     this.onMouseMove(e);
   }
 }
+
+export { View };

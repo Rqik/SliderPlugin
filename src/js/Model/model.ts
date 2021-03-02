@@ -1,6 +1,6 @@
-import { IState } from '../interface';
+import { IState, StateEl } from '../interface';
 
-export default class Model {
+class Model {
   state: IState = {
     selector: 'sliderRqik', // селектор
     minValue: 0, // минимальное значение
@@ -23,14 +23,14 @@ export default class Model {
     this.state.selector = selector;
   }
 
-  edit<T extends object>(key: T): void {
+  edit(key: StateEl): void {
     this.state = {
       ...this.state,
       ...key,
     };
   }
 
-  editMode<T extends object>(key: T): void {
+  editMode(key: StateEl): void {
     this.edit(key);
     this.state.minValue = Number(this.state.minValue);
     this.state.maxValue = Number(this.state.maxValue);
@@ -41,16 +41,18 @@ export default class Model {
     this.state.round = Number(this.state.round);
   }
 
-  leftVal() {
+  leftVal(): void {
     const t = this.state;
     const res = ((t.maxValue - t.minValue) * t.shiftXl) / 100 + t.minValue;
     t.currentVal2 = Math.round(res * 10 ** t.round) / 10 ** t.round;
   }
 
-  rightVal() {
+  rightVal(): void {
     const t = this.state;
-    const res = ((t.maxValue - t.minValue) * t.shiftXr) / 100 + t.minValue;
-    t.currentVal1 = Math.round(res * 10 ** t.round) / 10 ** t.round;
+    const res = Number(
+      ((t.maxValue - t.minValue) * t.shiftXr) / 100 + t.minValue
+    );
+    t.currentVal1 = Number(Math.round(res * 10 ** t.round) / 10 ** t.round);
     t.currentMax = t.currentVal1;
   }
 
@@ -58,3 +60,5 @@ export default class Model {
     return this.state;
   }
 }
+
+export { Model };

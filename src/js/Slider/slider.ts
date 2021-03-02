@@ -1,33 +1,37 @@
-import { data, fn } from 'jquery';
-import { IState } from '../interface';
-import Present from '../Presenter/presenter';
+import { IState, StateEl } from '../interface';
+import { Present } from '../Presenter/presenter';
 
+interface Slider {
+  data: (opt: StateEl) => Slider;
+  getData: () => IState[];
+}
 declare global {
   interface JQuery {
-    sliderRqik: any;
+    sliderRqik: (opt?: StateEl) => Slider;
   }
 }
 (function ($) {
-  $.fn.sliderRqik = function (options: object) {
-    const arr: any = [];
+  $.fn.sliderRqik = function (options?: StateEl) {
+    const arr: SliderPlag[] = [];
 
     this.map((id, el) => {
       const res = new SliderPlag(el, id);
-      res.data(options);
+      options && res.data(options);
       arr.push(res);
     });
 
-    const slider = {
-      data(opt: object) {
-        arr.map((el: any) => {
+    const slider: Slider = {
+      data(opt) {
+        arr.map((el: SliderPlag) => {
           el.data(opt);
         });
         return slider;
       },
       getData() {
-        let res: any = [];
-        arr.map((el: any, ind: any) => {
-          res = [...res, el.getData()];
+        const res: Array<IState> = [];
+        arr.map((el: SliderPlag) => {
+          const r = el.getData();
+          r && res.push(r);
         });
 
         return res;
@@ -36,11 +40,12 @@ declare global {
 
     return slider;
   };
-}(jQuery));
+})(jQuery);
+
 class SliderPlag {
   sliders: HTMLElement;
 
-  presents?: any = [];
+  presents?: Present;
 
   selector = '';
 
@@ -50,7 +55,7 @@ class SliderPlag {
     this.start(this.selector, ind, this.sliders.dataset);
   }
 
-  start(selector: string, ind: number, opt: object) {
+  start(selector: string, ind: number, opt: DOMStringMap) {
     const className = `${selector.replace(/\W+/gi, '')}-${ind}_i-slider`;
     this.sliders.classList.add(className);
     const pr = new Present(`.${className}`);
@@ -59,12 +64,12 @@ class SliderPlag {
     return this;
   }
 
-  data(data: object) {
-    this.presents.sliderMode(data);
+  data(data: StateEl) {
+    this.presents && this.presents.sliderMode(data);
     return this;
   }
 
   getData() {
-    return this.presents.state();
+    return this.presents && this.presents.state();
   }
 }

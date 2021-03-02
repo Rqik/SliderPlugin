@@ -1,5 +1,5 @@
-import View from './view';
-import EventObsever from '../observer';
+import { View } from './view';
+import { EventObsever } from '../observer';
 import { IState } from '../interface';
 
 const state: IState = {
@@ -149,12 +149,14 @@ describe('View test', () => {
     });
 
     test('drawing currentVal  show: "true"', () => {
-      const currentVal = view.sliderRange.querySelector('.slider__current_value');
+      const currentVal = view.sliderRange.querySelector(
+        '.slider__current_value'
+      );
       expect(!!currentVal).toBe(true);
       const currentRigth = view.currentValRight.currentVal;
       expect(currentVal).toEqual(currentRigth);
       expect(view.currentValLeft.currentVal).toEqual(
-        view.currentValRight.currentVal,
+        view.currentValRight.currentVal
       );
     });
 
@@ -241,21 +243,21 @@ describe('View test', () => {
         view.showCurentValue();
 
         expect(view.currentValLeft.currentVal.style.left).toEqual(
-          `calc(10% - ${view.currentValLeft.currentVal.offsetWidth / 2}px)`,
+          `calc(10% - ${view.currentValLeft.currentVal.offsetWidth / 2}px)`
         );
         expect(view.currentValLeft.currentVal.style.left).not.toEqual(
-          'calc(120% - 10px)',
+          'calc(120% - 10px)'
         );
 
         view.tumblerB = false;
         view.showCurentValue();
 
         expect(view.currentValRight.currentVal.style.left).toEqual(
-          `calc(100% - ${view.currentValRight.currentVal.offsetWidth / 2}px)`,
+          `calc(100% - ${view.currentValRight.currentVal.offsetWidth / 2}px)`
         );
 
         expect(view.currentValRight.currentVal.style.left).not.toEqual(
-          'calc(20% - 10px)',
+          'calc(20% - 10px)'
         );
       });
       test('vertical', () => {
@@ -277,10 +279,10 @@ describe('View test', () => {
         view.tumblerB = true;
         view.showCurentValue();
         expect(view.currentValLeft.currentVal.style.top).toEqual(
-          'calc(10% - 5px)',
+          'calc(10% - 5px)'
         );
         expect(view.currentValLeft.currentVal.style.top).not.toEqual(
-          'calc(120% - 10px)',
+          'calc(120% - 10px)'
         );
         expect(view.currentValLeft.currentVal.style.left).toEqual('-35px');
         expect(view.currentValLeft.currentVal.style.left).not.toEqual('25px');
@@ -289,10 +291,10 @@ describe('View test', () => {
         view.showCurentValue();
 
         expect(view.currentValRight.currentVal.style.top).toEqual(
-          'calc(100% - 20px)',
+          'calc(100% - 20px)'
         );
         expect(view.currentValRight.currentVal.style.top).not.toEqual(
-          'calc(120% - 20px)',
+          'calc(120% - 20px)'
         );
         expect(view.currentValRight.currentVal.style.left).toEqual('-65px');
         expect(view.currentValRight.currentVal.style.left).not.toEqual('225px');
@@ -443,16 +445,18 @@ describe('View test', () => {
       expect(view.buttonLeftExpose).not.toHaveBeenCalledTimes(1);
     });
     test('drawing currentVal  show: "false"', () => {
-      const currentVal = view.sliderRange.querySelector('.slider__current_value');
+      const currentVal = view.sliderRange.querySelector(
+        '.slider__current_value'
+      );
       expect(!!currentVal).toBe(false);
       const parentCLosest = view.currentValRight.currentVal.closest(
-        '.slider_rqik',
+        '.slider_rqik'
       );
       expect(parentCLosest).toEqual(null);
       expect(!!view.currentValLeft.currentVal).toEqual(true);
       expect(!!view.currentValRight.currentVal).toEqual(true);
       expect(view.currentValLeft.currentVal).toEqual(
-        view.currentValRight.currentVal,
+        view.currentValRight.currentVal
       );
     });
     test('movebutton function rotate: "vertical"', () => {

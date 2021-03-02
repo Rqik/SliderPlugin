@@ -1,8 +1,8 @@
 import { rotate } from '../interface';
-import Present from './presenter';
-import View from '../View/view';
-import Model from '../Model/model';
-import EventObsever from '../observer';
+import { Present } from './presenter';
+import { View } from '../View/view';
+import { Model } from '../Model/model';
+import { EventObsever } from '../observer';
 
 // jest.mock("../Model/model.ts");
 

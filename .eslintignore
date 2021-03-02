@@ -2,3 +2,4 @@ src/**/*.spec.ts
 dist
 coverage
 webpack.config.js
+.eslintrc.js

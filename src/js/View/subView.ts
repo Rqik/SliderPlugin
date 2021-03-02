@@ -14,8 +14,8 @@ class Button {
     this.button.className = 'slider__range_button';
   }
 
-  addEvent(type: string, action: (e: Event) => void): void {
-    this.button.addEventListener(type, (e) => action(e));
+  addEvent(type: string, action: (e: MouseEvent) => void): void {
+    this.button.addEventListener(type, (e: any) => action(e));
   }
 
   width(): number {

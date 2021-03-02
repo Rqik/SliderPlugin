@@ -1,9 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {
-  CleanWebpackPlugin,
-} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -17,14 +15,19 @@ const PATHS = {
   dist: path.join(__dirname, './dist'),
 };
 const PAGES_DIR = `${PATHS.src}/.`;
-const PAGES = fs.readdirSync(PAGES_DIR).filter((fileName) => fileName.endsWith('.html'));
+const PAGES = fs
+  .readdirSync(PAGES_DIR)
+  .filter((fileName) => fileName.endsWith('.html'));
 
 const plugins = () => {
   const base = [
-    ...PAGES.map((page) => new HtmlWebpackPlugin({
-      template: `${PAGES_DIR}/${page}`,
-      filename: `./${page}`,
-    })),
+    ...PAGES.map(
+      (page) =>
+        new HtmlWebpackPlugin({
+          template: `${PAGES_DIR}/${page}`,
+          filename: `./${page}`,
+        })
+    ),
 
     new MiniCssExtractPlugin({
       filename: 'css/[name]-[hash:5]-bundle.css',
@@ -55,7 +58,6 @@ module.exports = {
     filename: 'js/[name]-[contenthash:5]-bundle.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '',
-
   },
 
   optimization: {
@@ -82,68 +84,64 @@ module.exports = {
     minimize: false,
   },
   module: {
-    rules: [{
-      test: /\.css$/,
-      use: [
-        isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-        'css-loader',
-      ],
-    },
-    {
-      test: /\.(s[ca]ss|css)$/,
-      use: [
-
-        isDev ? 'style-loader' : {
-          loader: MiniCssExtractPlugin.loader,
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+        ],
+      },
+      {
+        test: /\.(s[ca]ss|css)$/,
+        use: [
+          isDev
+            ? 'style-loader'
+            : {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  publicPath: '../',
+                },
+              },
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
+        ],
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: {
+          loader: 'file-loader',
           options: {
-            publicPath: '../',
+            name: '[name][contenthash].[ext]',
+            outputPath: 'img/',
           },
         },
-        'css-loader',
-        'postcss-loader',
-        'sass-loader',
-      ],
-    },
-    {
-      test: /\.(png|jpg|gif)$/,
-      use: {
-        loader: 'file-loader',
+      },
+      {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader',
         options: {
           name: '[name][contenthash].[ext]',
           outputPath: 'img/',
         },
       },
-    },
-    {
-      test: /\.svg$/,
-      loader: 'svg-inline-loader',
-      options: {
-        name: '[name][contenthash].[ext]',
-        outputPath: 'img/',
-      },
-    },
-    {
-      test: /\.(ttf|woff|woff2|eot|svg)$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          name: '[name][contenthash:5].[ext]',
-          outputPath: 'fonts/',
+      {
+        test: /\.(ttf|woff|woff2|eot|svg)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name][contenthash:5].[ext]',
+            outputPath: 'fonts/',
+          },
         },
       },
-    },
 
-    {
-      test: /\.(js|jsx|tsx|ts)$/,
-      use: [
-        'babel-loader',
-        'ts-loader',
-      ],
-      exclude: /node_modules/,
-
-    },
-
+      {
+        test: /\.(js|jsx|tsx|ts)$/,
+        use: ['babel-loader', 'ts-loader'],
+        exclude: /node_modules/,
+      },
     ],
   },
-
 };

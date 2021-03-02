@@ -14,7 +14,7 @@ class Button {
     this.button.className = 'slider__range_button';
   }
 
-  addEvent(type: string, action: Function): void {
+  addEvent(type: string, action: (e: Event) => void): void {
     this.button.addEventListener(type, (e) => action(e));
   }
 

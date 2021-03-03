@@ -50,7 +50,7 @@ class Model {
   rightVal(): void {
     const t = this.state;
     const res = Number(
-      ((t.maxValue - t.minValue) * t.shiftXr) / 100 + t.minValue
+      ((t.maxValue - t.minValue) * t.shiftXr) / 100 + t.minValue,
     );
     t.currentVal1 = Number(Math.round(res * 10 ** t.round) / 10 ** t.round);
     t.currentMax = t.currentVal1;

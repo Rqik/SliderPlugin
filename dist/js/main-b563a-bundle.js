@@ -22,11 +22,16 @@ class Button {
   }
 
   addEvent(type, action) {
-    this.button.addEventListener(type, e => action(e));
+    function eventA(event) {
+      action(event);
+    }
+
+    this.button.addEventListener(type, eventA);
   }
 
   width() {
-    return this.widthButton = this.button.offsetWidth / 2;
+    this.widthButton = this.button.offsetWidth / 2;
+    return this.widthButton;
   }
 
 }
@@ -66,7 +71,7 @@ class Interval {
   init() {
     this.interval.className = 'interval_point';
 
-    if (this.rotate == 'vertical') {
+    if (this.rotate === 'vertical') {
       this.interval.classList.add('interval_point_vertical');
     }
   }
@@ -81,7 +86,7 @@ class Interval {
     const interval = (maxValue - minValue) / count;
     let sum;
 
-    for (let i = 0; i <= count; i++) {
+    for (let i = 0; i <= count; i += 1) {
       const li = document.createElement('li');
       li.className = 'interval_point-item';
       sum = Math.round((i * interval + minValue) * Math.pow(10, round)) / Math.pow(10, round);
@@ -92,26 +97,26 @@ class Interval {
     return this.interval;
   }
 
-  edit(rotate) {
-    this.rotate = rotate;
+  edit(rot) {
+    this.rotate = rot;
     this.init();
   }
 
 }
 
 class SliderRange {
-  constructor(rotate) {
+  constructor(rot) {
     this.sliderRange = document.createElement('div');
     this.sliderActiveZone = document.createElement('div');
     this.rotate = 'horizontal';
-    this.init(rotate);
+    this.init(rot);
   }
 
-  init(rotate) {
+  init(rot) {
     this.sliderRange.className = 'slider__range';
     this.sliderActiveZone.className = 'slider__range_active';
 
-    if (rotate === 'vertical') {
+    if (rot === 'vertical') {
       this.sliderRange.classList.add('slider__range_vertical');
     }
 
@@ -119,18 +124,18 @@ class SliderRange {
     return this.sliderRange;
   }
 
-  edit(rotate) {
-    if (rotate === 'vertical') {
-      this.rotate = rotate;
+  edit(rot) {
+    if (rot === 'vertical') {
+      this.rotate = rot;
       this.sliderRange.classList.add('slider__range_vertical');
-    } else if (rotate === 'horizontal') {
-      this.rotate = rotate;
+    } else if (rot === 'horizontal') {
+      this.rotate = rot;
       this.sliderRange.classList.remove('slider__range_vertical');
     }
   }
 
   activeZone(left, rigth) {
-    if (this.rotate == 'horizontal') {
+    if (this.rotate === 'horizontal') {
       this.sliderActiveZone.style.left = `${left}%`;
       this.sliderActiveZone.style.width = `${rigth - left}%`;
     } else {
@@ -173,6 +178,7 @@ class EventObsever {
 
 class View {
   constructor(state) {
+    this.slider = document.createElement('div');
     this.sliderIdent = 0;
     this.buttonLeft = new Button();
     this.buttonRight = new Button();
@@ -184,12 +190,16 @@ class View {
     this.currentButton = this.buttonRight.button;
     this.tumblerB = false;
     this.state = state;
-    this.slider = document.querySelector(this.state.selector);
-    this.slider.style.position = 'relative';
     this.newObserver = new EventObsever();
     this.slideClass = new SliderRange(this.state.rotate);
     this.sliderRange = this.slideClass.sliderRange;
+    this.startView(this.state.selector);
     this.sliderInit();
+  }
+
+  startView(selector) {
+    this.slider = document.querySelector(selector);
+    this.slider.style.position = 'relative';
   }
 
   editView(newState) {
@@ -243,8 +253,8 @@ class View {
 
   removeStyle(el) {
     const s = el.querySelectorAll('[style]');
-    s.forEach(el => {
-      el.removeAttribute('style');
+    s.forEach(elem => {
+      elem.removeAttribute('style');
     });
   }
 
@@ -275,7 +285,7 @@ class View {
     if (this.state.showInterval) {
       this.intervalExpose();
     } else {
-      this.interval.interval.remove;
+      this.interval.interval.remove();
     }
 
     if (this.state.show) {
@@ -291,7 +301,7 @@ class View {
     document.addEventListener('mouseup', this.remove.bind(this));
     this.currentButton = e.currentTarget;
 
-    if (this.currentButton == this.buttonLeft.button) {
+    if (this.currentButton === this.buttonLeft.button) {
       this.tumblerB = true;
     } else {
       this.tumblerB = false;
@@ -312,7 +322,7 @@ class View {
       this.sliderIdent = this.slider.offsetTop;
     }
 
-    if (this.state.range == 'two') {
+    if (this.state.range === 'two') {
       this.initMove(this.mathValueCalc(min), this.mathValueCalc(max));
     }
 
@@ -11549,46 +11559,9 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
+
+;// CONCATENATED MODULE: ./utils.ts
 /* provided dependency */ var $ = __webpack_require__(638);
-
-
-
-__webpack_require__(681);
-
-$('.plug').sliderRqik();
-const plug1 = $('.plug1').sliderRqik({
-  rotate: 'vertical',
-  maxValue: 1000,
-  range: ' two '
-});
-const plug2 = $('.plug2').sliderRqik({
-  rotate: 'vertical',
-  range: 'one',
-  minValue: -100
-});
-const plug3 = $('.plug3').sliderRqik();
-const plug4 = $('.plug4').sliderRqik();
-actionForm($('#form1'), plug1);
-actionForm($('#form2'), plug2);
-actionForm($('#form3'), plug3);
-actionForm($('#form4'), plug4);
-$('.plug1').on('click', () => {
-  inputChange($('#form1'), 'currentVal2', plug1.getData()[0].currentVal2);
-  inputChange($('#form1'), 'currentVal1', plug1.getData()[0].currentVal1);
-});
-$('.plug2').on('click', () => {
-  inputChange($('#form2'), 'currentVal2', plug2.getData()[0].currentVal2);
-  inputChange($('#form2'), 'currentVal1', plug2.getData()[0].currentVal1);
-});
-$('.plug3').on('click', () => {
-  inputChange($('#form3'), 'currentVal2', plug3.getData()[0].currentVal2);
-  inputChange($('#form3'), 'currentVal1', plug3.getData()[0].currentVal1);
-});
-$('.plug4').on('click', () => {
-  inputChange($('#form4'), 'currentVal2', plug4.getData()[0].currentVal2);
-  inputChange($('#form4'), 'currentVal1', plug4.getData()[0].currentVal1);
-});
-
 function checkChange(elem, nameAtr, value, plugItem) {
   elem.find(`input[name='${nameAtr}']`).on('click', function () {
     if ($(this).prop('checked')) {
@@ -11605,12 +11578,11 @@ function checkChange(elem, nameAtr, value, plugItem) {
 
 function inputChange(elem, nameAtr, value) {
   elem.find(`input[name='${nameAtr}']`).val(value);
-  console.log(value);
 }
 
 function runChange(elem, nameAtr, plugItem) {
   elem.find(`input[name='${nameAtr}']`).on('input', function () {
-    if ($(this).val() == '-') {
+    if ($(this).val() === '-') {
       return;
     }
 
@@ -11637,6 +11609,56 @@ function actionForm(form, el) {
   checkChange(form, 'show', [true, false], el);
   checkChange(form, 'range', ['two', 'one'], el);
 }
+
+
+;// CONCATENATED MODULE: ./index.ts
+/* provided dependency */ var index_$ = __webpack_require__(638);
+
+
+
+
+__webpack_require__(681);
+
+const $plug1 = index_$('.js-plug1');
+const $plug2 = index_$('.js-plug2');
+const $plug3 = index_$('.js-plug3');
+const $plug4 = index_$('.js-plug4');
+const $form1 = index_$('#form1');
+const $form2 = index_$('#form2');
+const $form3 = index_$('#form3');
+const $form4 = index_$('#form4');
+const plug1 = $plug1.sliderRqik({
+  rotate: 'vertical',
+  maxValue: 1000,
+  range: ' two '
+});
+const plug2 = $plug2.sliderRqik({
+  rotate: 'vertical',
+  range: 'one',
+  minValue: -100
+});
+const plug3 = $plug3.sliderRqik();
+const plug4 = $plug4.sliderRqik();
+actionForm($form1, plug1);
+actionForm($form2, plug2);
+actionForm($form3, plug3);
+actionForm($form4, plug4);
+$plug1.on('click', () => {
+  inputChange($form1, 'currentVal2', plug1.getData()[0].currentVal2);
+  inputChange($form1, 'currentVal1', plug1.getData()[0].currentVal1);
+});
+$plug2.on('click', () => {
+  inputChange($form2, 'currentVal2', plug2.getData()[0].currentVal2);
+  inputChange($form2, 'currentVal1', plug2.getData()[0].currentVal1);
+});
+$plug3.on('click', () => {
+  inputChange($form3, 'currentVal2', plug3.getData()[0].currentVal2);
+  inputChange($form3, 'currentVal1', plug3.getData()[0].currentVal1);
+});
+$plug4.on('click', () => {
+  inputChange($form4, 'currentVal2', plug4.getData()[0].currentVal2);
+  inputChange($form4, 'currentVal1', plug4.getData()[0].currentVal1);
+});
 })();
 
 /******/ })()

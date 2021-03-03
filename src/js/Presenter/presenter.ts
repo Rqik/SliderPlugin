@@ -1,6 +1,7 @@
 import { IState, rotate, setingOption, StateEl } from '../interface';
 import { View } from '../View/view';
 import { Model } from '../Model/model';
+
 class Present {
   model: Model;
 
@@ -63,7 +64,7 @@ class Present {
     this.view.reRender();
     this.view.installMove(
       this.model.state.currentVal2,
-      this.model.state.currentVal1
+      this.model.state.currentVal1,
     );
   }
 }

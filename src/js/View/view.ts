@@ -4,7 +4,7 @@ import { Interval, SliderRange, CurrentValue, Button } from './subView';
 import { EventObsever as Observer } from '../observer';
 
 class View {
-  slider: HTMLElement;
+  slider: HTMLElement = document.createElement('div');
 
   sliderIdent = 0;
 
@@ -36,12 +36,16 @@ class View {
 
   constructor(state: IState) {
     this.state = state;
-    this.slider = <HTMLElement>document.querySelector(this.state.selector);
-    this.slider.style.position = 'relative';
     this.newObserver = new Observer();
     this.slideClass = new SliderRange(this.state.rotate);
     this.sliderRange = this.slideClass.sliderRange;
+    this.startView(this.state.selector);
     this.sliderInit();
+  }
+
+  startView(selector: string): void {
+    this.slider = <HTMLElement>document.querySelector(selector);
+    this.slider.style.position = 'relative';
   }
 
   editView(newState: IState): void {
@@ -74,7 +78,7 @@ class View {
       this.state.minValue,
       this.state.maxValue,
       this.state.intervalCount,
-      this.state.round
+      this.state.round,
     );
   }
 
@@ -92,8 +96,8 @@ class View {
 
   resizeSLider(): void {
     if (
-      this.state.widthSlider !== this.sliderRange.offsetWidth ||
-      this.state.heightSlider !== this.sliderRange.offsetHeight
+      this.state.widthSlider !== this.sliderRange.offsetWidth
+      || this.state.heightSlider !== this.sliderRange.offsetHeight
     ) {
       this.newObserver.broadcast({
         widthSlider: this.sliderRange.offsetWidth,
@@ -102,10 +106,11 @@ class View {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   removeStyle(el: HTMLElement): void {
     const s = el.querySelectorAll('[style]');
-    s.forEach((el: Element) => {
-      el.removeAttribute('style');
+    s.forEach((elem: Element) => {
+      elem.removeAttribute('style');
     });
   }
 
@@ -135,7 +140,7 @@ class View {
     if (this.state.showInterval) {
       this.intervalExpose();
     } else {
-      this.interval.interval.remove;
+      this.interval.interval.remove();
     }
     if (this.state.show) {
       this.sliderRange.append(this.currentValRight.currentVal);
@@ -151,7 +156,7 @@ class View {
 
     this.currentButton = <HTMLElement>e.currentTarget;
 
-    if (this.currentButton == this.buttonLeft.button) {
+    if (this.currentButton === this.buttonLeft.button) {
       this.tumblerB = true;
     } else {
       this.tumblerB = false;
@@ -170,20 +175,20 @@ class View {
     } else if (this.state.rotate === 'vertical') {
       this.sliderIdent = this.slider.offsetTop;
     }
-    if (this.state.range == 'two') {
+    if (this.state.range === 'two') {
       this.initMove(this.mathValueCalc(min), this.mathValueCalc(max));
     }
     this.initMove(
       this.mathValueCalc(this.state.minValue),
-      this.mathValueCalc(max)
+      this.mathValueCalc(max),
     );
   }
 
   mathValueCalc(num: number): number {
     return (
-      ((num - this.state.minValue) /
-        (this.state.maxValue - this.state.minValue)) *
-      100
+      ((num - this.state.minValue)
+        / (this.state.maxValue - this.state.minValue))
+      * 100
     );
   }
 
@@ -232,8 +237,10 @@ class View {
 
   moveButton(pos: number): void {
     if (pos <= 0) {
+      // eslint-disable-next-line no-param-reassign
       pos = 0;
     } else if (pos >= 100) {
+      // eslint-disable-next-line no-param-reassign
       pos = 100;
     }
     if (this.tumblerB) {

@@ -1,5 +1,6 @@
 import { IState, StateEl } from '../interface';
 import { Present } from '../Presenter/presenter';
+
 interface Slider {
   data: (opt: StateEl) => Slider;
   getData: () => IState[];
@@ -38,7 +39,7 @@ declare global {
 
     return slider;
   };
-})(jQuery);
+}(jQuery));
 
 class SliderPlag {
   sliders: HTMLElement;

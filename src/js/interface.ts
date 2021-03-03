@@ -1,3 +1,6 @@
+type rotate = 'vertical' | 'horizontal';
+type range = 'one' | 'two';
+
 interface IState {
   selector: string;
   minValue: number;
@@ -21,8 +24,6 @@ interface StateEl {
   [k: string]: any;
 }
 type options = number | string | boolean;
-type rotate = 'vertical' | 'horizontal';
-type range = 'one' | 'two';
 
 interface setingOption {
   min?: number;

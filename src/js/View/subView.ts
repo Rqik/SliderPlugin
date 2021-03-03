@@ -15,11 +15,16 @@ class Button {
   }
 
   addEvent(type: string, action: (e: MouseEvent) => void): void {
-    this.button.addEventListener(type, (e: any) => action(e));
+    function eventA(event: Event) {
+      action(event as MouseEvent);
+    }
+
+    this.button.addEventListener(type, eventA);
   }
 
   width(): number {
-    return (this.widthButton = this.button.offsetWidth / 2);
+    this.widthButton = this.button.offsetWidth / 2;
+    return this.widthButton;
   }
 }
 
@@ -64,7 +69,7 @@ class Interval {
   init(): void {
     this.interval.className = 'interval_point';
 
-    if (this.rotate == 'vertical') {
+    if (this.rotate === 'vertical') {
       this.interval.classList.add('interval_point_vertical');
     }
   }
@@ -73,7 +78,7 @@ class Interval {
     minValue: number,
     maxValue: number,
     count: number,
-    round: number
+    round: number,
   ): HTMLElement {
     // interval это кол подписей минимум 2
     this.interval.textContent = '';
@@ -82,7 +87,7 @@ class Interval {
     }
     const interval: number = (maxValue - minValue) / count;
     let sum;
-    for (let i = 0; i <= count; i++) {
+    for (let i = 0; i <= count; i += 1) {
       const li = document.createElement('li');
       li.className = 'interval_point-item';
       sum = Math.round((i * interval + minValue) * 10 ** round) / 10 ** round;
@@ -93,8 +98,8 @@ class Interval {
     return this.interval;
   }
 
-  edit(rotate: rotate): void {
-    this.rotate = rotate;
+  edit(rot: rotate): void {
+    this.rotate = rot;
     this.init();
   }
 }
@@ -106,32 +111,32 @@ class SliderRange {
 
   rotate: rotate = 'horizontal';
 
-  constructor(rotate: rotate) {
-    this.init(rotate);
+  constructor(rot: rotate) {
+    this.init(rot);
   }
 
-  init(rotate: rotate): HTMLElement {
+  init(rot: rotate): HTMLElement {
     this.sliderRange.className = 'slider__range';
     this.sliderActiveZone.className = 'slider__range_active';
-    if (rotate === 'vertical') {
+    if (rot === 'vertical') {
       this.sliderRange.classList.add('slider__range_vertical');
     }
     this.sliderRange.appendChild(this.sliderActiveZone);
     return this.sliderRange;
   }
 
-  edit(rotate: rotate): void {
-    if (rotate === 'vertical') {
-      this.rotate = rotate;
+  edit(rot: rotate): void {
+    if (rot === 'vertical') {
+      this.rotate = rot;
       this.sliderRange.classList.add('slider__range_vertical');
-    } else if (rotate === 'horizontal') {
-      this.rotate = rotate;
+    } else if (rot === 'horizontal') {
+      this.rotate = rot;
       this.sliderRange.classList.remove('slider__range_vertical');
     }
   }
 
   activeZone(left: number, rigth: number): void {
-    if (this.rotate == 'horizontal') {
+    if (this.rotate === 'horizontal') {
       this.sliderActiveZone.style.left = `${left}%`;
       this.sliderActiveZone.style.width = `${rigth - left}%`;
     } else {

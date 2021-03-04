@@ -45,19 +45,22 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: flex-start;
 
     label {
+      max-width: 250px;
       line-height: 1.4rem;
       display: flex;
       flex-direction: row;
       text-align: left;
-      align-items: center;
+      align-items: flex-start;
     }
 
     input {
+      align-self: center;
       // width: 100%;
-      width: 40px;
-      height: 15px;
+      width: 15px;
+      // height: 15px;
     }
   }
 }

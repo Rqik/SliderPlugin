@@ -1,3 +1,6 @@
+/* eslint-disable wrap-iife */
+/* eslint-disable no-param-reassign */
+/* eslint-disable func-names */
 import { IState, StateEl } from '../interface';
 import { Present } from '../Presenter/presenter';
 
@@ -12,29 +15,31 @@ declare global {
 }
 (function ($) {
   $.fn.sliderRqik = function (options?: StateEl) {
-    const arr: SliderPlag[] = [];
-
-    this.map((id, el) => {
+    const allSlider: SliderPlag[] = [];
+    this.each((id: number, el: any) => {
       const res = new SliderPlag(el, id);
-      options && res.data(options);
-      arr.push(res);
+      if (options) {
+        res.data(options);
+      }
+      allSlider.push(res);
     });
 
     const slider: Slider = {
       data(opt) {
-        arr.map((el: SliderPlag) => {
+        allSlider.forEach((el: SliderPlag) => {
           el.data(opt);
         });
         return slider;
       },
-      getData() {
-        const res: Array<IState> = [];
-        arr.map((el: SliderPlag) => {
+      getData(): any {
+        const stateArr: Array<IState> = [];
+        allSlider.forEach((el: any) => {
           const r = el.getData();
-          r && res.push(r);
+          if (r) {
+            stateArr.push(r);
+          }
         });
-
-        return res;
+        return stateArr;
       },
     };
 
@@ -55,21 +60,26 @@ class SliderPlag {
     this.start(this.selector, ind, this.sliders.dataset);
   }
 
-  start(selector: string, ind: number, opt: DOMStringMap) {
+  start(selector: string, ind: number, opt: DOMStringMap): this {
     const className = `${selector.replace(/\W+/gi, '')}-${ind}_i-slider`;
     this.sliders.classList.add(className);
     const pr = new Present(`.${className}`);
-    pr.sliderMode(opt);
+    pr.sliderMode(opt as StateEl);
     this.presents = pr;
     return this;
   }
 
-  data(data: StateEl) {
-    this.presents && this.presents.sliderMode(data);
+  data(data: StateEl): this {
+    if (this.presents) {
+      this.presents.sliderMode(data);
+    }
     return this;
   }
 
-  getData() {
-    return this.presents && this.presents.state();
+  getData(): IState | false {
+    if (this.presents) {
+      return this.presents.state();
+    }
+    return false;
   }
 }

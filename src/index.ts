@@ -22,6 +22,8 @@ const plug1 = $plug1.sliderRqik({
   maxValue: 1000,
   range: ' two ',
 });
+console.log(plug1.getData());
+
 const plug2 = $plug2.sliderRqik({
   rotate: 'vertical',
   range: 'one',
@@ -42,7 +44,6 @@ actionForm($form4, plug4);
 
 $plug1.on('click', () => {
   inputChange($form1, 'currentVal2', plug1.getData()[0].currentVal2);
-
   inputChange($form1, 'currentVal1', plug1.getData()[0].currentVal1);
 });
 

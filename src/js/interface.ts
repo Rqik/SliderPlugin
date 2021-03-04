@@ -17,11 +17,11 @@ interface IState {
   shiftXl: number;
   shiftXr: number;
   round: number;
-  [k: string]: any;
+  [k: string]: string | number | boolean;
 }
 
 interface StateEl {
-  [k: string]: any;
+  [k: string]: string | number | boolean;
 }
 type options = number | string | boolean;
 

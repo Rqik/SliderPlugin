@@ -1,7 +1,10 @@
 /* eslint-disable fsd/no-function-declaration-in-event-listener */
+import { IState, StateEl } from './js/interface';
 
-import { Slider } from './js/Slider/jquery.slider';
-
+interface Slider {
+  data: (opt: StateEl) => Slider;
+  getData: () => IState[];
+}
 /* eslint-disable func-names */
 function checkChange(
   elem: JQuery,
@@ -9,7 +12,9 @@ function checkChange(
   value: (string | number | boolean)[],
   plugItem: Slider,
 ): void {
-  elem.find(`input[name='${nameAtr}']`).on('click', function () {
+  const item = elem.find(`input[name='${nameAtr}']`);
+
+  item.on('click', function () {
     if ($(this).prop('checked')) {
       plugItem.data({
         [nameAtr]: value[0],
@@ -20,6 +25,15 @@ function checkChange(
       });
     }
   });
+  if (item.prop('checked')) {
+    plugItem.data({
+      [nameAtr]: value[0],
+    });
+  } else {
+    plugItem.data({
+      [nameAtr]: value[1],
+    });
+  }
 }
 
 function inputChange(
@@ -31,15 +45,20 @@ function inputChange(
 }
 
 function runChange(elem: JQuery, nameAtr: string, plugItem: Slider): void {
-  elem.find(`input[name='${nameAtr}']`).on('input', function () {
-    if ($(this).val() === '-') {
+  const item = elem.find(`input[name='${nameAtr}']`);
+  let val = item.val() || 0;
+  item.on('input', () => {
+    val = item.val() || 0;
+    if (val === '-') {
       return;
     }
-    plugItem.data({ [nameAtr]: $(this).val() });
+    plugItem.data({ [nameAtr]: +val });
   });
-  plugItem.data({
-    [nameAtr]: elem.find(`input[name='${nameAtr}']`).val(),
-  });
+  if (val !== '-' || val !== undefined) {
+    plugItem.data({
+      [nameAtr]: +val,
+    });
+  }
 }
 function actionForm(form: JQuery, el: Slider): void {
   runChange(form, 'maxValue', el);

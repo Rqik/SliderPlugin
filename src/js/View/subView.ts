@@ -44,6 +44,7 @@ class CurrentValue {
   }
 
   positionHorizont(shiftX: string | number): void {
+    this.currentVal.style.top = `${-(+this.currentVal.offsetHeight + 10)}px`;
     this.currentVal.style.left = `calc(${shiftX}% - ${
       this.currentVal.offsetWidth / 2
     }px)`;

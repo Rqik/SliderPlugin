@@ -96,8 +96,8 @@ class View {
 
   resizeSLider(): void {
     if (
-      this.state.widthSlider !== this.sliderRange.offsetWidth
-      || this.state.heightSlider !== this.sliderRange.offsetHeight
+      this.state.widthSlider !== this.sliderRange.offsetWidth ||
+      this.state.heightSlider !== this.sliderRange.offsetHeight
     ) {
       this.newObserver.broadcast({
         widthSlider: this.sliderRange.offsetWidth,
@@ -116,6 +116,7 @@ class View {
 
   reRender(): void {
     this.slider.innerHTML = '';
+    this.removeStyle(this.slider);
     this.show();
     this.addElem();
     this.resizeSLider();
@@ -186,9 +187,9 @@ class View {
 
   mathValueCalc(num: number): number {
     return (
-      ((num - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
-      * 100
+      ((num - this.state.minValue) /
+        (this.state.maxValue - this.state.minValue)) *
+      100
     );
   }
 

@@ -51,6 +51,7 @@ class CurrentValue {
   }
 
   positionHorizont(shiftX) {
+    this.currentVal.style.top = `${-(+this.currentVal.offsetHeight + 10)}px`;
     this.currentVal.style.left = `calc(${shiftX}% - ${this.currentVal.offsetWidth / 2}px)`;
   }
 
@@ -260,6 +261,7 @@ class View {
 
   reRender() {
     this.slider.innerHTML = '';
+    this.removeStyle(this.slider);
     this.show();
     this.addElem();
     this.resizeSLider();
@@ -548,7 +550,7 @@ class Present {
   init() {
     this.view.newObserver.subscribe(this.subFunction);
     this.view.sliderInit();
-    this.start();
+    this.view.installMove(this.model.state.currentVal2, this.model.state.currentVal1);
   }
 
   sliderMode(options) {
@@ -560,9 +562,9 @@ class Present {
       this.view.newObserver.unsubscribe(this.subFunction);
       this.view.removeStyle(this.view.slider);
       this.init();
+    } else {
+      this.start();
     }
-
-    this.start();
   }
 
   start() {
@@ -579,27 +581,34 @@ class Present {
 
 (function ($) {
   $.fn.sliderRqik = function (options) {
-    const arr = [];
-    this.map((id, el) => {
+    const allSlider = [];
+    this.each((id, el) => {
       const res = new SliderPlag(el, id);
-      options && res.data(options);
-      arr.push(res);
+
+      if (options) {
+        res.data(options);
+      }
+
+      allSlider.push(res);
     });
     const slider = {
       data(opt) {
-        arr.map(el => {
+        allSlider.forEach(el => {
           el.data(opt);
         });
         return slider;
       },
 
       getData() {
-        const res = [];
-        arr.map(el => {
+        const stateArr = [];
+        allSlider.forEach(el => {
           const r = el.getData();
-          r && res.push(r);
+
+          if (r) {
+            stateArr.push(r);
+          }
         });
-        return res;
+        return stateArr;
       }
 
     };
@@ -625,12 +634,19 @@ class SliderPlag {
   }
 
   data(data) {
-    this.presents && this.presents.sliderMode(data);
+    if (this.presents) {
+      this.presents.sliderMode(data);
+    }
+
     return this;
   }
 
   getData() {
-    return this.presents && this.presents.state();
+    if (this.presents) {
+      return this.presents.state();
+    }
+
+    return false;
   }
 
 }
@@ -11563,7 +11579,8 @@ var __webpack_exports__ = {};
 ;// CONCATENATED MODULE: ./utils.ts
 /* provided dependency */ var $ = __webpack_require__(638);
 function checkChange(elem, nameAtr, value, plugItem) {
-  elem.find(`input[name='${nameAtr}']`).on('click', function () {
+  const item = elem.find(`input[name='${nameAtr}']`);
+  item.on('click', function () {
     if ($(this).prop('checked')) {
       plugItem.data({
         [nameAtr]: value[0]
@@ -11574,6 +11591,16 @@ function checkChange(elem, nameAtr, value, plugItem) {
       });
     }
   });
+
+  if (item.prop('checked')) {
+    plugItem.data({
+      [nameAtr]: value[0]
+    });
+  } else {
+    plugItem.data({
+      [nameAtr]: value[1]
+    });
+  }
 }
 
 function inputChange(elem, nameAtr, value) {
@@ -11581,18 +11608,25 @@ function inputChange(elem, nameAtr, value) {
 }
 
 function runChange(elem, nameAtr, plugItem) {
-  elem.find(`input[name='${nameAtr}']`).on('input', function () {
-    if ($(this).val() === '-') {
+  const item = elem.find(`input[name='${nameAtr}']`);
+  let val = item.val() || 0;
+  item.on('input', () => {
+    val = item.val() || 0;
+
+    if (val === '-') {
       return;
     }
 
     plugItem.data({
-      [nameAtr]: $(this).val()
+      [nameAtr]: +val
     });
   });
-  plugItem.data({
-    [nameAtr]: elem.find(`input[name='${nameAtr}']`).val()
-  });
+
+  if (val !== '-' || val !== undefined) {
+    plugItem.data({
+      [nameAtr]: +val
+    });
+  }
 }
 
 function actionForm(form, el) {
@@ -11632,6 +11666,7 @@ const plug1 = $plug1.sliderRqik({
   maxValue: 1000,
   range: ' two '
 });
+console.log(plug1.getData());
 const plug2 = $plug2.sliderRqik({
   rotate: 'vertical',
   range: 'one',

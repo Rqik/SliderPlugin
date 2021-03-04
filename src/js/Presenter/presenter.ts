@@ -43,7 +43,10 @@ class Present {
   init(): void {
     this.view.newObserver.subscribe(this.subFunction);
     this.view.sliderInit();
-    this.start();
+    this.view.installMove(
+      this.model.state.currentVal2,
+      this.model.state.currentVal1,
+    );
   }
 
   sliderMode(options: StateEl): void {
@@ -56,8 +59,9 @@ class Present {
       this.view.newObserver.unsubscribe(this.subFunction);
       this.view.removeStyle(this.view.slider);
       this.init();
+    } else {
+      this.start();
     }
-    this.start();
   }
 
   start(): void {

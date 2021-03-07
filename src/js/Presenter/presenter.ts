@@ -1,5 +1,5 @@
-import { IState, rotate, setingOption, StateEl } from '../interface';
-import { View } from '../View/view';
+import { IState, rotate, setingOption, StateEl } from '../Interface';
+import { View } from '../View/View';
 import { Model } from '../Model/model';
 
 class Present {
@@ -11,7 +11,7 @@ class Present {
 
   rotate: rotate;
 
-  subFunction: (data: StateEl) => void = this.modify.bind(this);
+  subFunction: (data: StateEl) => void = this.callBack.bind(this);
 
   constructor(public selector: string) {
     this.model = new Model(selector);
@@ -24,7 +24,7 @@ class Present {
     return this.model.stateCurrent;
   }
 
-  modify(data: StateEl): void {
+  callBack(data: StateEl): void {
     this.model.edit(data);
     switch (Object.keys(data)[0]) {
       case 'shiftXl':
@@ -44,15 +44,14 @@ class Present {
     this.view.newObserver.subscribe(this.subFunction);
     this.view.sliderInit();
     this.view.installMove(
-      this.model.state.currentVal2,
-      this.model.state.currentVal1,
+      this.model.stateCurrent.currentVal2,
+      this.model.stateCurrent.currentVal1,
     );
   }
 
   sliderMode(options: StateEl): void {
     this.model.editMode(options);
     this.view.editView(this.model.stateCurrent);
-    // console.log( options);
 
     if (this.rotate !== this.model.stateCurrent.rotate) {
       this.rotate = this.model.stateCurrent.rotate;
@@ -67,8 +66,8 @@ class Present {
   start(): void {
     this.view.reRender();
     this.view.installMove(
-      this.model.state.currentVal2,
-      this.model.state.currentVal1,
+      this.model.stateCurrent.currentVal2,
+      this.model.stateCurrent.currentVal1,
     );
   }
 }

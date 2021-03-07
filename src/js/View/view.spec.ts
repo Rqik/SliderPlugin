@@ -1,6 +1,6 @@
-import { View } from './view';
-import { EventObsever } from '../observer';
-import { IState } from '../interface';
+import { View } from './View';
+import { EventObsever } from '../Observer';
+import { IState } from '../Interface';
 
 const state: IState = {
   selector: 'slider_rqik', // селектор
@@ -17,7 +17,7 @@ const state: IState = {
   round: 1, // округление,
   pixelSize: '6',
   shiftXl: 0,
-  shiftXr: 200,
+  shiftXr: 100,
   stepSizePerc: 0,
 };
 
@@ -150,13 +150,13 @@ describe('View test', () => {
 
     test('drawing currentVal  show: "true"', () => {
       const currentVal = view.sliderRange.querySelector(
-        '.slider__current_value'
+        '.slider__current_value',
       );
       expect(!!currentVal).toBe(true);
       const currentRigth = view.currentValRight.currentVal;
       expect(currentVal).toEqual(currentRigth);
       expect(view.currentValLeft.currentVal).toEqual(
-        view.currentValRight.currentVal
+        view.currentValRight.currentVal,
       );
     });
 
@@ -171,9 +171,9 @@ describe('View test', () => {
       view.buttonWidth = 10;
       view.state.rotate = 'horizontal';
       view.state.heightSlider = 100;
-      view.state.shiftXl = 1000;
-      view.state.shiftXr = 10;
-      view.state.tumblerB = false;
+      view.state.shiftXl = 10;
+      view.state.shiftXr = 100;
+      view.state.tumbler = false;
       view.currentValueText = jest.fn();
       view.showCurentValue = jest.fn();
       view.activeZoneAction = jest.fn();
@@ -181,29 +181,29 @@ describe('View test', () => {
 
       expect(view.currentValueText).not.toHaveBeenCalled();
       expect(view.showCurentValue).not.toHaveBeenCalled();
-
-      view.moveButton(-2201);
-      expect(view.currentButton.style.left).toEqual('calc(0% - 10px)');
-      expect(view.currentButton.style.top).toEqual('-100px');
-
-      expect(view.newObserver.broadcast).toHaveBeenCalled();
-      expect(view.newObserver.broadcast).toHaveBeenCalledWith({ shiftXr: 0 });
-
-      expect(view.state.shiftXl).toBeGreaterThan(view.state.shiftXr);
-      expect(view.state.shiftXr).toBeLessThanOrEqual(473);
-      expect(view.state.shiftXr).toBeLessThan(view.state.shiftXl);
-      expect(view.state.shiftXr).toBeLessThanOrEqual(900);
-
-      view.tumblerB = true;
-      view.moveButton(1230);
+      view.overridingButtons(false);
+      view.eventButton(100);
       expect(view.currentButton.style.left).toEqual('calc(100% - 10px)');
       expect(view.currentButton.style.top).toEqual('-100px');
 
+      expect(view.newObserver.broadcast).toHaveBeenCalled();
+      expect(view.newObserver.broadcast).toHaveBeenCalledWith({ shiftXr: 100 });
+
+      expect(view.state.shiftXr).toBeGreaterThan(view.state.shiftXl);
+      expect(view.state.shiftXr).toBeLessThanOrEqual(473);
+      expect(view.state.shiftXl).toBeLessThan(view.state.shiftXr);
+      expect(view.state.shiftXr).toBeGreaterThan(90);
+
+      view.overridingButtons(true);
+      view.eventButton(40);
+      expect(view.currentButton.style.left).toEqual('calc(40% - 10px)');
+      expect(view.currentButton.style.top).toEqual('-100px');
+
       expect(view.newObserver.broadcast).toHaveBeenLastCalledWith({
-        shiftXl: 100,
+        shiftXl: 40,
       });
 
-      view.moveButton(-0);
+      view.eventButton(-0);
       expect(view.currentButton.style.left).toEqual('calc(0% - 10px)');
       expect(view.currentButton.style.top).toEqual('-100px');
 
@@ -224,11 +224,11 @@ describe('View test', () => {
       view.state.currentVal2 = 987;
       view.state.currentVal1 = 123;
 
-      view.tumblerB = true;
+      view.tumbler = true;
       view.currentValueText();
       expect(view.currentValLeft.currentVal.textContent).toEqual('987');
 
-      view.tumblerB = false;
+      view.tumbler = false;
       view.currentValueText();
       expect(view.currentValRight.currentVal.textContent).toEqual('123');
     });
@@ -239,25 +239,25 @@ describe('View test', () => {
         view.state.shiftXr = 100;
         view.state.shiftXl = 10;
 
-        view.tumblerB = true;
+        view.tumbler = true;
         view.showCurentValue();
 
         expect(view.currentValLeft.currentVal.style.left).toEqual(
-          `calc(10% - ${view.currentValLeft.currentVal.offsetWidth / 2}px)`
+          `calc(10% - ${view.currentValLeft.currentVal.offsetWidth / 2}px)`,
         );
         expect(view.currentValLeft.currentVal.style.left).not.toEqual(
-          'calc(120% - 10px)'
+          'calc(120% - 10px)',
         );
 
-        view.tumblerB = false;
+        view.tumbler = false;
         view.showCurentValue();
 
         expect(view.currentValRight.currentVal.style.left).toEqual(
-          `calc(100% - ${view.currentValRight.currentVal.offsetWidth / 2}px)`
+          `calc(100% - ${view.currentValRight.currentVal.offsetWidth / 2}px)`,
         );
 
         expect(view.currentValRight.currentVal.style.left).not.toEqual(
-          'calc(20% - 10px)'
+          'calc(20% - 10px)',
         );
       });
       test('vertical', () => {
@@ -276,25 +276,26 @@ describe('View test', () => {
         Object.defineProperty(view.currentValRight.currentVal, 'offsetHeight', {
           value: 40,
         });
-        view.tumblerB = true;
+        view.overridingButtons(true);
+        view.currentValLeft.setRotate(view.state.rotate);
         view.showCurentValue();
         expect(view.currentValLeft.currentVal.style.top).toEqual(
-          'calc(10% - 5px)'
+          'calc(10% - 5px)',
         );
         expect(view.currentValLeft.currentVal.style.top).not.toEqual(
-          'calc(120% - 10px)'
+          'calc(120% - 10px)',
         );
         expect(view.currentValLeft.currentVal.style.left).toEqual('-35px');
         expect(view.currentValLeft.currentVal.style.left).not.toEqual('25px');
-
-        view.tumblerB = false;
+        view.currentValRight.setRotate(view.state.rotate);
+        view.tumbler = false;
         view.showCurentValue();
 
         expect(view.currentValRight.currentVal.style.top).toEqual(
-          'calc(100% - 20px)'
+          'calc(100% - 20px)',
         );
         expect(view.currentValRight.currentVal.style.top).not.toEqual(
-          'calc(120% - 20px)'
+          'calc(120% - 20px)',
         );
         expect(view.currentValRight.currentVal.style.left).toEqual('-65px');
         expect(view.currentValRight.currentVal.style.left).not.toEqual('225px');
@@ -364,7 +365,7 @@ describe('View test', () => {
       view.clickHandler = jest.fn();
       view.remove = jest.fn();
       view.buttonAction(event);
-      expect(view.tumblerB).toEqual(true);
+      expect(view.tumbler).toEqual(true);
 
       document.dispatchEvent(move);
       expect(view.remove).not.toHaveBeenCalled();
@@ -376,8 +377,8 @@ describe('View test', () => {
       expect(view.remove).toHaveBeenCalledTimes(1);
 
       view.buttonAction(event2);
-      expect(view.tumblerB).toEqual(false);
-      expect(view.tumblerB).not.toEqual(true);
+      expect(view.tumbler).toEqual(false);
+      expect(view.tumbler).not.toEqual(true);
     });
 
     test('remove eventlistener', () => {
@@ -415,15 +416,15 @@ describe('View test', () => {
     });
     test('initMove', async () => {
       const s = jest.fn((el) => el * 2);
-      view.moveButton = s;
+      view.eventButton = s;
       await view.initMove(100, 220);
       expect(s.mock.calls).toHaveLength(2);
       expect(s.mock.results[0].value).toEqual(200);
       expect(s.mock.results[1].value).toEqual(440);
-      expect(view.moveButton).toHaveBeenCalled();
-      expect(view.moveButton).toHaveBeenCalledTimes(2);
-      expect(view.moveButton).toHaveBeenLastCalledWith(220);
-      expect(view.tumblerB).toBe(false);
+      expect(view.eventButton).toHaveBeenCalled();
+      expect(view.eventButton).toHaveBeenCalledTimes(2);
+      expect(view.eventButton).toHaveBeenLastCalledWith(220);
+      expect(view.tumbler).toBe(false);
       expect(view.currentButton).toEqual(view.buttonRight.button);
     });
   });
@@ -446,17 +447,17 @@ describe('View test', () => {
     });
     test('drawing currentVal  show: "false"', () => {
       const currentVal = view.sliderRange.querySelector(
-        '.slider__current_value'
+        '.slider__current_value',
       );
       expect(!!currentVal).toBe(false);
       const parentCLosest = view.currentValRight.currentVal.closest(
-        '.slider_rqik'
+        '.slider_rqik',
       );
       expect(parentCLosest).toEqual(null);
       expect(!!view.currentValLeft.currentVal).toEqual(true);
       expect(!!view.currentValRight.currentVal).toEqual(true);
       expect(view.currentValLeft.currentVal).toEqual(
-        view.currentValRight.currentVal
+        view.currentValRight.currentVal,
       );
     });
     test('movebutton function rotate: "vertical"', () => {
@@ -468,13 +469,13 @@ describe('View test', () => {
       view.showCurentValue = jest.fn();
       view.activeZoneAction = jest.fn();
 
-      view.moveButton(-2000);
+      view.moveButton(20);
       expect(view.currentButton.style.left).toEqual('-100px');
-      expect(view.currentButton.style.top).toEqual('calc(0% - 10px)');
+      expect(view.currentButton.style.top).toEqual('calc(20% - 10px)');
 
-      view.moveButton(2000);
+      view.moveButton(50);
       expect(view.currentButton.style.left).toEqual('-100px');
-      expect(view.currentButton.style.top).toEqual('calc(100% - 10px)');
+      expect(view.currentButton.style.top).toEqual('calc(50% - 10px)');
 
       view.moveButton(0);
       expect(view.currentButton.style.left).toEqual('-100px');
@@ -535,7 +536,7 @@ describe('View test', () => {
 
       expect(array).toEqual([0, 0, 25, 25, 50, 50, 50, 50, 100]);
     });
-    test('mathOperation function', () => {
+    test('mathStepPixel function', () => {
       let array = [
         0,
         10,
@@ -547,7 +548,7 @@ describe('View test', () => {
         49.99,
         10022.2,
       ];
-      array = array.map((el) => view.mathOperation(el));
+      array = array.map((el) => view.mathStepPixel(el));
 
       expect(array).toEqual([0, 20, 20, 20, 40, 40, 60, 40, 10020]);
     });
@@ -559,29 +560,26 @@ describe('View test', () => {
         view: window,
       });
       view.mathPercent = jest.fn();
-      view.moveButton = jest.fn();
-      view.mathOperation = jest.fn();
+      view.mathStepPixel = jest.fn();
       view.mathStepPercent = jest.fn();
+      view.eventButton = jest.fn();
       view.state.stepSize = 1;
       view.state.stepSizePerc = 0;
       view.onMouseMove(event);
 
       expect(view.mathPercent).toHaveBeenCalled();
       expect(view.mathPercent).toHaveBeenCalledTimes(1);
-      expect(view.moveButton).toHaveBeenCalled();
-      expect(view.moveButton).toHaveBeenCalledTimes(1);
       expect(view.mathStepPercent).not.toHaveBeenCalled();
-      expect(view.mathOperation).not.toHaveBeenCalled();
-      expect(view.mathOperation).not.toHaveBeenCalledTimes(1);
+      expect(view.mathStepPixel).not.toHaveBeenCalled();
+      expect(view.mathStepPixel).not.toHaveBeenCalledTimes(1);
       view.state.rotate = 'horizontal';
       view.state.stepSize = 22;
       view.onMouseMove(event);
       expect(view.mathPercent).toHaveBeenCalled();
       expect(view.mathPercent).toHaveBeenCalledTimes(2);
-      expect(view.moveButton).toHaveBeenCalled();
-      expect(view.moveButton).toHaveBeenCalledTimes(2);
-      expect(view.mathOperation).toHaveBeenCalled();
-      expect(view.mathOperation).toHaveBeenCalledTimes(1);
+
+      expect(view.mathStepPixel).toHaveBeenCalled();
+      expect(view.mathStepPixel).toHaveBeenCalledTimes(1);
       expect(view.mathStepPercent).not.toHaveBeenCalled();
 
       view.state.stepSizePerc = 10;
@@ -590,16 +588,16 @@ describe('View test', () => {
       expect(view.mathStepPercent).toHaveBeenCalledTimes(1);
     });
 
-    test('movePoint function ', () => {
+    test('onClickMove function ', () => {
       const event: MouseEvent = new MouseEvent('click', {
         bubbles: true,
         cancelable: true,
         view: window,
       });
       view.onMouseMove = jest.fn();
-      view.movePoint(event);
-      view.movePoint(event);
-      view.movePoint(event);
+      view.onClickMove(event);
+      view.onClickMove(event);
+      view.onClickMove(event);
 
       expect(view.onMouseMove).toHaveBeenCalled();
       expect(view.onMouseMove).toHaveBeenCalledTimes(3);

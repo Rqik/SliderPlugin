@@ -2,8 +2,8 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 import './assets/main.scss';
-import './js/View/subView.ts';
-import { inputChange, actionForm } from './utils';
+import './js/View/SubView.ts';
+import { inputChange, actionForm } from './js/utils';
 
 require('./js/Slider/slider.ts');
 
@@ -18,11 +18,11 @@ const $form3 = $('#form3');
 const $form4 = $('#form4');
 
 const plug1 = $plug1.sliderRqik({
-  rotate: 'vertical',
+  rotate: 'horizontal',
   maxValue: 1000,
-  range: ' two ',
+  range: 'one',
 });
-console.log(plug1.getData());
+// console.log(plug1.getData());
 
 const plug2 = $plug2.sliderRqik({
   rotate: 'vertical',

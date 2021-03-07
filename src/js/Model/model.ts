@@ -1,7 +1,7 @@
-import { IState, StateEl } from '../interface';
+import { IState, StateEl } from '../Interface';
 
 class Model {
-  state: IState = {
+  private state: IState = {
     selector: 'sliderRqik', // селектор
     minValue: 0, // минимальное значение
     maxValue: 100, // максимальное значение
@@ -16,11 +16,15 @@ class Model {
     currentVal2: 0, // установка значений в числах
     round: 1, // округление,
     shiftXl: 0,
-    shiftXr: 0,
+    shiftXr: 100,
   };
 
   constructor(selector = 'slider_rqik') {
     this.state.selector = selector;
+  }
+
+  get stateCurrent(): IState {
+    return this.state;
   }
 
   edit(key: StateEl): void {
@@ -53,11 +57,6 @@ class Model {
       ((t.maxValue - t.minValue) * t.shiftXr) / 100 + t.minValue,
     );
     t.currentVal1 = Number(Math.round(res * 10 ** t.round) / 10 ** t.round);
-    t.currentMax = t.currentVal1;
-  }
-
-  get stateCurrent(): IState {
-    return this.state;
   }
 }
 

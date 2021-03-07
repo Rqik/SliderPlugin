@@ -1,5 +1,5 @@
 /* eslint-disable fsd/no-function-declaration-in-event-listener */
-import { IState, StateEl } from './js/interface';
+import { IState, StateEl } from './Interface';
 
 interface Slider {
   data: (opt: StateEl) => Slider;

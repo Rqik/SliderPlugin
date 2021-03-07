@@ -1,5 +1,6 @@
 type rotate = 'vertical' | 'horizontal';
 type range = 'one' | 'two';
+type callBack = (args?: any) => any;
 
 interface IState {
   selector: string;
@@ -33,4 +34,4 @@ interface setingOption {
   range?: range;
 }
 
-export { setingOption, IState, rotate, range, options, StateEl };
+export { setingOption, IState, rotate, range, callBack, options, StateEl };

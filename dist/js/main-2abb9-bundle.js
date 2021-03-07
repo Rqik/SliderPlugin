@@ -1,20 +1,19 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 681:
+/***/ 679:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-;// CONCATENATED MODULE: ./js/View/subView.ts
+;// CONCATENATED MODULE: ./js/View/Button/Butoon.ts
 class Button {
   constructor() {
     this.button = document.createElement('div');
-    this.widthButton = 110;
+    this.widthButton = 10;
     this.init();
-    this.width();
   }
 
   init() {
@@ -36,32 +35,8 @@ class Button {
 
 }
 
-class CurrentValue {
-  constructor() {
-    this.currentVal = document.createElement('div');
-    this.init();
-  }
 
-  init() {
-    this.currentVal.className = 'slider__current_value';
-  }
-
-  text(text) {
-    this.currentVal.textContent = `${text}`;
-  }
-
-  positionHorizont(shiftX) {
-    this.currentVal.style.top = `${-(+this.currentVal.offsetHeight + 10)}px`;
-    this.currentVal.style.left = `calc(${shiftX}% - ${this.currentVal.offsetWidth / 2}px)`;
-  }
-
-  positionVertical(shiftX) {
-    this.currentVal.style.top = `calc(${shiftX}% - ${this.currentVal.offsetHeight / 2}px)`;
-    this.currentVal.style.left = `${-(+this.currentVal.offsetWidth + 15)}px`;
-  }
-
-}
-
+;// CONCATENATED MODULE: ./js/View/Interval/Interval.ts
 class Interval {
   constructor() {
     this.interval = document.createElement('ul');
@@ -105,6 +80,76 @@ class Interval {
 
 }
 
+
+;// CONCATENATED MODULE: ./js/View/CurrentVal/CurrentVal.ts
+class CurrentValue {
+  constructor(rotation) {
+    this.rotation = rotation;
+    this.currentVal = document.createElement('div');
+    this.size = 10;
+    this.init();
+  }
+
+  init() {
+    this.currentVal.className = 'slider__current_value';
+  }
+
+  text(text) {
+    this.currentVal.textContent = `${text}`;
+  }
+
+  position(position) {
+    if (this.rotation === 'horizontal') {
+      this.positionHorizont(position);
+    } else if (this.rotation === 'vertical') {
+      this.positionVertical(position);
+    }
+  }
+
+  positionHorizont(shiftX) {
+    this.currentVal.style.top = `${-(+this.currentVal.offsetHeight + 10)}px`;
+    this.currentVal.style.left = `calc(${shiftX}% - ${this.currentVal.offsetWidth / 2}px)`;
+  }
+
+  positionVertical(shiftX) {
+    this.currentVal.style.top = `calc(${shiftX}% - ${this.currentVal.offsetHeight / 2}px)`;
+    this.currentVal.style.left = `${-(+this.currentVal.offsetWidth + 15)}px`;
+  }
+
+  setRotate(rotation) {
+    this.rotation = rotation;
+  }
+
+  rectLeft() {
+    const clientRect = this.currentVal.getBoundingClientRect();
+
+    if (this.rotation === 'horizontal') {
+      return clientRect.left;
+    }
+
+    return clientRect.top;
+  }
+
+  rectRigth() {
+    const clientRect = this.currentVal.getBoundingClientRect();
+
+    if (this.rotation === 'horizontal') {
+      return clientRect.right;
+    }
+
+    return clientRect.bottom;
+  }
+
+  fixedSize(bool) {
+    if (!bool) {
+      this.size = this.rectLeft();
+    }
+  }
+
+}
+
+
+;// CONCATENATED MODULE: ./js/View/SliderRange/SliderRange.ts
 class SliderRange {
   constructor(rot) {
     this.sliderRange = document.createElement('div');
@@ -148,7 +193,7 @@ class SliderRange {
 }
 
 
-;// CONCATENATED MODULE: ./js/observer.ts
+;// CONCATENATED MODULE: ./js/Observer.ts
 class EventObsever {
   constructor() {
     this.observers = [];
@@ -173,7 +218,7 @@ class EventObsever {
 }
 
 
-;// CONCATENATED MODULE: ./js/View/view.ts
+;// CONCATENATED MODULE: ./js/View/View.ts
 
 
 
@@ -183,19 +228,21 @@ class View {
     this.sliderIdent = 0;
     this.buttonLeft = new Button();
     this.buttonRight = new Button();
-    this.currentValLeft = new CurrentValue();
-    this.currentValRight = new CurrentValue();
     this.interval = new Interval();
     this.buttonWidth = 10;
     this.clickHandler = this.onMouseMove.bind(this);
+    this.clickMovehandler = this.onClickMove.bind(this);
+    this.mouseDownHandler = this.buttonAction.bind(this);
     this.currentButton = this.buttonRight.button;
-    this.tumblerB = false;
+    this.tumbler = false;
     this.state = state;
     this.newObserver = new EventObsever();
+    this.currentValLeft = new CurrentValue(this.state.rotate);
+    this.currentValRight = new CurrentValue(this.state.rotate);
+    this.currentVal = new CurrentValue(this.state.rotate);
     this.slideClass = new SliderRange(this.state.rotate);
     this.sliderRange = this.slideClass.sliderRange;
     this.startView(this.state.selector);
-    this.sliderInit();
   }
 
   startView(selector) {
@@ -207,6 +254,9 @@ class View {
     this.state = Object.assign({}, newState);
     this.slideClass.edit(this.state.rotate);
     this.interval.edit(this.state.rotate);
+    this.currentValLeft.setRotate(this.state.rotate);
+    this.currentValRight.setRotate(this.state.rotate);
+    this.currentVal.setRotate(this.state.rotate);
   }
 
   buttonLeftExpose() {
@@ -218,6 +268,7 @@ class View {
   }
 
   buttonLeftRemove() {
+    this.currentVal.currentVal.remove();
     this.buttonLeft.button.remove();
     this.currentValLeft.currentVal.remove();
   }
@@ -237,10 +288,10 @@ class View {
   }
 
   addAction() {
-    this.buttonRight.addEvent('mousedown', this.buttonAction.bind(this));
-    this.slider.addEventListener('click', this.resizeSLider.bind(this));
-    this.slider.addEventListener('click', this.movePoint.bind(this));
-    this.buttonLeft.addEvent('mousedown', this.buttonAction.bind(this));
+    this.buttonRight.addEvent('mousedown', this.mouseDownHandler);
+    this.slider.addEventListener('click', this.clickMovehandler);
+    this.buttonLeft.addEvent('mousedown', this.mouseDownHandler);
+    window.addEventListener('resize', this.resizeSLider.bind(this));
   }
 
   resizeSLider() {
@@ -264,7 +315,6 @@ class View {
     this.removeStyle(this.slider);
     this.show();
     this.addElem();
-    this.resizeSLider();
     this.buttonWidth = this.buttonRight.width();
   }
 
@@ -291,6 +341,7 @@ class View {
     }
 
     if (this.state.show) {
+      this.currentValRight.currentVal.style.opacity = '1';
       this.sliderRange.append(this.currentValRight.currentVal);
     } else {
       this.currentValLeft.currentVal.remove();
@@ -304,9 +355,9 @@ class View {
     this.currentButton = e.currentTarget;
 
     if (this.currentButton === this.buttonLeft.button) {
-      this.tumblerB = true;
+      this.tumbler = true;
     } else {
-      this.tumblerB = false;
+      this.tumbler = false;
     }
 
     this.currentButton.ondragstart = () => false;
@@ -326,9 +377,9 @@ class View {
 
     if (this.state.range === 'two') {
       this.initMove(this.mathValueCalc(min), this.mathValueCalc(max));
+    } else {
+      this.initMove(this.mathValueCalc(this.state.minValue), this.mathValueCalc(max));
     }
-
-    this.initMove(this.mathValueCalc(this.state.minValue), this.mathValueCalc(max));
   }
 
   mathValueCalc(num) {
@@ -336,12 +387,20 @@ class View {
   }
 
   initMove(min, max) {
-    this.currentButton = this.buttonLeft.button;
-    this.tumblerB = true;
-    this.moveButton(min);
-    this.currentButton = this.buttonRight.button;
-    this.tumblerB = false;
-    this.moveButton(max);
+    this.overridingButtons(true);
+    this.eventButton(min);
+    this.overridingButtons(false);
+    this.eventButton(max);
+  }
+
+  overridingButtons(bool) {
+    if (bool) {
+      this.currentButton = this.buttonLeft.button;
+      this.tumbler = true;
+    } else {
+      this.currentButton = this.buttonRight.button;
+      this.tumbler = false;
+    }
   }
 
   onMouseMove(e) {
@@ -354,12 +413,29 @@ class View {
     }
 
     if (this.state.stepSizePerc) {
-      this.moveButton(this.mathStepPercent(perc));
+      this.eventButton(this.mathStepPercent(perc));
     } else if (this.state.stepSize > 1) {
-      this.moveButton(this.mathOperation(perc));
+      this.eventButton(this.mathStepPixel(perc));
     } else {
-      this.moveButton(perc);
+      this.eventButton(perc);
     }
+  }
+
+  onClickMove(e) {
+    let perc;
+
+    if (this.state.rotate === 'horizontal') {
+      perc = this.mathPercent(e.pageX);
+    } else {
+      perc = this.mathPercent(e.pageY);
+    }
+
+    if (this.state.range === 'two') {
+      const bool = Math.abs(perc - this.state.shiftXl) < Math.abs(perc - this.state.shiftXr);
+      this.overridingButtons(bool);
+    }
+
+    this.onMouseMove(e);
   }
 
   mathStepPercent(num) {
@@ -374,64 +450,120 @@ class View {
     return (num - this.slider.offsetTop) / this.slider.offsetHeight * 100;
   }
 
-  mathOperation(num) {
+  mathStepPixel(num) {
     return Math.round(num / this.state.stepSize) * this.state.stepSize;
   }
 
-  moveButton(pos) {
+  mathBalanceLeft(position) {
+    let pos = position;
+
+    if (this.state.stepSizePerc) {
+      pos = this.state.shiftXr - this.state.stepSizePerc;
+    } else if (this.state.stepSize) {
+      pos = this.state.shiftXr - this.mathPercent(this.state.stepSize);
+    } else {
+      pos = this.state.shiftXr;
+    }
+
+    return pos;
+  }
+
+  mathBalanceRigth(position) {
+    let pos = position;
+
+    if (this.state.stepSizePerc) {
+      pos = this.state.shiftXl + this.state.stepSizePerc;
+    } else if (this.state.stepSize) {
+      pos = this.state.shiftXl + this.mathPercent(this.state.stepSize);
+    } else {
+      pos = this.state.shiftXl;
+    }
+
+    return pos;
+  }
+
+  eventButton(position) {
+    let pos = position;
+
     if (pos <= 0) {
       pos = 0;
     } else if (pos >= 100) {
       pos = 100;
     }
 
-    if (this.tumblerB) {
+    if (this.tumbler) {
+      pos = this.state.shiftXr > pos ? pos : this.mathBalanceLeft(pos);
       this.newObserver.broadcast({
         shiftXl: pos
       });
     } else {
+      pos = this.state.shiftXl < pos ? pos : this.mathBalanceRigth(pos);
       this.newObserver.broadcast({
         shiftXr: pos
       });
     }
 
+    this.moveButton(pos);
+  }
+
+  moveButton(position) {
     if (this.state.rotate === 'horizontal') {
-      this.currentButton.style.left = `calc(${pos}% - ${this.buttonWidth}px)`;
+      this.currentButton.style.left = `calc(${position}% - ${this.buttonWidth}px)`;
       this.currentButton.style.top = `${-this.state.heightSlider}px`;
     } else if (this.state.rotate === 'vertical') {
       this.currentButton.style.left = `${-this.state.widthSlider}px`;
-      this.currentButton.style.top = `calc(${pos}% - ${this.buttonWidth}px)`;
+      this.currentButton.style.top = `calc(${position}% - ${this.buttonWidth}px)`;
     }
 
     if (this.state.show) {
       this.currentValueText();
       this.showCurentValue();
+
+      if (this.state.range === 'two') {
+        const oneCurrent = this.currentValLeft.rectRigth() > this.currentValRight.rectLeft();
+        this.responsiveCurrent(oneCurrent);
+      }
     }
 
     this.activeZoneAction();
   }
 
   currentValueText() {
-    if (this.tumblerB) {
+    if (this.tumbler) {
       this.currentValLeft.text(this.state.currentVal2);
     } else {
       this.currentValRight.text(this.state.currentVal1);
     }
   }
 
+  responsiveCurrent(oneCurrent) {
+    if (oneCurrent) {
+      this.sliderRange.append(this.currentVal.currentVal);
+      this.currentValLeft.currentVal.style.opacity = '0';
+      this.currentValRight.currentVal.style.opacity = '0';
+      this.currentVal.currentVal.style.opacity = '1';
+      this.currentVal.currentVal.style.display = 'block';
+
+      if (this.state.currentVal2 === this.state.currentVal1) {
+        this.currentVal.text(`${this.state.currentVal2}`);
+      } else {
+        this.currentVal.text(`${this.state.currentVal2} - ${+this.state.currentVal1}`);
+      }
+
+      this.currentVal.position((this.state.shiftXr + this.state.shiftXl) / 2);
+    } else {
+      this.currentVal.currentVal.style.opacity = '0';
+      this.currentVal.currentVal.style.display = 'none';
+      this.currentValLeft.currentVal.style.opacity = '1';
+      this.currentValRight.currentVal.style.opacity = '1';
+    }
+  }
+
   showCurentValue() {
-    if (this.state.rotate === 'horizontal') {
-      if (this.tumblerB) {
-        this.currentValLeft.positionHorizont(this.state.shiftXl);
-      } else {
-        this.currentValRight.positionHorizont(this.state.shiftXr);
-      }
-    } else if (this.state.rotate === 'vertical') {
-      if (this.tumblerB) {
-        this.currentValLeft.positionVertical(this.state.shiftXl);
-      } else {
-        this.currentValRight.positionVertical(this.state.shiftXr);
-      }
+    if (this.tumbler) {
+      this.currentValLeft.position(this.state.shiftXl);
+    } else {
+      this.currentValRight.position(this.state.shiftXr);
     }
   }
 
@@ -441,10 +573,6 @@ class View {
     } else {
       this.slideClass.activeZone(this.state.shiftXl, this.state.shiftXr);
     }
-  }
-
-  movePoint(e) {
-    this.onMouseMove(e);
   }
 
 }
@@ -468,9 +596,13 @@ class Model {
       currentVal2: 0,
       round: 1,
       shiftXl: 0,
-      shiftXr: 0
+      shiftXr: 100
     };
     this.state.selector = selector;
+  }
+
+  get stateCurrent() {
+    return this.state;
   }
 
   edit(key) {
@@ -498,11 +630,6 @@ class Model {
     const t = this.state;
     const res = Number((t.maxValue - t.minValue) * t.shiftXr / 100 + t.minValue);
     t.currentVal1 = Number(Math.round(res * Math.pow(10, t.round)) / Math.pow(10, t.round));
-    t.currentMax = t.currentVal1;
-  }
-
-  get stateCurrent() {
-    return this.state;
   }
 
 }
@@ -516,7 +643,7 @@ class Present {
   constructor(selector) {
     this.selector = selector;
     this.options = {};
-    this.subFunction = this.modify.bind(this);
+    this.subFunction = this.callBack.bind(this);
     this.model = new Model(selector);
     this.view = new View(this.model.stateCurrent);
     this.rotate = this.model.stateCurrent.rotate;
@@ -527,7 +654,7 @@ class Present {
     return this.model.stateCurrent;
   }
 
-  modify(data) {
+  callBack(data) {
     this.model.edit(data);
 
     switch (Object.keys(data)[0]) {
@@ -550,7 +677,7 @@ class Present {
   init() {
     this.view.newObserver.subscribe(this.subFunction);
     this.view.sliderInit();
-    this.view.installMove(this.model.state.currentVal2, this.model.state.currentVal1);
+    this.view.installMove(this.model.stateCurrent.currentVal2, this.model.stateCurrent.currentVal1);
   }
 
   sliderMode(options) {
@@ -569,7 +696,7 @@ class Present {
 
   start() {
     this.view.reRender();
-    this.view.installMove(this.model.state.currentVal2, this.model.state.currentVal1);
+    this.view.installMove(this.model.stateCurrent.currentVal2, this.model.stateCurrent.currentVal1);
   }
 
 }
@@ -11576,7 +11703,7 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 
-;// CONCATENATED MODULE: ./utils.ts
+;// CONCATENATED MODULE: ./js/utils.ts
 /* provided dependency */ var $ = __webpack_require__(638);
 function checkChange(elem, nameAtr, value, plugItem) {
   const item = elem.find(`input[name='${nameAtr}']`);
@@ -11651,7 +11778,7 @@ function actionForm(form, el) {
 
 
 
-__webpack_require__(681);
+__webpack_require__(679);
 
 const $plug1 = index_$('.js-plug1');
 const $plug2 = index_$('.js-plug2');
@@ -11662,11 +11789,10 @@ const $form2 = index_$('#form2');
 const $form3 = index_$('#form3');
 const $form4 = index_$('#form4');
 const plug1 = $plug1.sliderRqik({
-  rotate: 'vertical',
+  rotate: 'horizontal',
   maxValue: 1000,
-  range: ' two '
+  range: 'one'
 });
-console.log(plug1.getData());
 const plug2 = $plug2.sliderRqik({
   rotate: 'vertical',
   range: 'one',

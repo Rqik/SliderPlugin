@@ -56,147 +56,212 @@
         </code>
       </pre>
       </div>
-      <div class="view__slider view__slider-col" id='demo'>
-        <div class="slider_rqik js-plug1 "></div>
+      <div class="view__slider " id='demo'>
+        <div class="view__slider-block">
+          <div class=" slider_rqik2 js-plug1 "></div>
+        </div>
         <form id="form1" class="control-panel">
           <label>
-            Min
-            <input type="text" name="minValue" value="0" /></label>
-          <label>
-            Max
-            <input type="text" name="maxValue" value="120" /></label>
 
+            <input type="text" name="minValue" value="0" />
+            <span>Min</span></label>
           <label>
-            Тек. значение Btn 1
-            <input type="text" name="currentVal1" value="10" /></label>
+            <input type="text" name="maxValue" value="120" />
+            <span>Max</span></label>
           <label>
-            Тек.значени Btn 2
-            <input type="text" name="currentVal2" value="0" /></label>
+            <input type="text" name="currentVal1" value="10" />
+            <span>
+              Тек. значение Btn 1
+            </span></label>
           <label>
-            Округление после запятой
-            <input type="text" name="round" value="2" /></label>
+            <input type="text" name="currentVal2" value="0" />
+            <span>
+              Тек.значени Btn 2
+            </span></label>
+          <label>
+            <input type="text" name="round" value="2" />
+            <span>
+              Округление после запятой
+            </span>
+          </label>
+          <label>
+            <input type="text" name="intervalCount" value="2" />
+            <span>
+              Количество интервалов
+            </span></label>
+          <label>
+            <input type="text" name="stepSizePerc" />
+            <span>
+              Шаг в %
+            </span></label>
+          <label>
+            <input type="text" name="stepSize" />
+            <span>
 
-          <label>
-            Количество интервалов
-            <input type="text" name="intervalCount" value="2" /></label>
-          <label>
-            Шаг в %
-            <input type="text" name="stepSizePerc" /></label>
-          <label>
-            Шаг в px
-            <input type="text" name="stepSize" /></label>
-            <div class="checkbox-items">
-              <label>
+              Шаг в px
+            </span></label>
+          <div class="checkbox-items">
+            <label>
+              <input type="checkbox" name="showInterval" checked />
+              <span>
                 Показать интервалы
-                <input type="checkbox" name="showInterval" checked /></label>
-              <label>
+              </span></label>
+            <label>
+              <input type="checkbox" name="show" checked />
+              <span>
                 Показать текущее значение над полузнком
-                <input type="checkbox" name="show" checked /></label>
-              <label>
+              </span></label>
+            <label>
+              <input type="checkbox" name="rotate" />
+              <span>
                 Ориентация
-                <span> (Вертикальная/Горизонтальная) </span>
-                <input type="checkbox" name="rotate" /></label>
-    
-              <label>
+          (Вертикальная/Горизонтальная) </span>
+            </label>
+            <label>
+              <input type="checkbox" name="range" checked />
+              <span>
                 Количество ползунков Два/Один
-                <input type="checkbox" name="range" checked /></label>
-            </div>
+              </span></label>
+          </div>
         </form>
       </div>
-      <div class="view__slider view__slider-col">
-        <div class="slider_rqik js-plug2 "></div>
+      <div class="view__slider ">
+        <div class="view__slider-block">
+          <div class="slider_rqik2 js-plug2 "></div>
+        </div>
         <form id="form2" class="control-panel">
           <label>
-            Min
-            <input type="text" name="minValue" value="0" /></label>
-          <label>
-            Max
-            <input type="text" name="maxValue" value="120" /></label>
 
+            <input type="text" name="minValue" value="0" />
+            <span>Min</span></label>
           <label>
-            Тек. значение Btn 1
-            <input type="text" name="currentVal1" value="10" /></label>
+            <input type="text" name="maxValue" value="120" />
+            <span>Max</span></label>
           <label>
-            Тек.значени Btn 2
-            <input type="text" name="currentVal2" value="0" /></label>
+            <input type="text" name="currentVal1" value="10" />
+            <span>
+              Тек. значение Btn 1
+            </span></label>
           <label>
-            Округление после запятой
-            <input type="text" name="round" value="2" /></label>
+            <input type="text" name="currentVal2" value="0" />
+            <span>
+              Тек.значени Btn 2
+            </span></label>
+          <label>
+            <input type="text" name="round" value="2" />
+            <span>
+              Округление после запятой
+            </span>
+          </label>
+          <label>
+            <input type="text" name="intervalCount" value="2" />
+            <span>
+              Количество интервалов
+            </span></label>
+          <label>
+            <input type="text" name="stepSizePerc" />
+            <span>
+              Шаг в %
+            </span></label>
+          <label>
+            <input type="text" name="stepSize" />
+            <span>
 
-          <label>
-            Количество интервалов
-            <input type="text" name="intervalCount" value="2" /></label>
-          <label>
-            Шаг в %
-            <input type="text" name="stepSizePerc" /></label>
-          <label>
-            Шаг в px
-            <input type="text" name="stepSize" /></label>
-            <div class="checkbox-items">
-              <label>
+              Шаг в px
+            </span></label>
+          <div class="checkbox-items">
+            <label>
+              <input type="checkbox" name="showInterval" checked />
+              <span>
                 Показать интервалы
-                <input type="checkbox" name="showInterval" checked /></label>
-              <label>
+              </span></label>
+            <label>
+              <input type="checkbox" name="show" checked />
+              <span>
                 Показать текущее значение над полузнком
-                <input type="checkbox" name="show" checked /></label>
-              <label>
+              </span></label>
+            <label>
+              <input type="checkbox" name="rotate" />
+              <span>
                 Ориентация
-                <span> (Вертикальная/Горизонтальная) </span>
-                <input type="checkbox" name="rotate" /></label>
-    
-              <label>
+          (Вертикальная/Горизонтальная) </span>
+            </label>
+            <label>
+              <input type="checkbox" name="range" checked />
+              <span>
                 Количество ползунков Два/Один
-                <input type="checkbox" name="range" checked /></label>
-            </div>
+              </span></label>
+          </div>
         </form>
       </div>
       <div class="view__slider">
-        <div class="js-plug3 slider_rqik2 "></div>
+        <div class="view__slider-block">
+          <div class="js-plug3 slider_rqik2 "></div>
+        </div>
         <form id="form3" class="control-panel">
           <label>
-            Min
-            <input type="text" name="minValue" value="0" /></label>
-          <label>
-            Max
-            <input type="text" name="maxValue" value="120" /></label>
 
+            <input type="text" name="minValue" value="0" />
+            <span>Min</span></label>
           <label>
-            Тек. значение Btn 1
-            <input type="text" name="currentVal1" value="10" /></label>
+            <input type="text" name="maxValue" value="120" />
+            <span>Max</span></label>
           <label>
-            Тек.значени Btn 2
-            <input type="text" name="currentVal2" value="0" /></label>
+            <input type="text" name="currentVal1" value="10" />
+            <span>
+              Тек. значение Btn 1
+            </span></label>
           <label>
-            Округление после запятой
-            <input type="text" name="round" value="2" /></label>
+            <input type="text" name="currentVal2" value="0" />
+            <span>
+              Тек.значени Btn 2
+            </span></label>
+          <label>
+            <input type="text" name="round" value="2" />
+            <span>
+              Округление после запятой
+            </span>
+          </label>
+          <label>
+            <input type="text" name="intervalCount" value="2" />
+            <span>
+              Количество интервалов
+            </span></label>
+          <label>
+            <input type="text" name="stepSizePerc" />
+            <span>
+              Шаг в %
+            </span></label>
+          <label>
+            <input type="text" name="stepSize" />
+            <span>
 
-          <label>
-            Количество интервалов
-            <input type="text" name="intervalCount" value="2" /></label>
-          <label>
-            Шаг в %
-            <input type="text" name="stepSizePerc" /></label>
-          <label>
-            Шаг в px
-            <input type="text" name="stepSize" /></label>
-            <div class="checkbox-items">
-              <label>
+              Шаг в px
+            </span></label>
+          <div class="checkbox-items">
+            <label>
+              <input type="checkbox" name="showInterval" checked />
+              <span>
                 Показать интервалы
-                <input type="checkbox" name="showInterval" checked /></label>
-              <label>
+              </span></label>
+            <label>
+              <input type="checkbox" name="show" checked />
+              <span>
                 Показать текущее значение над полузнком
-                <input type="checkbox" name="show" checked /></label>
-              <label>
+              </span></label>
+            <label>
+              <input type="checkbox" name="rotate" />
+              <span>
                 Ориентация
-                <span> (Вертикальная/Горизонтальная) </span>
-                <input type="checkbox" name="rotate" /></label>
-    
-              <label>
+          (Вертикальная/Горизонтальная) </span>
+            </label>
+            <label>
+              <input type="checkbox" name="range" checked />
+              <span>
                 Количество ползунков Два/Один
-                <input type="checkbox" name="range" checked /></label>
-            </div>
+              </span></label>
+          </div>
         </form>
-        <!-- <div>data-min-value="22" data-max-value="222" data-current-val2='90'</div> -->
       </div>
       <div class="view__slider">
         <div class="heys">
@@ -204,47 +269,67 @@
         </div>
         <form id="form4" class="control-panel">
           <label>
-            Min
-            <input type="text" name="minValue" value="0" /></label>
-          <label>
-            Max
-            <input type="text" name="maxValue" value="120" /></label>
 
+            <input type="text" name="minValue" value="0" />
+            <span>Min</span></label>
           <label>
-            Тек. значение Btn 1
-            <input type="text" name="currentVal1" value="10" /></label>
+            <input type="text" name="maxValue" value="120" />
+            <span>Max</span></label>
           <label>
-            Тек.значени Btn 2
-            <input type="text" name="currentVal2" value="0" /></label>
+            <input type="text" name="currentVal1" value="10" />
+            <span>
+              Тек. значение Btn 1
+            </span></label>
           <label>
-            Округление после запятой
-            <input type="text" name="round" value="2" /></label>
+            <input type="text" name="currentVal2" value="0" />
+            <span>
+              Тек.значени Btn 2
+            </span></label>
+          <label>
+            <input type="text" name="round" value="2" />
+            <span>
+              Округление после запятой
+            </span>
+          </label>
+          <label>
+            <input type="text" name="intervalCount" value="2" />
+            <span>
+              Количество интервалов
+            </span></label>
+          <label>
+            <input type="text" name="stepSizePerc" />
+            <span>
+              Шаг в %
+            </span></label>
+          <label>
+            <input type="text" name="stepSize" />
+            <span>
 
-          <label>
-            Количество интервалов
-            <input type="text" name="intervalCount" value="2" /></label>
-          <label>
-            Шаг в %
-            <input type="text" name="stepSizePerc" /></label>
-          <label>
-            Шаг в px
-            <input type="text" name="stepSize" /></label>
-            <div class="checkbox-items">
-              <label>
+              Шаг в px
+            </span></label>
+          <div class="checkbox-items">
+            <label>
+              <input type="checkbox" name="showInterval" checked />
+              <span>
                 Показать интервалы
-                <input type="checkbox" name="showInterval" checked /></label>
-              <label>
+              </span></label>
+            <label>
+              <input type="checkbox" name="show" checked />
+              <span>
                 Показать текущее значение над полузнком
-                <input type="checkbox" name="show" checked /></label>
-              <label>
+              </span></label>
+            <label>
+              <input type="checkbox" name="rotate" />
+              <span>
                 Ориентация
-                <span> (Вертикальная/Горизонтальная) </span>
-                <input type="checkbox" name="rotate" /></label>
-    
-              <label>
+          (Вертикальная/Горизонтальная) </span>
+            </label>
+            <label>
+              <input type="checkbox" name="range" checked />
+              <span>
                 Количество ползунков Два/Один
-                <input type="checkbox" name="range" checked /></label>
-            </div>
+              </span></label>
+          </div>
         </form>
       </div>
       <div class="view__slider" id='fq'>

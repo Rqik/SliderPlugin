@@ -161,6 +161,7 @@ class View {
       this.currentValRight.currentVal.style.opacity = '1';
       this.sliderRange.append(this.currentValRight.currentVal);
     } else {
+      this.currentVal.currentVal.remove();
       this.currentValLeft.currentVal.remove();
       this.currentValRight.currentVal.remove();
     }

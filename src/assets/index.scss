@@ -1,7 +1,7 @@
-
-*{
+* {
   box-sizing: border-box;
 }
+
 .wrapper {
   display: grid;
   grid-template-columns: 1fr 3fr;
@@ -26,24 +26,28 @@
     top: 0;
     color: #000000;
     box-shadow: 4px 0px 4px rgba(129, 99, 77, 0.29);
+
     .menu {
-      
-      &__bar{
+
+      &__bar {
         width: 100%;
-       
+
         list-style: none;
         padding: 0;
         width: 100%;
 
       }
+
       &__item {
         padding: 0.3rem;
         width: 100%;
         cursor: pointer;
-        &:hover{
+
+        &:hover {
           background-color: $grey-border;
         }
-        a{
+
+        a {
           font-family: inherit;
           text-decoration: none;
           color: inherit;
@@ -53,7 +57,7 @@
     }
   }
 
-  .view-panel{
+  .view-panel {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -61,9 +65,9 @@
     align-items: center;
     align-content: center;
 
-    pre{
+    pre {
       background-color: $background-color-b;
-      padding:20px;
+      padding: 20px;
       display: flex;
       color: $color-b;
       width: 100%;
@@ -71,52 +75,69 @@
       font-size: 13px;
       justify-content: flex-start;
       align-items: flex-start;
+
       // text-align: center;
-      .comment{
+      .comment {
         color: $color-c;
         font-style: italic;
       }
     }
   }
 
-  .view__slider{
+  .view__slider {
     display: flex;
     flex-direction: column;
     justify-self: center;
     align-self: flex-start;
     align-content: center;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
     // border: 1px solid black;
     // height: 30%;
     padding: 40px;
     width: 100%;
 
-    &-col{
-      flex-direction: row;
-      justify-content: flex-end;
-
+    &-block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
     }
-    H1,  h2 , h3, h4, p , a{
-      font-family: 'Montserrat', 'Roboto' , sans-serif;
+
+    .slider_vertical {
+      width: 130px;
+      min-height: 300px;
+      margin-bottom: 30px;
+    }
+
+    H1,
+    h2,
+    h3,
+    h4,
+    p,
+    a {
+      font-family: 'Montserrat', 'Roboto', sans-serif;
       font-style: normal;
       line-height: 126.9%;
     }
-    h1{
+
+    h1 {
       font-weight: 600;
       line-height: 126.9%;
     }
-    hr{
+
+    hr {
       color: $color-c;
       width: 100%;
-      border:none;
+      border: none;
       background-color: $color-c;
-       height:3px;
+      height: 3px;
       outline: none;
     }
-   
-    .view_title{
-      font-family: 'Montserrat', 'Roboto' , sans-serif;
+
+    .view_title {
+      font-family: 'Montserrat', 'Roboto', sans-serif;
       font-style: normal;
       font-weight: 600;
       font-size: 24px;

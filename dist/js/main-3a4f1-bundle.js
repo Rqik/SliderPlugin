@@ -263,6 +263,7 @@ class View {
     this.sliderRange.append(this.buttonLeft.button);
 
     if (this.state.show) {
+      this.currentValLeft.currentVal.style.opacity = '1';
       this.sliderRange.append(this.currentValLeft.currentVal);
     }
   }

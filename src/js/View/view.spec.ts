@@ -149,18 +149,23 @@ describe('View test', () => {
     });
 
     test('drawing currentVal  show: "true"', () => {
+      view.state.range = 'two';
+      view.sliderInit();
       const currentVal = view.sliderRange.querySelector(
         '.slider__current_value',
       );
       expect(!!currentVal).toBe(true);
       const currentRigth = view.currentValRight.currentVal;
+
       expect(currentVal).toEqual(currentRigth);
+
       expect(view.currentValLeft.currentVal).toEqual(
         view.currentValRight.currentVal,
       );
     });
 
     test('add element in main slider ', () => {
+      view.sliderInit();
       const button = view.slider.querySelector('.slider__range_button');
       expect(button).toEqual(view.buttonRight.button);
 
@@ -610,7 +615,7 @@ describe('View test', () => {
     test('reinitialization function reRender', () => {
       view.show = jest.fn();
       view.addElem = jest.fn();
-      view.resizeSLider = jest.fn();
+      view.removeStyle = jest.fn();
       view.reRender();
 
       expect(view.slider.textContent).toEqual('');
@@ -621,8 +626,8 @@ describe('View test', () => {
       expect(view.addElem).toHaveBeenCalled();
       expect(view.addElem).toHaveBeenCalledTimes(1);
 
-      expect(view.resizeSLider).toHaveBeenCalled();
-      expect(view.resizeSLider).toHaveBeenCalledTimes(1);
+      expect(view.removeStyle).toHaveBeenCalled();
+      expect(view.removeStyle).toHaveBeenCalledTimes(1);
     });
   });
 });

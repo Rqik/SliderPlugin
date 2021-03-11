@@ -11802,34 +11802,25 @@ const plug2 = $plug2.sliderRqik({
 });
 const plug3 = $plug3.sliderRqik();
 const plug4 = $plug4.sliderRqik();
-$form1.find("input[name='rotate']").click(function () {
-  if (index_$(this).is(':checked')) {
-    $plug1.addClass('slider_vertical');
-  } else {
-    $plug1.removeClass('slider_vertical');
-  }
-});
-$form2.find("input[name='rotate']").click(function () {
-  if (index_$(this).is(':checked')) {
-    $plug2.addClass('slider_vertical');
-  } else {
-    $plug2.removeClass('slider_vertical');
-  }
-});
-$form3.find("input[name='rotate']").click(function () {
-  if (index_$(this).is(':checked')) {
-    $plug3.addClass('slider_vertical');
-  } else {
-    $plug3.removeClass('slider_vertical');
-  }
-});
-$form4.find("input[name='rotate']").click(function () {
-  if (index_$(this).is(':checked')) {
-    $plug4.addClass('widt30');
-  } else {
-    $plug4.removeClass('widt30');
-  }
-});
+const $input1 = $form1.find("input[name='rotate']");
+const $input2 = $form2.find("input[name='rotate']");
+const $input3 = $form3.find("input[name='rotate']");
+const $input4 = $form4.find("input[name='rotate']");
+addClassForm($input1, $plug1, 'slider_vertical');
+addClassForm($input2, $plug2, 'slider_vertical');
+addClassForm($input3, $plug3, 'slider_vertical');
+addClassForm($input4, $plug4, 'widt30');
+
+function addClassForm($input, $elem, className) {
+  $input.click(() => {
+    if ($input.is(':checked')) {
+      $elem.addClass(className);
+    } else {
+      $elem.removeClass(className);
+    }
+  });
+}
+
 actionForm($form1, plug1);
 actionForm($form2, plug2);
 actionForm($form3, plug3);

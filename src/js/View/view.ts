@@ -112,8 +112,8 @@ class View {
 
   resizeSLider(): void {
     if (
-      this.state.widthSlider !== this.sliderRange.offsetWidth ||
-      this.state.heightSlider !== this.sliderRange.offsetHeight
+      this.state.widthSlider !== this.sliderRange.offsetWidth
+      || this.state.heightSlider !== this.sliderRange.offsetHeight
     ) {
       this.newObserver.broadcast({
         widthSlider: this.sliderRange.offsetWidth,
@@ -205,9 +205,9 @@ class View {
 
   mathValueCalc(num: number): number {
     return (
-      ((num - this.state.minValue) /
-        (this.state.maxValue - this.state.minValue)) *
-      100
+      ((num - this.state.minValue)
+        / (this.state.maxValue - this.state.minValue))
+      * 100
     );
   }
 
@@ -254,9 +254,8 @@ class View {
       perc = this.mathPercent(e.pageY);
     }
     if (this.state.range === 'two') {
-      const bool =
-        Math.abs(perc - this.state.shiftXl) <
-        Math.abs(perc - this.state.shiftXr);
+      const bool = Math.abs(perc - this.state.shiftXl)
+        < Math.abs(perc - this.state.shiftXr);
 
       this.overridingButtons(bool);
     }
@@ -344,8 +343,7 @@ class View {
       this.currentValueText();
       this.showCurentValue();
       if (this.state.range === 'two') {
-        const oneCurrent =
-          this.currentValLeft.rectRigth() > this.currentValRight.rectLeft();
+        const oneCurrent = this.currentValLeft.rectRigth() > this.currentValRight.rectLeft();
         this.responsiveCurrent(oneCurrent);
       }
     }

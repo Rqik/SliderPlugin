@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
 
@@ -17,22 +16,19 @@ const PATHS = {
 const PAGES_DIR = `${PATHS.src}/.`;
 const PAGES = fs
   .readdirSync(PAGES_DIR)
-  .filter((fileName) => fileName.endsWith('.html'));
+  .filter((fileName) => fileName.endsWith('.pug'));
 
 const plugins = () => {
   const base = [
-    ...PAGES.map(
-      (page) =>
-        new HtmlWebpackPlugin({
-          template: `${PAGES_DIR}/${page}`,
-          filename: `./${page}`,
-        })
-    ),
+    new CleanWebpackPlugin(),
 
+    new HtmlWebpackPlugin({
+      template: `./demo/demo.pug`,
+      filename: `demo.html`,
+    }),
     new MiniCssExtractPlugin({
       filename: 'css/[name]-[hash:5]-bundle.css',
     }),
-    new CleanWebpackPlugin(),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
@@ -50,17 +46,21 @@ const plugins = () => {
 };
 
 module.exports = {
-  target: process.env.NODE_ENV === 'development' ? 'web' : 'browserslist',
-  context: path.resolve(__dirname, 'src'),
+  stats: { errorDetails: true, children: true },
+
+  // target: process.env.NODE_ENV === 'development' ? 'web' : 'browserslist',
+
+  context: PATHS.src,
   mode: 'development',
-  entry: './index.ts',
+  entry: './demo/demo.ts',
   output: {
     filename: 'js/[name]-[contenthash:5]-bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: PATHS.dist,
     publicPath: '',
   },
 
   optimization: {
+    minimize: false,
     splitChunks: {
       chunks: 'all',
     },
@@ -74,15 +74,13 @@ module.exports = {
     },
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: PATHS.dist,
     // compress: true,
     port: 8008,
     hot: true,
   },
   plugins: plugins(),
-  optimization: {
-    minimize: false,
-  },
+
   module: {
     rules: [
       {
@@ -141,6 +139,13 @@ module.exports = {
         test: /\.(js|jsx|tsx|ts)$/,
         use: ['babel-loader', 'ts-loader'],
         exclude: /node_modules/,
+      },
+      {
+        test: /\.pug$/,
+        loader: 'pug-loader',
+        options: {
+          pretty: true,
+        },
       },
     ],
   },

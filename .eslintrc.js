@@ -63,7 +63,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/*.spec.ts'], // Or *.test.js
+      files: ['**/*.spec.ts'], // Or *.test.MVP
       rules: {
         'require-jsdoc': 'off',
       },

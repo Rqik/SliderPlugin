@@ -1,0 +1,6 @@
+include ../slider-form/slider-form
+mixin slider({className="slider_rqik" , id , classBlock}={})
+  .slider
+    .slider__view-block(class=classBlock)
+      div(class = className)&attributes(attributes)
+    +sliderForm({id})

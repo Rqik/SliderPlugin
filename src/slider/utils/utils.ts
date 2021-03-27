@@ -1,5 +1,5 @@
 /* eslint-disable fsd/no-function-declaration-in-event-listener */
-import {IState, StateEl , Slider} from './Interface';
+import { IState, StateEl, Slider } from './Interface';
 
 /* eslint-disable func-names */
 function checkChange(
@@ -48,7 +48,7 @@ function runChange(elem: JQuery, nameAtr: string, plugItem: Slider): void {
     if (val === '-') {
       return;
     }
-    plugItem.data({[nameAtr]: +val});
+    plugItem.data({ [nameAtr]: +val });
   });
   if (val !== '-' || val !== undefined) {
     plugItem.data({
@@ -73,4 +73,4 @@ function actionForm(form: JQuery, el: Slider): void {
   checkChange(form, 'range', ['two', 'one'], el);
 }
 
-export {checkChange, inputChange, runChange, actionForm};
+export { checkChange, inputChange, runChange, actionForm };

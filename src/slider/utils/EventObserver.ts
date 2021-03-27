@@ -1,4 +1,4 @@
-import {callBack, StateEl} from './Interface';
+import { callBack, StateEl } from './Interface';
 
 class EventObserver {
   observers: callBack[];
@@ -24,4 +24,4 @@ class EventObserver {
   }
 }
 
-export {EventObserver};
+export { EventObserver };

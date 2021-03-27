@@ -1,7 +1,7 @@
 /* eslint-disable wrap-iife */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
-import { IState, StateEl , Slider } from './utils/Interface';
+import { IState, StateEl, Slider } from './utils/Interface';
 import { Present } from './mvp/Presenter/Presenter';
 
 declare global {

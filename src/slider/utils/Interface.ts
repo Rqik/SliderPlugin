@@ -46,4 +46,4 @@ interface settingOption {
   range?: range;
 }
 
-export { Coordinate, settingOption, IState, rotate, range, callBack, options, StateEl , Slider};
+export { Coordinate, settingOption, IState, rotate, range, callBack, options, StateEl, Slider };

@@ -25,4 +25,4 @@ class Button {
   }
 }
 
-export {Button};
+export { Button };

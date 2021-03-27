@@ -17,7 +17,7 @@ class CurrentValue {
     this.currentVal.textContent = `${text}`;
   }
 
-   position(position: number): void {
+  position(position: number): void {
     if (this.rotation === 'horizontal') {
       this.positionHorizontal(position);
     } else if (this.rotation === 'vertical') {
@@ -43,15 +43,15 @@ class CurrentValue {
     this.rotation = rotation;
   }
 
-   rectLeft(): number {
+  rectLeft(): number {
     const clientRect = this.currentVal.getBoundingClientRect();
     if (this.rotation === 'horizontal') {
       return clientRect.left;
     }
-      return clientRect.top;
+    return clientRect.top;
   }
 
-   rectRight(): number {
+  rectRight(): number {
     const clientRect = this.currentVal.getBoundingClientRect();
     if (this.rotation === 'horizontal') {
       return clientRect.right;

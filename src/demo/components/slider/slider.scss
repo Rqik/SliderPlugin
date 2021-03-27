@@ -6,8 +6,6 @@
   align-content: center;
   justify-content: flex-start;
   align-items: center;
-  // border: 1px solid black;
-  // height: 30%;
   padding: 40px;
   width: 100%;
 
@@ -23,31 +21,6 @@
     width: 130px;
     min-height: 300px;
     margin-bottom: 30px;
-  }
-
-  H1,
-  h2,
-  h3,
-  h4,
-  p,
-  a {
-    font-family: 'Montserrat', 'Roboto', sans-serif;
-    font-style: normal;
-    line-height: 126.9%;
-  }
-
-  h1 {
-    font-weight: 600;
-    line-height: 126.9%;
-  }
-
-  hr {
-    color: $color-c;
-    width: 100%;
-    border: none;
-    background-color: $color-c;
-    height: 3px;
-    outline: none;
   }
 
   .view_title {

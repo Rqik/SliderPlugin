@@ -2,10 +2,10 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 import '@/demo/assets/main.scss';
-import '../MVP/View/SubView.ts';
-import { actionForm, inputChange } from '../MVP/utils';
+import '../slider/mvp/View/SubView.ts';
+import { actionForm, inputChange } from '../slider/utils/utils';
 
-require('../MVP/Slider/slider.ts');
+require('../slider/Slider.ts');
 
 const $plug1 = $('.js-plug1');
 const $plug2 = $('.js-plug2');
@@ -32,7 +32,7 @@ const plug3 = $plug3.sliderRqik();
 
 const plug4 = $plug4.sliderRqik();
 
-const $input1 = $form1//$form1.find("input[name='rotate']");
+const $input1 = $form1.find("input[name='rotate']");
 const $input2 = $form2.find("input[name='rotate']");
 const $input3 = $form3.find("input[name='rotate']");
 const $input4 = $form4.find("input[name='rotate']");
@@ -40,11 +40,10 @@ const $input4 = $form4.find("input[name='rotate']");
 addClassForm($input1, $plug1, 'slider_vertical');
 addClassForm($input2, $plug2, 'slider_vertical');
 addClassForm($input3, $plug3, 'slider_vertical');
-addClassForm($input4, $plug4, 'widt30');
+addClassForm($input4, $plug4, 'slider_min-width');
 
 function addClassForm($input: JQuery, $elem: JQuery, className: string) {
   $input.click(() => {
-
     if ($input.is(':checked')) {
       $elem.addClass(className);
     } else {
@@ -62,7 +61,7 @@ actionForm($form3, plug3);
 actionForm($form4, plug4);
 
 $plug1.on('click', () => {
-  console.log('kjshg')
+  console.log('kjshg');
 
   inputChange($form1, 'currentVal2', plug1.getData()[0].currentVal2);
   inputChange($form1, 'currentVal1', plug1.getData()[0].currentVal1);

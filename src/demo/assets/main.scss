@@ -1,13 +1,12 @@
 // @import '~normalize.css';
 @import 'fonts/montserrat.css';
 @import 'variables';
-@import 'slider';
+@import 'src/slider/style/slider';
 @import 'index';
 @import "../components/check/check";
 @import "../components/slider/slider";
 @import "../components/slider-form/slider-form";
 @import "../components/field/field";
-
 
 .resize-block{
   width: 100%;
@@ -18,7 +17,7 @@
   margin: 20px 0;
   max-width: 60vw;
   background-color: white;
-  border: 4px solid $green;
+  border: 4px solid $resize-block-border;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -38,10 +37,6 @@
   }
 }
 
-.slider2 {
-  width: 400px;
-}
-
 .slider_rqik {
   position: relative;
   margin-bottom: 0;
@@ -59,18 +54,3 @@
   box-sizing: border-box;
 }
 
-.slider_r2 {
-  width: 400px;
-  height: 200px;
-  position: relative;
-  box-sizing: border-box;
-}
-
-.slider_r3 {
-  width: 100px;
-  height: 300px;
-  margin-bottom: 20px;
-  position: relative;
-  box-sizing: border-box;
-
-}

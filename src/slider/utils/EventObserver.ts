@@ -11,7 +11,7 @@ class EventObserver {
     this.observers.push(fn);
   }
 
-  broadcast(data: StateEl | object): void {
+  broadcast(data: StateEl | any): void {
     this.observers.forEach((subscriber) => {
       if (typeof subscriber === 'function') {
         subscriber(data);

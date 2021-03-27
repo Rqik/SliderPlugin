@@ -61,8 +61,6 @@ actionForm($form3, plug3);
 actionForm($form4, plug4);
 
 $plug1.on('click', () => {
-  console.log('kjshg');
-
   inputChange($form1, 'currentVal2', plug1.getData()[0].currentVal2);
   inputChange($form1, 'currentVal1', plug1.getData()[0].currentVal1);
 });

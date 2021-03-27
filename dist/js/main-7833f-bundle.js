@@ -126,7 +126,6 @@ actionForm($form2, plug2);
 actionForm($form3, plug3);
 actionForm($form4, plug4);
 $plug1.on('click', () => {
-  console.log('kjshg');
   inputChange($form1, 'currentVal2', plug1.getData()[0].currentVal2);
   inputChange($form1, 'currentVal1', plug1.getData()[0].currentVal1);
 });
@@ -487,6 +486,9 @@ class View {
     this.currentVal.currentVal.remove();
     this.buttonLeft.button.remove();
     this.currentValLeft.currentVal.remove();
+    this.observer.broadcast({
+      shiftXl: 0
+    });
   }
 
   intervalExpose() {

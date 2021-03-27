@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
 
@@ -24,7 +25,7 @@ const plugins = () => {
 
     new HtmlWebpackPlugin({
       template: `./demo/demo.pug`,
-      filename: `demo.html`,
+      filename: `index.html`,
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name]-[hash:5]-bundle.css',
@@ -33,6 +34,17 @@ const plugins = () => {
       $: 'jquery',
       jQuery: 'jquery',
       'windows.jQuery': 'jquery',
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: `${PATHS.src}/demo/assets/img`,
+          to: `${PATHS.dist}/img`,
+        },
+      ],
+      options: {
+        concurrency: 100,
+      },
     }),
   ];
 
@@ -134,7 +146,16 @@ module.exports = {
           },
         },
       },
-
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name][contenthash].[ext]',
+            outputPath: 'img/',
+          },
+        },
+      },
       {
         test: /\.(js|jsx|tsx|ts)$/,
         use: ['babel-loader', 'ts-loader'],

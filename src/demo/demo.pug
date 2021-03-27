@@ -1,7 +1,12 @@
 include ./components/slider/slider
+include ./components/favicon/favicon
 doctype html
 html
   head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    +favicon
+    title Slider | Demo
   body.wrapper
     +slider({className: 'slider_rqik2 js-plug1', id: 'form1' })
     +slider({className: 'slider_rqik2 js-plug2', id: 'form2'})

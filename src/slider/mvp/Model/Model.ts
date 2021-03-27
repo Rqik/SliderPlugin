@@ -86,12 +86,14 @@ class Model {
     this.state.currentVal1 = Number(this.state.currentVal1);
     this.state.currentVal2 = Number(this.state.currentVal2);
     this.state.round = Number(this.state.round);
-    this.state.shiftXl = ((this.state.currentVal2 - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
-      * 100;
-    this.state.shiftXr = ((this.state.currentVal1 - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
-      * 100;
+    this.state.shiftXl =
+      ((this.state.currentVal2 - this.state.minValue) /
+        (this.state.maxValue - this.state.minValue)) *
+      100;
+    this.state.shiftXr =
+      ((this.state.currentVal1 - this.state.minValue) /
+        (this.state.maxValue - this.state.minValue)) *
+      100;
   }
 
   private updateCoordinate(coordinate: Coordinate) {
@@ -113,8 +115,9 @@ class Model {
   }
 
   private activeButton() {
-    this.state.activeLeft = Math.abs(this.state.shiftXl - this.state.step)
-      < Math.abs(this.state.shiftXr - this.state.step);
+    this.state.activeLeft =
+      Math.abs(this.state.shiftXl - this.state.step) <
+      Math.abs(this.state.shiftXr - this.state.step);
     if (this.state.shiftXl === this.state.shiftXr) {
       this.state.activeLeft = this.state.step < this.state.shiftXr;
     }

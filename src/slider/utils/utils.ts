@@ -1,5 +1,5 @@
 /* eslint-disable fsd/no-function-declaration-in-event-listener */
-import { IState, StateEl, Slider } from './Interface';
+import { Slider } from './Interface';
 
 /* eslint-disable func-names */
 function checkChange(

@@ -264,8 +264,7 @@ class View {
       this.currentValueText();
       this.showCurrentValue();
       if (this.state.range === 'two') {
-        const oneCurrent =
-          this.currentValLeft.rectRight() > this.currentValRight.rectLeft();
+        const oneCurrent = this.currentValLeft.rectRight() > this.currentValRight.rectLeft();
         this.responsiveCurrent(oneCurrent);
       }
     }

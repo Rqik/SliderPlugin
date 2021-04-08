@@ -1,4 +1,5 @@
 import { rotate } from '../../../utils/Interface';
+import {rotation,currentValue as className} from '../../../utils/constatnts';
 
 class CurrentValue {
   currentVal: HTMLElement = document.createElement('div');
@@ -10,7 +11,7 @@ class CurrentValue {
   }
 
   private init(): void {
-    this.currentVal.className = 'slider-range__current-value';
+    this.currentVal.className = className.CURRENT;
   }
 
   text(text: string | number): void {
@@ -18,9 +19,9 @@ class CurrentValue {
   }
 
   position(position: number): void {
-    if (this.rotation === 'horizontal') {
+    if (this.rotation === rotation.HORIZONTAL) {
       this.positionHorizontal(position);
-    } else if (this.rotation === 'vertical') {
+    } else if (this.rotation === rotation.VERTICAL) {
       this.positionVertical(position);
     }
   }
@@ -45,7 +46,7 @@ class CurrentValue {
 
   rectLeft(): number {
     const clientRect = this.currentVal.getBoundingClientRect();
-    if (this.rotation === 'horizontal') {
+    if (this.rotation === rotation.HORIZONTAL) {
       return clientRect.left;
     }
     return clientRect.top;
@@ -53,7 +54,7 @@ class CurrentValue {
 
   rectRight(): number {
     const clientRect = this.currentVal.getBoundingClientRect();
-    if (this.rotation === 'horizontal') {
+    if (this.rotation === rotation.HORIZONTAL) {
       return clientRect.right;
     }
     return clientRect.bottom;

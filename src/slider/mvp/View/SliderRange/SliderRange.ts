@@ -1,38 +1,39 @@
-import { rotate } from '../../../utils/Interface';
+import {rotate} from '../../../utils/Interface';
+import {rotation, slider as className} from '../../../utils/constatnts';
 
 class SliderRange {
   sliderRange: HTMLElement = document.createElement('div');
 
   sliderActiveZone: HTMLElement = document.createElement('div');
 
- private rotate: rotate = 'horizontal';
+ private rotate: rotate = rotation.HORIZONTAL;
 
  constructor(rot: rotate) {
    this.init(rot);
  }
 
  private init(rot: rotate): HTMLElement {
-   this.sliderRange.className = 'slider-range';
-   this.sliderActiveZone.className = 'slider-range__active-zone';
-   if (rot === 'vertical') {
-     this.sliderRange.classList.add('slider-range_vertical');
+   this.sliderRange.className = className.SLIDER;
+   this.sliderActiveZone.className = className.SLIDER_ACTIVE_ZONE;
+   if (rot === rotation.VERTICAL) {
+     this.sliderRange.classList.add(className.SLIDER_VERTICAL);
    }
    this.sliderRange.appendChild(this.sliderActiveZone);
    return this.sliderRange;
  }
 
  edit(rot: rotate): void {
-   if (rot === 'vertical') {
+   if (rot === rotation.VERTICAL) {
      this.rotate = rot;
-     this.sliderRange.classList.add('slider-range_vertical');
-   } else if (rot === 'horizontal') {
+     this.sliderRange.classList.add(className.SLIDER_VERTICAL);
+   } else if (rot === rotation.HORIZONTAL) {
      this.rotate = rot;
-     this.sliderRange.classList.remove('slider-range_vertical');
+     this.sliderRange.classList.remove(className.SLIDER_VERTICAL);
    }
  }
 
  activeZone(left: number, right: number): void {
-   if (this.rotate === 'horizontal') {
+   if (this.rotate === rotation.HORIZONTAL) {
      this.sliderActiveZone.style.left = `${left}%`;
      this.sliderActiveZone.style.width = `${right - left}%`;
    } else {

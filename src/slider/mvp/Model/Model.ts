@@ -1,5 +1,6 @@
-import { Coordinate, IState, StateEl } from '../../utils/Interface';
-import { EventObserver } from '../../utils/EventObserver';
+import {Coordinate, IState, StateEl} from '../../utils/Interface';
+import {EventObserver} from '../../utils/EventObserver';
+import {rotation} from '../../utils/constatnts';
 
 class Model {
   private state: IState = {
@@ -7,7 +8,7 @@ class Model {
     minValue: 0, // минимальное значение
     maxValue: 1200, // максимальное значение
     range: 'two', // 1 или 2 указателя
-    rotate: 'horizontal', // ориентация vertical horizontal
+    rotate: rotation.HORIZONTAL, // ориентация vertical horizontal
     show: true, // показывать текущее значение над указателем
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
@@ -121,7 +122,7 @@ class Model {
   }
 
   private mathPercent(num: number): number {
-    if (this.state.rotate === 'horizontal') {
+    if (this.state.rotate === rotation.HORIZONTAL) {
       return ((num - this.coordinates.x) / this.coordinates.width) * 100;
     }
     return ((num - this.coordinates.y) / this.coordinates.height) * 100;

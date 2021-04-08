@@ -1,5 +1,5 @@
 import { IState } from '../../utils/Interface';
-
+import {rotation} from '../../utils/constatnts';
 import { Button, CurrentValue, Interval, SliderRange } from './SubView';
 import { EventObserver as Observer } from '../../utils/EventObserver';
 
@@ -202,18 +202,18 @@ class View {
   }
 
   private onMouseMove(e: MouseEvent): void {
-    if (this.state.rotate === 'horizontal') {
+    if (this.state.rotate === rotation.HORIZONTAL) {
       this.observer.broadcast({ position: e.clientX });
-    } else if (this.state.rotate === 'vertical') {
+    } else if (this.state.rotate === rotation.VERTICAL) {
       this.observer.broadcast({ position: e.clientY });
     }
     this.eventButton(this.state.step);
   }
 
   private onClickMove(e: MouseEvent): void {
-    if (this.state.rotate === 'horizontal') {
+    if (this.state.rotate === rotation.HORIZONTAL) {
       this.observer.broadcast({ position: e.clientX });
-    } else if (this.state.rotate === 'vertical') {
+    } else if (this.state.rotate === rotation.VERTICAL) {
       this.observer.broadcast({ position: e.clientY });
     }
     if (this.state.range === 'two') {
@@ -252,10 +252,10 @@ class View {
   }
 
   private moveButton(position: number): void {
-    if (this.state.rotate === 'horizontal') {
+    if (this.state.rotate === rotation.HORIZONTAL) {
       this.currentButton.style.left = `calc(${position}% - ${this.buttonWidth}px)`;
       this.currentButton.style.top = `${-this.state.heightSlider}px`;
-    } else if (this.state.rotate === 'vertical') {
+    } else if (this.state.rotate === rotation.VERTICAL) {
       this.currentButton.style.left = `${-this.state.widthSlider}px`;
       this.currentButton.style.top = `calc(${position}% - ${this.buttonWidth}px)`;
     }
@@ -264,7 +264,8 @@ class View {
       this.currentValueText();
       this.showCurrentValue();
       if (this.state.range === 'two') {
-        const oneCurrent = this.currentValLeft.rectRight() > this.currentValRight.rectLeft();
+        const oneCurrent =
+          this.currentValLeft.rectRight() > this.currentValRight.rectLeft();
         this.responsiveCurrent(oneCurrent);
       }
     }

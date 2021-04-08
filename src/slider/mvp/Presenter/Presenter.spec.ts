@@ -1,8 +1,7 @@
-import { rotate } from '../../utils/Interface';
-import { Present } from './Presenter';
-import { View } from '../View/View';
-import { Model } from '../Model/Model';
-import { EventObserver } from '../../utils/EventObserver';
+import {Present} from './Presenter';
+import {View} from '../View/View';
+import {EventObserver} from '../../utils/EventObserver';
+import {rotation} from '../../utils/constatnts';
 
 // jest.mock('../Model/Model.ts');
 // jest.mock('../View/View.ts');
@@ -41,12 +40,11 @@ describe('Presenter test', () => {
     expect(init).toHaveBeenCalled();
     expect(render).toHaveBeenCalled();
     present.model.edit = jest.fn();
-    present.model.stateCurrent.rotate = 'horizontal';
+    present.model.stateCurrent.rotate = rotation.HORIZONTAL;
+    present.sliderMode({ rotate: rotation.HORIZONTAL });
 
-    present.sliderMode({ rotate: 'horizontal' });
-
-    present.model.stateCurrent.rotate = 'vertical';
-    present.sliderMode({ rotate: 'horizontal' });
+    present.model.stateCurrent.rotate = rotation.VERTICAL;
+    present.sliderMode({ rotate: rotation.VERTICAL });
 
     expect(init).toHaveBeenCalled();
     expect(init).toHaveBeenCalledTimes(3);

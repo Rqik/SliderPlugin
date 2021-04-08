@@ -1,19 +1,20 @@
-import { rotate } from '../../../utils/Interface';
+import {rotate} from '../../../utils/Interface';
+import {interval as className, rotation} from '../../../utils/constatnts';
 
 class Interval {
   interval: HTMLUListElement = document.createElement('ul');
 
-  private rotate: rotate = 'horizontal';
+  private rotate: rotate = rotation.HORIZONTAL;
 
   constructor() {
     this.init();
   }
 
   private init(): void {
-    this.interval.className = 'interval-point';
+    this.interval.className = className.INTERVAL;
 
-    if (this.rotate === 'vertical') {
-      this.interval.classList.add('interval-point_vertical');
+    if (this.rotate === rotation.VERTICAL) {
+      this.interval.classList.add(className.INTERVAL_VERTICAL);
     }
   }
 
@@ -32,9 +33,9 @@ class Interval {
     let sum;
     for (let i = 0; i <= count; i += 1) {
       const li = document.createElement('li');
-      li.className = 'interval-point__item';
+      li.className = className.INTERVAL_ITEM;
       sum = Math.round((i * interval + minValue) * 10 ** round) / 10 ** round;
-      li.innerHTML = `<div class="interval-point__item-text">${sum} </div>`;
+      li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`;
       this.interval.append(li);
     }
 

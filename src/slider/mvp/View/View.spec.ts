@@ -1,13 +1,14 @@
-import { View } from './View';
-import { EventObserver } from '../../utils/EventObserver';
-import { IState } from '../../utils/Interface';
+import {View} from './View';
+import {EventObserver} from '../../utils/EventObserver';
+import {IState} from '../../utils/Interface';
+import {rotation} from '../../utils/constatnts';
 
 const state: IState = {
   selector: 'slider-rqik', // селектор
   minValue: 0, // минимальное значение
   maxValue: 120, // максимальное значение
   range: 'two', // 1 или 2 указателя
-  rotate: 'horizontal', // ориентация vertical horizontal
+  rotate: rotation.HORIZONTAL, // ориентация vertical horizontal
   show: true, // показыватьть текущее значение над указателем
   showInterval: true, // показать интервал
   intervalCount: 7, // количество интервалов
@@ -28,7 +29,7 @@ const state2: IState = {
   minValue: 0, // минимальное значение
   maxValue: 120, // максимальное значение
   range: 'one', // 1 или 2 указателя
-  rotate: 'vertical', // ориентация vertical horizontal
+  rotate: rotation.VERTICAL, // ориентация vertical horizontal
   show: false, // показыватьть текущее значение над указателем
   showInterval: false, // показать интервал
   intervalCount: 7, // количество интервалов

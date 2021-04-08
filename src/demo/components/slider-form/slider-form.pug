@@ -3,24 +3,24 @@ include ../checkbox-list/checkbox-list
 
 mixin sliderForm({id, minValue=0 , maxValue=100 ,intervalCount=2,round=2,currentVal1=50 , currentVal2 = 0 }={})
   form.slider-form(id=id, )
-    +field({name: 'minValue', text: 'Min', value: minValue})
-    +field({name: 'maxValue', text: 'Max', value: maxValue})
+    +field({name: "minValue", text: "Min", value: minValue})
+    +field({name: "maxValue", text: "Max", value: maxValue})
     +field({
-      name: 'currentVal1',
-      text: 'Тек. значение Btn 1',
+      name: "currentVal1",
+      text: "Тек. значение Btn 1",
       value: currentVal1
     })
     +field({
-      name: 'currentVal2',
-      text: 'Тек. значение Btn 2',
+      name: "currentVal2",
+      text: "Тек. значение Btn 2",
       value: currentVal2
     })
-    +field({name: 'round', text: 'Округление после запятой', value: round})
+    +field({name: "round", text: "Округление после запятой", value: round})
     +field({
-      name: 'intervalCount',
-      text: 'Количество интервалов',
+      name: "intervalCount",
+      text: "Количество интервалов",
       value: intervalCount
     })
-    +field({name: 'stepSizePercent', text: 'Шаг в %'})
-    +field({name: 'stepSize', text: 'Шаг в px'})
-    +checkBox(require('@/demo/components/slider-form/slider-form.json'))
+    +field({name: "stepSizePercent", text: "Шаг в %"})
+    +field({name: "stepSize", text: "Шаг в px"})
+    +checkBox(require("@/demo/components/slider-form/slider-form.json"))

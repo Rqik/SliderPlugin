@@ -1,3 +1,5 @@
+import {button as className} from '../../../utils/constatnts';
+
 class Button {
   button: HTMLElement = document.createElement('div');
 
@@ -8,7 +10,7 @@ class Button {
   }
 
   private init(): void {
-    this.button.className = 'slider-range__button';
+    this.button.className = className.BUTTON;
   }
 
   addEvent(type: string, action: (e: MouseEvent) => void): void {

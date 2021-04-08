@@ -6,6 +6,8 @@
 /***/ ((__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 
+// EXTERNAL MODULE: ./slider/mvp/View/SubView.ts + 4 modules
+var SubView = __webpack_require__(851);
 ;// CONCATENATED MODULE: ./slider/utils/utils.ts
 /* provided dependency */ var $ = __webpack_require__(638);
 function checkChange(elem, nameAtr, value, plugItem) {
@@ -81,7 +83,7 @@ function actionForm(form, el) {
 
 
 
-__webpack_require__(606);
+__webpack_require__(425);
 
 const $plug1 = demo_$('.js-plug1');
 const $plug2 = demo_$('.js-plug2');
@@ -144,197 +146,16 @@ $plug4.on('click', () => {
 
 /***/ }),
 
-/***/ 606:
+/***/ 425:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-;// CONCATENATED MODULE: ./slider/mvp/View/Button/Butoon.ts
-class Button {
-  constructor() {
-    this.button = document.createElement('div');
-    this.widthButton = 10;
-    this.init();
-  }
-
-  init() {
-    this.button.className = 'slider-range__button';
-  }
-
-  addEvent(type, action) {
-    function eventA(event) {
-      action(event);
-    }
-
-    this.button.addEventListener(type, eventA);
-  }
-
-  width() {
-    this.widthButton = this.button.offsetWidth / 2;
-    return this.widthButton;
-  }
-
-}
-
-
-;// CONCATENATED MODULE: ./slider/mvp/View/Interval/Interval.ts
-class Interval {
-  constructor() {
-    this.interval = document.createElement('ul');
-    this.rotate = 'horizontal';
-    this.init();
-  }
-
-  init() {
-    this.interval.className = 'interval-point';
-
-    if (this.rotate === 'vertical') {
-      this.interval.classList.add('interval-point_vertical');
-    }
-  }
-
-  valueInterval(minValue, maxValue, count, round) {
-    this.interval.textContent = '';
-
-    if (count <= 0) {
-      return this.interval;
-    }
-
-    const interval = (maxValue - minValue) / count;
-    let sum;
-
-    for (let i = 0; i <= count; i += 1) {
-      const li = document.createElement('li');
-      li.className = 'interval-point__item';
-      sum = Math.round((i * interval + minValue) * Math.pow(10, round)) / Math.pow(10, round);
-      li.innerHTML = `<div class="interval-point__item-text">${sum} </div>`;
-      this.interval.append(li);
-    }
-
-    return this.interval;
-  }
-
-  edit(rot) {
-    this.rotate = rot;
-    this.init();
-  }
-
-}
-
-
-;// CONCATENATED MODULE: ./slider/mvp/View/CurrentVal/CurrentVal.ts
-class CurrentValue {
-  constructor(rotation) {
-    this.rotation = rotation;
-    this.currentVal = document.createElement('div');
-    this.size = 10;
-    this.init();
-  }
-
-  init() {
-    this.currentVal.className = 'slider-range__current-value';
-  }
-
-  text(text) {
-    this.currentVal.textContent = `${text}`;
-  }
-
-  position(position) {
-    if (this.rotation === 'horizontal') {
-      this.positionHorizontal(position);
-    } else if (this.rotation === 'vertical') {
-      this.positionVertical(position);
-    }
-  }
-
-  positionHorizontal(shiftX) {
-    this.currentVal.style.top = `${-(+this.currentVal.offsetHeight + 10)}px`;
-    this.currentVal.style.left = `calc(${shiftX}% - ${this.currentVal.offsetWidth / 2}px)`;
-  }
-
-  positionVertical(shiftX) {
-    this.currentVal.style.top = `calc(${shiftX}% - ${this.currentVal.offsetHeight / 2}px)`;
-    this.currentVal.style.left = `${-(+this.currentVal.offsetWidth + 15)}px`;
-  }
-
-  setRotate(rotation) {
-    this.rotation = rotation;
-  }
-
-  rectLeft() {
-    const clientRect = this.currentVal.getBoundingClientRect();
-
-    if (this.rotation === 'horizontal') {
-      return clientRect.left;
-    }
-
-    return clientRect.top;
-  }
-
-  rectRight() {
-    const clientRect = this.currentVal.getBoundingClientRect();
-
-    if (this.rotation === 'horizontal') {
-      return clientRect.right;
-    }
-
-    return clientRect.bottom;
-  }
-
-  fixedSize(bool) {
-    if (!bool) {
-      this.size = this.rectLeft();
-    }
-  }
-
-}
-
-
-;// CONCATENATED MODULE: ./slider/mvp/View/SliderRange/SliderRange.ts
-class SliderRange {
-  constructor(rot) {
-    this.sliderRange = document.createElement('div');
-    this.sliderActiveZone = document.createElement('div');
-    this.rotate = 'horizontal';
-    this.init(rot);
-  }
-
-  init(rot) {
-    this.sliderRange.className = 'slider-range';
-    this.sliderActiveZone.className = 'slider-range__active-zone';
-
-    if (rot === 'vertical') {
-      this.sliderRange.classList.add('slider-range_vertical');
-    }
-
-    this.sliderRange.appendChild(this.sliderActiveZone);
-    return this.sliderRange;
-  }
-
-  edit(rot) {
-    if (rot === 'vertical') {
-      this.rotate = rot;
-      this.sliderRange.classList.add('slider-range_vertical');
-    } else if (rot === 'horizontal') {
-      this.rotate = rot;
-      this.sliderRange.classList.remove('slider-range_vertical');
-    }
-  }
-
-  activeZone(left, right) {
-    if (this.rotate === 'horizontal') {
-      this.sliderActiveZone.style.left = `${left}%`;
-      this.sliderActiveZone.style.width = `${right - left}%`;
-    } else {
-      this.sliderActiveZone.style.top = `${left}%`;
-      this.sliderActiveZone.style.height = `${right - left}%`;
-    }
-  }
-
-}
-
-
+// EXTERNAL MODULE: ./slider/utils/constatnts.ts
+var constatnts = __webpack_require__(876);
+// EXTERNAL MODULE: ./slider/mvp/View/SubView.ts + 4 modules
+var SubView = __webpack_require__(851);
 ;// CONCATENATED MODULE: ./slider/utils/EventObserver.ts
 class EventObserver {
   constructor() {
@@ -364,12 +185,13 @@ class EventObserver {
 
 
 
+
 class View {
   constructor(state) {
     this.slider = document.createElement('div');
-    this.buttonLeft = new Button();
-    this.buttonRight = new Button();
-    this.interval = new Interval();
+    this.buttonLeft = new SubView/* Button */.zx();
+    this.buttonRight = new SubView/* Button */.zx();
+    this.interval = new SubView/* Interval */.Xp();
     this.buttonWidth = 10;
     this.clickHandler = this.onMouseMove.bind(this);
     this.clickMoveHandler = this.onClickMove.bind(this);
@@ -378,10 +200,10 @@ class View {
     this.tumbler = false;
     this.state = state;
     this.observer = new EventObserver();
-    this.currentValLeft = new CurrentValue(this.state.rotate);
-    this.currentValRight = new CurrentValue(this.state.rotate);
-    this.currentVal = new CurrentValue(this.state.rotate);
-    this.slideClass = new SliderRange(this.state.rotate);
+    this.currentValLeft = new SubView/* CurrentValue */.SY(this.state.rotate);
+    this.currentValRight = new SubView/* CurrentValue */.SY(this.state.rotate);
+    this.currentVal = new SubView/* CurrentValue */.SY(this.state.rotate);
+    this.slideClass = new SubView/* SliderRange */.i5(this.state.rotate);
     this.sliderRange = this.slideClass.sliderRange;
     this.startView(this.state.selector);
   }
@@ -522,11 +344,11 @@ class View {
   }
 
   onMouseMove(e) {
-    if (this.state.rotate === 'horizontal') {
+    if (this.state.rotate === constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL) {
       this.observer.broadcast({
         position: e.clientX
       });
-    } else if (this.state.rotate === 'vertical') {
+    } else if (this.state.rotate === constatnts/* rotation.VERTICAL */.Wn.VERTICAL) {
       this.observer.broadcast({
         position: e.clientY
       });
@@ -536,11 +358,11 @@ class View {
   }
 
   onClickMove(e) {
-    if (this.state.rotate === 'horizontal') {
+    if (this.state.rotate === constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL) {
       this.observer.broadcast({
         position: e.clientX
       });
-    } else if (this.state.rotate === 'vertical') {
+    } else if (this.state.rotate === constatnts/* rotation.VERTICAL */.Wn.VERTICAL) {
       this.observer.broadcast({
         position: e.clientY
       });
@@ -592,10 +414,10 @@ class View {
   }
 
   moveButton(position) {
-    if (this.state.rotate === 'horizontal') {
+    if (this.state.rotate === constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL) {
       this.currentButton.style.left = `calc(${position}% - ${this.buttonWidth}px)`;
       this.currentButton.style.top = `${-this.state.heightSlider}px`;
-    } else if (this.state.rotate === 'vertical') {
+    } else if (this.state.rotate === constatnts/* rotation.VERTICAL */.Wn.VERTICAL) {
       this.currentButton.style.left = `${-this.state.widthSlider}px`;
       this.currentButton.style.top = `calc(${position}% - ${this.buttonWidth}px)`;
     }
@@ -666,6 +488,7 @@ class View {
 ;// CONCATENATED MODULE: ./slider/mvp/Model/Model.ts
 
 
+
 class Model {
   constructor(selector = 'slider-rqik') {
     this.state = {
@@ -673,7 +496,7 @@ class Model {
       minValue: 0,
       maxValue: 1200,
       range: 'two',
-      rotate: 'horizontal',
+      rotate: constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL,
       show: true,
       showInterval: true,
       intervalCount: 2,
@@ -777,7 +600,7 @@ class Model {
   }
 
   mathPercent(num) {
-    if (this.state.rotate === 'horizontal') {
+    if (this.state.rotate === constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL) {
       return (num - this.coordinates.x) / this.coordinates.width * 100;
     }
 
@@ -936,6 +759,272 @@ class SliderPlugin {
 
 }
 
+/***/ }),
+
+/***/ 851:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "zx": () => (/* reexport */ Button),
+  "SY": () => (/* reexport */ CurrentValue),
+  "Xp": () => (/* reexport */ Interval),
+  "i5": () => (/* reexport */ SliderRange)
+});
+
+// EXTERNAL MODULE: ./slider/utils/constatnts.ts
+var constatnts = __webpack_require__(876);
+;// CONCATENATED MODULE: ./slider/mvp/View/Button/Butoon.ts
+
+
+class Button {
+  constructor() {
+    this.button = document.createElement('div');
+    this.widthButton = 10;
+    this.init();
+  }
+
+  init() {
+    this.button.className = constatnts/* button.BUTTON */.LI.BUTTON;
+  }
+
+  addEvent(type, action) {
+    function eventA(event) {
+      action(event);
+    }
+
+    this.button.addEventListener(type, eventA);
+  }
+
+  width() {
+    this.widthButton = this.button.offsetWidth / 2;
+    return this.widthButton;
+  }
+
+}
+
+
+;// CONCATENATED MODULE: ./slider/mvp/View/SliderRange/SliderRange.ts
+
+
+class SliderRange {
+  constructor(rot) {
+    this.sliderRange = document.createElement('div');
+    this.sliderActiveZone = document.createElement('div');
+    this.rotate = constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL;
+    this.init(rot);
+  }
+
+  init(rot) {
+    this.sliderRange.className = constatnts/* slider.SLIDER */.$i.SLIDER;
+    this.sliderActiveZone.className = constatnts/* slider.SLIDER_ACTIVE_ZONE */.$i.SLIDER_ACTIVE_ZONE;
+
+    if (rot === constatnts/* rotation.VERTICAL */.Wn.VERTICAL) {
+      this.sliderRange.classList.add(constatnts/* slider.SLIDER_VERTICAL */.$i.SLIDER_VERTICAL);
+    }
+
+    this.sliderRange.appendChild(this.sliderActiveZone);
+    return this.sliderRange;
+  }
+
+  edit(rot) {
+    if (rot === constatnts/* rotation.VERTICAL */.Wn.VERTICAL) {
+      this.rotate = rot;
+      this.sliderRange.classList.add(constatnts/* slider.SLIDER_VERTICAL */.$i.SLIDER_VERTICAL);
+    } else if (rot === constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL) {
+      this.rotate = rot;
+      this.sliderRange.classList.remove(constatnts/* slider.SLIDER_VERTICAL */.$i.SLIDER_VERTICAL);
+    }
+  }
+
+  activeZone(left, right) {
+    if (this.rotate === constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL) {
+      this.sliderActiveZone.style.left = `${left}%`;
+      this.sliderActiveZone.style.width = `${right - left}%`;
+    } else {
+      this.sliderActiveZone.style.top = `${left}%`;
+      this.sliderActiveZone.style.height = `${right - left}%`;
+    }
+  }
+
+}
+
+
+;// CONCATENATED MODULE: ./slider/mvp/View/CurrentVal/CurrentVal.ts
+
+
+class CurrentValue {
+  constructor(rotation) {
+    this.rotation = rotation;
+    this.currentVal = document.createElement('div');
+    this.size = 10;
+    this.init();
+  }
+
+  init() {
+    this.currentVal.className = constatnts/* currentValue.CURRENT */.i5.CURRENT;
+  }
+
+  text(text) {
+    this.currentVal.textContent = `${text}`;
+  }
+
+  position(position) {
+    if (this.rotation === constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL) {
+      this.positionHorizontal(position);
+    } else if (this.rotation === constatnts/* rotation.VERTICAL */.Wn.VERTICAL) {
+      this.positionVertical(position);
+    }
+  }
+
+  positionHorizontal(shiftX) {
+    this.currentVal.style.top = `${-(+this.currentVal.offsetHeight + 10)}px`;
+    this.currentVal.style.left = `calc(${shiftX}% - ${this.currentVal.offsetWidth / 2}px)`;
+  }
+
+  positionVertical(shiftX) {
+    this.currentVal.style.top = `calc(${shiftX}% - ${this.currentVal.offsetHeight / 2}px)`;
+    this.currentVal.style.left = `${-(+this.currentVal.offsetWidth + 15)}px`;
+  }
+
+  setRotate(rotation) {
+    this.rotation = rotation;
+  }
+
+  rectLeft() {
+    const clientRect = this.currentVal.getBoundingClientRect();
+
+    if (this.rotation === constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL) {
+      return clientRect.left;
+    }
+
+    return clientRect.top;
+  }
+
+  rectRight() {
+    const clientRect = this.currentVal.getBoundingClientRect();
+
+    if (this.rotation === constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL) {
+      return clientRect.right;
+    }
+
+    return clientRect.bottom;
+  }
+
+  fixedSize(bool) {
+    if (!bool) {
+      this.size = this.rectLeft();
+    }
+  }
+
+}
+
+
+;// CONCATENATED MODULE: ./slider/mvp/View/Interval/Interval.ts
+
+
+class Interval {
+  constructor() {
+    this.interval = document.createElement('ul');
+    this.rotate = constatnts/* rotation.HORIZONTAL */.Wn.HORIZONTAL;
+    this.init();
+  }
+
+  init() {
+    this.interval.className = constatnts/* interval.INTERVAL */.FG.INTERVAL;
+
+    if (this.rotate === constatnts/* rotation.VERTICAL */.Wn.VERTICAL) {
+      this.interval.classList.add(constatnts/* interval.INTERVAL_VERTICAL */.FG.INTERVAL_VERTICAL);
+    }
+  }
+
+  valueInterval(minValue, maxValue, count, round) {
+    this.interval.textContent = '';
+
+    if (count <= 0) {
+      return this.interval;
+    }
+
+    const interval = (maxValue - minValue) / count;
+    let sum;
+
+    for (let i = 0; i <= count; i += 1) {
+      const li = document.createElement('li');
+      li.className = constatnts/* interval.INTERVAL_ITEM */.FG.INTERVAL_ITEM;
+      sum = Math.round((i * interval + minValue) * Math.pow(10, round)) / Math.pow(10, round);
+      li.innerHTML = `<div class=${constatnts/* interval.INTERVAL_ITEM_TEXT */.FG.INTERVAL_ITEM_TEXT}> ${sum} </div>`;
+      this.interval.append(li);
+    }
+
+    return this.interval;
+  }
+
+  edit(rot) {
+    this.rotate = rot;
+    this.init();
+  }
+
+}
+
+
+;// CONCATENATED MODULE: ./slider/mvp/View/SubView.ts
+
+
+
+
+
+
+/***/ }),
+
+/***/ 876:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "FG": () => (/* binding */ interval),
+/* harmony export */   "i5": () => (/* binding */ currentValue),
+/* harmony export */   "LI": () => (/* binding */ button),
+/* harmony export */   "$i": () => (/* binding */ slider),
+/* harmony export */   "Wn": () => (/* binding */ rotation)
+/* harmony export */ });
+var rotation;
+
+(function (rotation) {
+  rotation["HORIZONTAL"] = "horizontal";
+  rotation["VERTICAL"] = "vertical";
+})(rotation || (rotation = {}));
+
+var interval;
+
+(function (interval) {
+  interval["INTERVAL"] = "interval-point";
+  interval["INTERVAL_VERTICAL"] = "interval-point_vertical";
+  interval["INTERVAL_ITEM"] = "interval-point__item";
+  interval["INTERVAL_ITEM_TEXT"] = "interval-point__item-text";
+})(interval || (interval = {}));
+
+var currentValue;
+
+(function (currentValue) {
+  currentValue["CURRENT"] = "slider-range__current-value";
+})(currentValue || (currentValue = {}));
+
+var button;
+
+(function (button) {
+  button["BUTTON"] = "slider-range__button";
+})(button || (button = {}));
+
+var slider;
+
+(function (slider) {
+  slider["SLIDER"] = "slider-range";
+  slider["SLIDER_VERTICAL"] = "slider-range_vertical";
+  slider["SLIDER_ACTIVE_ZONE"] = "slider-range__active-zone";
+})(slider || (slider = {}));
+
+
+
 /***/ })
 
 /******/ 	});
@@ -970,6 +1059,18 @@ class SliderPlugin {
 /******/ 	// It's empty as some runtime module handles the default behavior
 /******/ 	__webpack_require__.x = x => {};
 /************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))

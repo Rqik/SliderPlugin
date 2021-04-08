@@ -1,17 +1,22 @@
-type rotate = 'vertical' | 'horizontal';
+import {rotation} from './constatnts';
+
+type rotate = rotation.HORIZONTAL| rotation.VERTICAL;
 type range = 'one' | 'two';
 type callBack = (args?: any) => any;
 
-interface Coordinate{
+
+interface Coordinate {
   x: number;
   y: number;
   width: number;
   height: number;
 }
+
 interface Slider {
   data: (opt: StateEl) => Slider;
   getData: () => IState[];
 }
+
 interface IState {
   selector: string;
   minValue: number;
@@ -30,12 +35,14 @@ interface IState {
   round: number;
   step: number;
   activeLeft: boolean;
+
   [k: string]: string | number | boolean;
 }
 
 interface StateEl {
   [k: string]: string | number | boolean;
 }
+
 type options = number | string | boolean;
 
 interface settingOption {
@@ -46,4 +53,14 @@ interface settingOption {
   range?: range;
 }
 
-export { Coordinate, settingOption, IState, rotate, range, callBack, options, StateEl, Slider };
+export {
+  Coordinate,
+  settingOption,
+  IState,
+  rotate,
+  range,
+  callBack,
+  options,
+  StateEl,
+  Slider
+};

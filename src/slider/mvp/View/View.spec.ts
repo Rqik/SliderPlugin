@@ -3,7 +3,7 @@ import { EventObserver } from '../../utils/EventObserver';
 import { IState } from '../../utils/Interface';
 
 const state: IState = {
-  selector: 'slider_rqik', // селектор
+  selector: 'slider-rqik', // селектор
   minValue: 0, // минимальное значение
   maxValue: 120, // максимальное значение
   range: 'two', // 1 или 2 указателя
@@ -24,7 +24,7 @@ const state: IState = {
 };
 
 const state2: IState = {
-  selector: 'slider_rqik', // селектор
+  selector: 'slider-rqik', // селектор
   minValue: 0, // минимальное значение
   maxValue: 120, // максимальное значение
   range: 'one', // 1 или 2 указателя
@@ -56,7 +56,7 @@ beforeEach(() => {
   expect(sliderElem.style.position).toBeDefined();
   jest.spyOn(document, 'querySelector').mockImplementation((selector) => {
     switch (selector) {
-      case '.slider_rqik':
+      case '.slider-rqik':
         return sliderElem;
       default:
         return sliderElem;

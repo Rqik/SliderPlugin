@@ -3,7 +3,7 @@ import { EventObserver } from '../../utils/EventObserver';
 
 class Model {
   private state: IState = {
-    selector: 'sliderRqik', // селектор
+    selector: 'slider-range', // селектор
     minValue: 0, // минимальное значение
     maxValue: 1200, // максимальное значение
     range: 'two', // 1 или 2 указателя
@@ -14,7 +14,7 @@ class Model {
     stepSizePercent: 0, // шаг движения указателя в %
     stepSize: 1, // шаг движения указателя в px
     currentVal1: 22, // установка значений в числах
-    currentVal2: 11, // установкa значений в числах
+    currentVal2: 11, // установка значений в числах
     round: 1, // округление,
     shiftXl: 2,
     shiftXr: 100,
@@ -31,7 +31,7 @@ class Model {
 
   public observer: EventObserver;
 
-  constructor(selector = 'slider_rqik') {
+  constructor(selector = 'slider-rqik') {
     this.state.selector = selector;
     this.observer = new EventObserver();
   }

@@ -1,4 +1,5 @@
 # **SliderRqik**
+# [**Демо страница**](https://rqik.github.io/SliderPlugin/dist/)
 
 **Использованные технологии**  
 _TypeScript_  
@@ -54,17 +55,24 @@ npm run start
 > к DomElement имеющим одинаковый selector переданный при
 > инициализации._
 
-# [**Демо страница**](https://rqik.github.io/SliderPlugin/dist/)
 
 ## https://rqik.github.io/SliderPlugin/dist
 
 ## Способ подключения
 
+Слайдер автоматически проинициализируется на элементах с классом
+**_.slider-rqik_** , при этом опции можно передать через **_data_**  атрибуты.
+
+```html
+<div class="slider-rqik" data-min-value="-999"></div>
+```
+
+_Ручная инициализация_
 ```javascript
 // index.html
 <div class="plug"></div>;
 
-// index.MVP
+// index.js
 $('.plug').sliderRqik();
 ```
 
@@ -233,7 +241,7 @@ slider.data({ maxValue: 99999 });
 
 ## Получения текущих значений
 
-Метод **_getData_** вернет массив с объеками в которых записаны текущие значения
+Метод **_getData_** вернет массив с объектами в которых записаны текущие значения
 
 ```javascript
 // index.html

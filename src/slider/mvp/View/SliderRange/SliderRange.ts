@@ -13,7 +13,7 @@ class SliderRange {
 
  private init(rot: rotate): HTMLElement {
    this.sliderRange.className = 'slider-range';
-   this.sliderActiveZone.className = 'slider-range_active';
+   this.sliderActiveZone.className = 'slider-range__active-zone';
    if (rot === 'vertical') {
      this.sliderRange.classList.add('slider-range_vertical');
    }

@@ -1,14 +1,15 @@
 /* eslint-disable wrap-iife */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
-import { IState, StateEl, Slider } from './utils/Interface';
-import { Present } from './mvp/Presenter/Presenter';
+import {IState, Slider, StateEl} from './utils/Interface';
+import {Present} from './mvp/Presenter/Presenter';
 
 declare global {
   interface JQuery {
     sliderRqik: (opt?: StateEl) => Slider;
   }
 }
+
 (function ($) {
   $.fn.sliderRqik = function (options?: StateEl) {
     const allSlider: SliderPlugin[] = [];
@@ -41,6 +42,10 @@ declare global {
 
     return slider;
   };
+
+  $(function () {
+    $('.slider-rqik').sliderRqik()
+  })
 })(jQuery);
 
 class SliderPlugin {

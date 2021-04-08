@@ -302,7 +302,7 @@ class SliderRange {
 
   init(rot) {
     this.sliderRange.className = 'slider-range';
-    this.sliderActiveZone.className = 'slider-range_active';
+    this.sliderActiveZone.className = 'slider-range__active-zone';
 
     if (rot === 'vertical') {
       this.sliderRange.classList.add('slider-range_vertical');
@@ -667,9 +667,9 @@ class View {
 
 
 class Model {
-  constructor(selector = 'slider_rqik') {
+  constructor(selector = 'slider-rqik') {
     this.state = {
-      selector: 'sliderRqik',
+      selector: 'slider-range',
       minValue: 0,
       maxValue: 1200,
       range: 'two',
@@ -895,6 +895,10 @@ class Present {
     };
     return slider;
   };
+
+  $(function () {
+    $('.slider-rqik').sliderRqik();
+  });
 })(jQuery);
 
 class SliderPlugin {

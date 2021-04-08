@@ -1,6 +1,6 @@
-import {Coordinate, IState, StateEl} from '../../utils/Interface';
-import {EventObserver} from '../../utils/EventObserver';
-import {rotation} from '../../utils/constatnts';
+import { Coordinate, IState, StateEl } from '../../utils/Interface';
+import { EventObserver } from '../../utils/EventObserver';
+import { keyChanges, rotation } from '../../utils/constatnts';
 
 class Model {
   private state: IState = {
@@ -52,21 +52,21 @@ class Model {
 
   editState(data: StateEl | any): void {
     switch (Object.keys(data)[0]) {
-      case 'shiftXl':
+      case keyChanges.SHIFT_XL:
         this.edit(data);
         this.leftVal();
         break;
-      case 'shiftXr':
+      case keyChanges.SHIFT_XR:
         this.edit(data);
         this.rightVal();
         break;
-      case 'position':
+      case keyChanges.POSITION:
         this.step(+data.position);
         break;
-      case 'coordinate':
+      case keyChanges.COORDINATES:
         this.updateCoordinate(data.coordinate);
         break;
-      case 'active':
+      case keyChanges.ACTIVE:
         this.activeButton();
         break;
       default:
@@ -87,12 +87,14 @@ class Model {
     this.state.currentVal1 = Number(this.state.currentVal1);
     this.state.currentVal2 = Number(this.state.currentVal2);
     this.state.round = Number(this.state.round);
-    this.state.shiftXl = ((this.state.currentVal2 - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
-      * 100;
-    this.state.shiftXr = ((this.state.currentVal1 - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
-      * 100;
+    this.state.shiftXl =
+      ((this.state.currentVal2 - this.state.minValue) /
+        (this.state.maxValue - this.state.minValue)) *
+      100;
+    this.state.shiftXr =
+      ((this.state.currentVal1 - this.state.minValue) /
+        (this.state.maxValue - this.state.minValue)) *
+      100;
   }
 
   private updateCoordinate(coordinate: Coordinate) {
@@ -114,8 +116,9 @@ class Model {
   }
 
   private activeButton() {
-    this.state.activeLeft = Math.abs(this.state.shiftXl - this.state.step)
-      < Math.abs(this.state.shiftXr - this.state.step);
+    this.state.activeLeft =
+      Math.abs(this.state.shiftXl - this.state.step) <
+      Math.abs(this.state.shiftXr - this.state.step);
     if (this.state.shiftXl === this.state.shiftXr) {
       this.state.activeLeft = this.state.step < this.state.shiftXr;
     }

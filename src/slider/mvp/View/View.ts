@@ -1,7 +1,7 @@
-import { IState } from '../../utils/Interface';
+import {IState} from '../../utils/Interface';
 import {rotation} from '../../utils/constatnts';
-import { Button, CurrentValue, Interval, SliderRange } from './SubView';
-import { EventObserver as Observer } from '../../utils/EventObserver';
+import {Button, CurrentValue, Interval, SliderRange} from './SubView';
+import {EventObserver as Observer} from '../../utils/EventObserver';
 
 class View {
   private slider: HTMLElement = document.createElement('div');
@@ -166,7 +166,7 @@ class View {
     this.currentVal.currentVal.remove();
     this.buttonLeft.button.remove();
     this.currentValLeft.currentVal.remove();
-    this.observer.broadcast({ shiftXl: 0 });
+    this.observer.broadcast({shiftXl: 0});
   }
 
   private intervalExpose(): void {
@@ -203,21 +203,21 @@ class View {
 
   private onMouseMove(e: MouseEvent): void {
     if (this.state.rotate === rotation.HORIZONTAL) {
-      this.observer.broadcast({ position: e.clientX });
+      this.observer.broadcast({position: e.clientX});
     } else if (this.state.rotate === rotation.VERTICAL) {
-      this.observer.broadcast({ position: e.clientY });
+      this.observer.broadcast({position: e.clientY});
     }
     this.eventButton(this.state.step);
   }
 
   private onClickMove(e: MouseEvent): void {
     if (this.state.rotate === rotation.HORIZONTAL) {
-      this.observer.broadcast({ position: e.clientX });
+      this.observer.broadcast({position: e.clientX});
     } else if (this.state.rotate === rotation.VERTICAL) {
-      this.observer.broadcast({ position: e.clientY });
+      this.observer.broadcast({position: e.clientY});
     }
     if (this.state.range === 'two') {
-      this.observer.broadcast({ active: true });
+      this.observer.broadcast({active: true});
       this.overridingButtons(this.state.activeLeft);
     }
     this.resizeSlider();
@@ -243,10 +243,10 @@ class View {
     }
     if (this.tumbler) {
       pos = this.state.shiftXr < pos ? this.state.shiftXr : pos;
-      this.observer.broadcast({ shiftXl: pos });
+      this.observer.broadcast({shiftXl: pos});
     } else {
       pos = this.state.shiftXl > pos ? this.state.shiftXl : pos;
-      this.observer.broadcast({ shiftXr: pos });
+      this.observer.broadcast({shiftXr: pos});
     }
     this.moveButton(pos);
   }
@@ -325,4 +325,4 @@ class View {
   }
 }
 
-export { View };
+export {View};

@@ -14,7 +14,7 @@ beforeEach(() => {
   expect(sliderElem.style.position).toBeDefined();
   jest.spyOn(document, 'querySelector').mockImplementation((selector) => {
     switch (selector) {
-      case '.slider_rqik':
+      case '.slider-rqik':
         return sliderElem;
       default:
         return sliderElem;

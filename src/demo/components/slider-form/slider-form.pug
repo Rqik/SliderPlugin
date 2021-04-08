@@ -1,5 +1,6 @@
 include ../field/field
-include ../check/check
+include ../checkbox-list/checkbox-list
+
 mixin sliderForm({id, minValue=0 , maxValue=100 ,intervalCount=2,round=2,currentVal1=50 , currentVal2 = 0 }={})
   form.slider-form(id=id, )
     +field({name: 'minValue', text: 'Min', value: minValue})
@@ -20,6 +21,6 @@ mixin sliderForm({id, minValue=0 , maxValue=100 ,intervalCount=2,round=2,current
       text: 'Количество интервалов',
       value: intervalCount
     })
-    +field({name: 'stepSizePercent', text: 'Шаг в %' })
+    +field({name: 'stepSizePercent', text: 'Шаг в %'})
     +field({name: 'stepSize', text: 'Шаг в px'})
-    +check
+    +checkBox(require('@/demo/components/slider-form/slider-form.json'))

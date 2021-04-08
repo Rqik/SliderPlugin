@@ -2,7 +2,7 @@ import { IState } from '../../utils/Interface';
 import { Model } from './Model';
 
 const state: IState = {
-  selector: 'slider_rqik', // селектор
+  selector: 'slider-rqik', // селектор
   minValue: 10, // минимальное значение
   maxValue: 120, // максимальное значение
   range: 'two', // 1 или 2 указателя
@@ -25,7 +25,7 @@ const state: IState = {
 };
 
 const state2: IState = {
-  selector: 'slider_rqik', // селектор
+  selector: 'slider-rqik', // селектор
   minValue: 112, // минимальное значение
   maxValue: 120, // максимальное значение
   range: 'one', // 1 или 2 указателя

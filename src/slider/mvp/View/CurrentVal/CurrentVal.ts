@@ -1,12 +1,12 @@
 import { rotate } from '../../../utils/Interface';
-import {rotation,currentValue as className} from '../../../utils/constatnts';
+import { rotation, currentValue as className } from '../../../utils/constatnts';
 
 class CurrentValue {
   currentVal: HTMLElement = document.createElement('div');
 
   private size = 10;
 
-  constructor(private rotation: rotate) {
+  constructor(private orientation: rotate) {
     this.init();
   }
 
@@ -19,9 +19,9 @@ class CurrentValue {
   }
 
   position(position: number): void {
-    if (this.rotation === rotation.HORIZONTAL) {
+    if (this.orientation === rotation.HORIZONTAL) {
       this.positionHorizontal(position);
-    } else if (this.rotation === rotation.VERTICAL) {
+    } else if (this.orientation === rotation.VERTICAL) {
       this.positionVertical(position);
     }
   }
@@ -40,13 +40,13 @@ class CurrentValue {
     this.currentVal.style.left = `${-(+this.currentVal.offsetWidth + 15)}px`;
   }
 
-  setRotate(rotation: rotate): void {
-    this.rotation = rotation;
+  setRotate(orientation: rotate): void {
+    this.orientation = orientation;
   }
 
   rectLeft(): number {
     const clientRect = this.currentVal.getBoundingClientRect();
-    if (this.rotation === rotation.HORIZONTAL) {
+    if (this.orientation === rotation.HORIZONTAL) {
       return clientRect.left;
     }
     return clientRect.top;
@@ -54,13 +54,13 @@ class CurrentValue {
 
   rectRight(): number {
     const clientRect = this.currentVal.getBoundingClientRect();
-    if (this.rotation === rotation.HORIZONTAL) {
+    if (this.orientation === rotation.HORIZONTAL) {
       return clientRect.right;
     }
     return clientRect.bottom;
   }
 
-  fixedSize(bool: boolean) {
+  fixedSize(bool: boolean): void {
     if (!bool) {
       this.size = this.rectLeft();
     }

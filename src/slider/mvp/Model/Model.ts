@@ -1,4 +1,4 @@
-import { Coordinate, IState, StateEl } from '../../utils/Interface';
+import { Coords, IState, StateEl } from '../../utils/Interface';
 import { EventObserver } from '../../utils/EventObserver';
 import { keyChanges, rotation } from '../../utils/constatnts';
 
@@ -17,13 +17,13 @@ class Model {
     currentVal1: 22, // установка значений в числах
     currentVal2: 11, // установка значений в числах
     round: 1, // округление,
-    shiftXl: 2,
-    shiftXr: 100,
+    [keyChanges.SHIFT_XL]: 2,
+    [keyChanges.SHIFT_XR]: 100,
     step: 0,
     activeLeft: false,
   };
 
-  public coordinates: Coordinate = {
+  public coords: Coords = {
     x: 0,
     y: 0,
     height: 0,
@@ -61,10 +61,10 @@ class Model {
         this.rightVal();
         break;
       case keyChanges.POSITION:
-        this.step(+data.position);
+        this.step(+data[keyChanges.POSITION]);
         break;
       case keyChanges.COORDINATES:
-        this.updateCoordinate(data.coordinate);
+        this.updateCoordinate(data[keyChanges.COORDINATES]);
         break;
       case keyChanges.ACTIVE:
         this.activeButton();
@@ -73,7 +73,6 @@ class Model {
         this.edit(data);
         break;
     }
-
     this.observer.broadcast(this.stateCurrent);
   }
 
@@ -97,14 +96,14 @@ class Model {
       100;
   }
 
-  private updateCoordinate(coordinate: Coordinate) {
-    this.coordinates = {
-      ...this.coordinates,
-      ...coordinate,
+  private updateCoordinate(coords: Coords): void {
+    this.coords = {
+      ...this.coords,
+      ...coords,
     };
   }
 
-  private step(position: number) {
+  private step(position: number): void{
     const percent = this.mathPercent(position);
     if (this.state.stepSizePercent) {
       this.state.step = this.mathStepPercent(percent);
@@ -115,7 +114,7 @@ class Model {
     }
   }
 
-  private activeButton() {
+  private activeButton(): void{
     this.state.activeLeft =
       Math.abs(this.state.shiftXl - this.state.step) <
       Math.abs(this.state.shiftXr - this.state.step);
@@ -126,9 +125,9 @@ class Model {
 
   private mathPercent(num: number): number {
     if (this.state.rotate === rotation.HORIZONTAL) {
-      return ((num - this.coordinates.x) / this.coordinates.width) * 100;
+      return ((num - this.coords.x) / this.coords.width) * 100;
     }
-    return ((num - this.coordinates.y) / this.coordinates.height) * 100;
+    return ((num - this.coords.y) / this.coords.height) * 100;
   }
 
   private mathStepPercent(num: number): number {

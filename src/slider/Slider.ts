@@ -43,9 +43,9 @@ declare global {
     return slider;
   };
 
-  $(function () {
-    $('.slider-rqik').sliderRqik()
-  })
+  $(() => {
+    $('.slider-rqik').sliderRqik();
+  });
 })(jQuery);
 
 class SliderPlugin {

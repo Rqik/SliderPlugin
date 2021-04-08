@@ -4,6 +4,8 @@ const enum keyChanges {
   POSITION = 'position',
   COORDINATES = 'coordinates',
   ACTIVE = 'active',
+  WIDTH = 'widthSlider',
+  HEIGHT = 'heightSlider',
 }
 
 const enum rotation {

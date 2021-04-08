@@ -1,6 +1,6 @@
-import {IState} from '../../utils/Interface';
-import {Model} from './Model';
-import {rotation} from '../../utils/constatnts';
+import { IState } from '../../utils/Interface';
+import { Model } from './Model';
+import { keyChanges, rotation } from '../../utils/constatnts';
 
 const state: IState = {
   selector: 'slider-rqik', // селектор
@@ -16,8 +16,8 @@ const state: IState = {
   currentVal2: 70, // установка значений в числах
   round: 2, // округление,
   pixelSize: '6',
-  shiftXl: 123,
-  shiftXr: 210.221,
+  [keyChanges.SHIFT_XL]: 123,
+  [keyChanges.SHIFT_XR]: 210.221,
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
   stepSizePercent: 0, // шаг движения указателя в %
@@ -39,8 +39,8 @@ const state2: IState = {
   currentVal2: 70, // установка значений в числах
   round: 5, // округление,
   pixelSize: '6',
-  shiftXl: 132.22,
-  shiftXr: 210.221,
+  [keyChanges.SHIFT_XL]: 132.22,
+  [keyChanges.SHIFT_XR]: 210.221,
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
   stepSizePercent: 0, // шаг движения указателя в %
@@ -116,7 +116,7 @@ describe('Model test', () => {
     model.editState({ position: '44' });
     expect(step).toHaveBeenCalled();
 
-    model.editState({ coordinate: '44' });
+    model.editState({ coordinates: '44' });
     expect(updateCoordinate).toHaveBeenCalled();
 
     model.editState({ active: '44' });

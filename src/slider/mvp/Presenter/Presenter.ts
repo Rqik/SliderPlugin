@@ -9,9 +9,7 @@ class Present {
 
   private rotate: rotate;
 
-  private subFunctionModel: (data: StateEl) => void = this.setStateModel.bind(
-    this,
-  );
+  private subFunctionModel: (data: StateEl) => void = this.setStateModel.bind(this);
 
   private subFunctionView: (data: StateEl) => void = this.setStateView.bind(
     this,

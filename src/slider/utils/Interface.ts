@@ -1,11 +1,10 @@
-import {rotation} from './constatnts';
+import {keyChanges, rotation} from './constatnts';
 
-type rotate = rotation.HORIZONTAL| rotation.VERTICAL;
+type rotate = rotation.HORIZONTAL | rotation.VERTICAL;
 type range = 'one' | 'two';
 type callBack = (args?: any) => any;
 
-
-interface Coordinate {
+interface Coords {
   x: number;
   y: number;
   width: number;
@@ -30,8 +29,8 @@ interface IState {
   stepSizePercent: number;
   currentVal1: number;
   currentVal2: number;
-  shiftXl: number;
-  shiftXr: number;
+  [keyChanges.SHIFT_XL]: number;
+  [keyChanges.SHIFT_XR]: number;
   round: number;
   step: number;
   activeLeft: boolean;
@@ -54,7 +53,7 @@ interface settingOption {
 }
 
 export {
-  Coordinate,
+  Coords,
   settingOption,
   IState,
   rotate,
@@ -62,5 +61,5 @@ export {
   callBack,
   options,
   StateEl,
-  Slider
+  Slider,
 };

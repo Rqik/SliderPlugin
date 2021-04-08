@@ -1,5 +1,5 @@
-import {rotate} from '../../../utils/Interface';
-import {interval as className, rotation} from '../../../utils/constatnts';
+import { rotate } from '../../../utils/Interface';
+import { interval as className, rotation } from '../../../utils/constatnts';
 
 class Interval {
   interval: HTMLUListElement = document.createElement('ul');

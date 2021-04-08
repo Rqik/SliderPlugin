@@ -225,8 +225,8 @@ class Interval {
 
 ;// CONCATENATED MODULE: ./slider/mvp/View/CurrentVal/CurrentVal.ts
 class CurrentValue {
-  constructor(rotation) {
-    this.rotation = rotation;
+  constructor(orientation) {
+    this.orientation = orientation;
     this.currentVal = document.createElement('div');
     this.size = 10;
     this.init();
@@ -241,9 +241,9 @@ class CurrentValue {
   }
 
   position(position) {
-    if (this.rotation === "horizontal") {
+    if (this.orientation === "horizontal") {
       this.positionHorizontal(position);
-    } else if (this.rotation === "vertical") {
+    } else if (this.orientation === "vertical") {
       this.positionVertical(position);
     }
   }
@@ -258,14 +258,14 @@ class CurrentValue {
     this.currentVal.style.left = `${-(+this.currentVal.offsetWidth + 15)}px`;
   }
 
-  setRotate(rotation) {
-    this.rotation = rotation;
+  setRotate(orientation) {
+    this.orientation = orientation;
   }
 
   rectLeft() {
     const clientRect = this.currentVal.getBoundingClientRect();
 
-    if (this.rotation === "horizontal") {
+    if (this.orientation === "horizontal") {
       return clientRect.left;
     }
 
@@ -275,7 +275,7 @@ class CurrentValue {
   rectRight() {
     const clientRect = this.currentVal.getBoundingClientRect();
 
-    if (this.rotation === "horizontal") {
+    if (this.orientation === "horizontal") {
       return clientRect.right;
     }
 
@@ -420,11 +420,11 @@ class View {
 
   resizeSlider() {
     this.observer.broadcast({
-      widthSlider: this.sliderRange.offsetWidth,
-      heightSlider: this.sliderRange.offsetHeight
+      ["widthSlider"]: this.sliderRange.offsetWidth,
+      ["heightSlider"]: this.sliderRange.offsetHeight
     });
     this.observer.broadcast({
-      coordinate: {
+      ["coordinates"]: {
         x: this.slider.getBoundingClientRect().x,
         y: this.slider.getBoundingClientRect().y,
         width: this.slider.getBoundingClientRect().width,
@@ -487,7 +487,7 @@ class View {
     this.buttonLeft.button.remove();
     this.currentValLeft.currentVal.remove();
     this.observer.broadcast({
-      shiftXl: 0
+      ["shiftXl"]: 0
     });
   }
 
@@ -524,11 +524,11 @@ class View {
   onMouseMove(e) {
     if (this.state.rotate === "horizontal") {
       this.observer.broadcast({
-        position: e.clientX
+        ["position"]: e.clientX
       });
     } else if (this.state.rotate === "vertical") {
       this.observer.broadcast({
-        position: e.clientY
+        ["position"]: e.clientY
       });
     }
 
@@ -536,19 +536,21 @@ class View {
   }
 
   onClickMove(e) {
+    this.buttonAction(e);
+
     if (this.state.rotate === "horizontal") {
       this.observer.broadcast({
-        position: e.clientX
+        ["position"]: e.clientX
       });
     } else if (this.state.rotate === "vertical") {
       this.observer.broadcast({
-        position: e.clientY
+        ["position"]: e.clientY
       });
     }
 
     if (this.state.range === 'two') {
       this.observer.broadcast({
-        active: true
+        ["active"]: true
       });
       this.overridingButtons(this.state.activeLeft);
     }
@@ -579,12 +581,12 @@ class View {
     if (this.tumbler) {
       pos = this.state.shiftXr < pos ? this.state.shiftXr : pos;
       this.observer.broadcast({
-        shiftXl: pos
+        ["shiftXl"]: pos
       });
     } else {
       pos = this.state.shiftXl > pos ? this.state.shiftXl : pos;
       this.observer.broadcast({
-        shiftXr: pos
+        ["shiftXr"]: pos
       });
     }
 
@@ -682,12 +684,12 @@ class Model {
       currentVal1: 22,
       currentVal2: 11,
       round: 1,
-      shiftXl: 2,
-      shiftXr: 100,
+      ["shiftXl"]: 2,
+      ["shiftXr"]: 100,
       step: 0,
       activeLeft: false
     };
-    this.coordinates = {
+    this.coords = {
       x: 0,
       y: 0,
       height: 0,
@@ -719,11 +721,11 @@ class Model {
         break;
 
       case "position":
-        this.step(+data.position);
+        this.step(+data["position"]);
         break;
 
       case "coordinates":
-        this.updateCoordinate(data.coordinate);
+        this.updateCoordinate(data["coordinates"]);
         break;
 
       case "active":
@@ -752,8 +754,8 @@ class Model {
     this.state.shiftXr = (this.state.currentVal1 - this.state.minValue) / (this.state.maxValue - this.state.minValue) * 100;
   }
 
-  updateCoordinate(coordinate) {
-    this.coordinates = Object.assign(Object.assign({}, this.coordinates), coordinate);
+  updateCoordinate(coords) {
+    this.coords = Object.assign(Object.assign({}, this.coords), coords);
   }
 
   step(position) {
@@ -778,10 +780,10 @@ class Model {
 
   mathPercent(num) {
     if (this.state.rotate === "horizontal") {
-      return (num - this.coordinates.x) / this.coordinates.width * 100;
+      return (num - this.coords.x) / this.coords.width * 100;
     }
 
-    return (num - this.coordinates.y) / this.coordinates.height * 100;
+    return (num - this.coords.y) / this.coords.height * 100;
   }
 
   mathStepPercent(num) {
@@ -896,7 +898,7 @@ class Present {
     return slider;
   };
 
-  $(function () {
+  $(() => {
     $('.slider-rqik').sliderRqik();
   });
 })(jQuery);

@@ -60,6 +60,8 @@ module.exports = {
       },
     ],
     'no-use-before-define': 'off',
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "error"
   },
   overrides: [
     {

@@ -1,5 +1,5 @@
-import {rotate} from '../../../utils/Interface';
-import {rotation, slider as className} from '../../../utils/constatnts';
+import { rotate } from '../../../utils/Interface';
+import { rotation, slider as className } from '../../../utils/constatnts';
 
 class SliderRange {
   sliderRange: HTMLElement = document.createElement('div');

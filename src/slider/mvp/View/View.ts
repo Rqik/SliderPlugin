@@ -1,7 +1,7 @@
-import {IState} from '../../utils/Interface';
-import {rotation} from '../../utils/constatnts';
-import {Button, CurrentValue, Interval, SliderRange} from './SubView';
-import {EventObserver as Observer} from '../../utils/EventObserver';
+import { IState } from '../../utils/Interface';
+import { keyChanges, rotation } from '../../utils/constatnts';
+import { Button, CurrentValue, Interval, SliderRange } from './SubView';
+import { EventObserver as Observer } from '../../utils/EventObserver';
 
 class View {
   private slider: HTMLElement = document.createElement('div');
@@ -51,7 +51,6 @@ class View {
     this.slideClass = new SliderRange(this.state.rotate);
     this.sliderRange = this.slideClass.sliderRange;
     this.startView(this.state.selector);
-    // this.sliderInit();
   }
 
   private startView(selector: string): void {
@@ -102,11 +101,11 @@ class View {
 
   private resizeSlider(): void {
     this.observer.broadcast({
-      widthSlider: this.sliderRange.offsetWidth,
-      heightSlider: this.sliderRange.offsetHeight,
+      [keyChanges.WIDTH]: this.sliderRange.offsetWidth,
+      [keyChanges.HEIGHT]: this.sliderRange.offsetHeight,
     });
     this.observer.broadcast({
-      coordinate: {
+      [keyChanges.COORDINATES]: {
         x: this.slider.getBoundingClientRect().x,
         y: this.slider.getBoundingClientRect().y,
         width: this.slider.getBoundingClientRect().width,
@@ -166,7 +165,7 @@ class View {
     this.currentVal.currentVal.remove();
     this.buttonLeft.button.remove();
     this.currentValLeft.currentVal.remove();
-    this.observer.broadcast({shiftXl: 0});
+    this.observer.broadcast({ [keyChanges.SHIFT_XL]: 0 });
   }
 
   private intervalExpose(): void {
@@ -177,9 +176,7 @@ class View {
   private buttonAction(e: MouseEvent): void {
     document.addEventListener('mousemove', this.clickHandler);
     document.addEventListener('mouseup', this.remove.bind(this));
-
     this.currentButton = <HTMLElement>e.currentTarget;
-
     this.tumbler = this.currentButton === this.buttonLeft.button;
     this.currentButton.ondragstart = () => false;
   }
@@ -203,21 +200,22 @@ class View {
 
   private onMouseMove(e: MouseEvent): void {
     if (this.state.rotate === rotation.HORIZONTAL) {
-      this.observer.broadcast({position: e.clientX});
+      this.observer.broadcast({ [keyChanges.POSITION]: e.clientX });
     } else if (this.state.rotate === rotation.VERTICAL) {
-      this.observer.broadcast({position: e.clientY});
+      this.observer.broadcast({ [keyChanges.POSITION]: e.clientY });
     }
     this.eventButton(this.state.step);
   }
 
   private onClickMove(e: MouseEvent): void {
+    this.buttonAction(e)
     if (this.state.rotate === rotation.HORIZONTAL) {
-      this.observer.broadcast({position: e.clientX});
+      this.observer.broadcast({ [keyChanges.POSITION]: e.clientX });
     } else if (this.state.rotate === rotation.VERTICAL) {
-      this.observer.broadcast({position: e.clientY});
+      this.observer.broadcast({ [keyChanges.POSITION]: e.clientY });
     }
     if (this.state.range === 'two') {
-      this.observer.broadcast({active: true});
+      this.observer.broadcast({ [keyChanges.ACTIVE]: true });
       this.overridingButtons(this.state.activeLeft);
     }
     this.resizeSlider();
@@ -243,10 +241,10 @@ class View {
     }
     if (this.tumbler) {
       pos = this.state.shiftXr < pos ? this.state.shiftXr : pos;
-      this.observer.broadcast({shiftXl: pos});
+      this.observer.broadcast({ [keyChanges.SHIFT_XL]: pos });
     } else {
       pos = this.state.shiftXl > pos ? this.state.shiftXl : pos;
-      this.observer.broadcast({shiftXr: pos});
+      this.observer.broadcast({ [keyChanges.SHIFT_XR]: pos });
     }
     this.moveButton(pos);
   }
@@ -270,10 +268,8 @@ class View {
       }
     }
 
-    // ----
-    this.activeZoneAction();
     // размеры для активной зоны
-    // ------
+    this.activeZoneAction();
   }
 
   private currentValueText(): void {
@@ -325,4 +321,4 @@ class View {
   }
 }
 
-export {View};
+export { View };

@@ -1,8 +1,8 @@
 /* eslint-disable wrap-iife */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
-import {IState, Slider, StateEl} from './utils/Interface';
-import {Present} from './mvp/Presenter/Presenter';
+import { IState, Slider, StateEl } from './utils/Interface';
+import { Present } from './mvp/Presenter/Presenter';
 
 declare global {
   interface JQuery {

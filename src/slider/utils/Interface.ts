@@ -1,4 +1,4 @@
-import {keyChanges, rotation} from './constatnts';
+import { keyChanges, rotation } from './constatnts';
 
 type rotate = rotation.HORIZONTAL | rotation.VERTICAL;
 type range = 'one' | 'two';
@@ -27,6 +27,7 @@ interface IState {
   intervalCount: number;
   stepSize: number;
   stepSizePercent: number;
+  stepSizeCount: number;
   currentVal1: number;
   currentVal2: number;
   [keyChanges.SHIFT_XL]: number;

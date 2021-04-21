@@ -21,6 +21,7 @@ const state: IState = {
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
   stepSizePercent: 0, // шаг движения указателя в %
+  stepSizeCount: 0,
   step: 0,
   activeLeft: false,
 };
@@ -44,6 +45,7 @@ const state2: IState = {
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
   stepSizePercent: 0, // шаг движения указателя в %
+  stepSizeCount: 0,
   step: 0,
   activeLeft: false,
 };

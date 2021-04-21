@@ -2,76 +2,122 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 726:
+/***/ 42:
 /***/ ((__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 
-;// CONCATENATED MODULE: ./slider/utils/utils.ts
+;// CONCATENATED MODULE: ./demo/InputChecker/InputChecker.ts
 /* provided dependency */ var $ = __webpack_require__(638);
-function checkChange(elem, nameAtr, value, plugItem) {
-  const item = elem.find(`input[name='${nameAtr}']`);
-  item.on('click', function () {
-    if ($(this).prop('checked')) {
-      plugItem.data({
-        [nameAtr]: value[0]
+class InputChecker {
+  constructor(form, sliderDOM, slider, classRotate) {
+    this.form = form;
+    this.sliderDOM = sliderDOM;
+    this.slider = slider;
+    this.inputRotate = this.form.find("input[name='rotate']");
+    this.classRotate = classRotate;
+  }
+
+  init() {
+    this.actionForm();
+    this.addEventSlider();
+  }
+
+  addEventSlider() {
+    this.sliderDOM.on('click', this.eventChange.bind(this));
+    this.inputRotate.on('click', this.addClassForm.bind(this));
+  }
+
+  addClassForm() {
+    if (this.inputRotate.is(':checked')) {
+      this.sliderDOM.addClass(this.classRotate);
+    } else {
+      this.sliderDOM.removeClass(this.classRotate);
+    }
+  }
+
+  eventChange() {
+    this.inputChange('currentVal2', this.slider.getData()[0].currentVal2);
+    this.inputChange('currentVal1', this.slider.getData()[0].currentVal1);
+  }
+
+  makeEventCheck(nameAtr, active, disable) {
+    return event => {
+      if ($(event.currentTarget).prop('checked')) {
+        this.slider.data({
+          [nameAtr]: active
+        });
+      } else {
+        this.slider.data({
+          [nameAtr]: disable
+        });
+      }
+    };
+  }
+
+  runChange(nameAtr) {
+    const item = this.form.find(`input[name='${nameAtr}']`);
+    const val = item.val() || 0;
+    item.on('input', this.makeEventInputChange(nameAtr));
+
+    if (val !== '-' || val !== undefined) {
+      this.slider.data({
+        [nameAtr]: +val
+      });
+    }
+  }
+
+  makeEventInputChange(nameAtr) {
+    const item = this.form.find(`input[name='${nameAtr}']`);
+    let val = item.val() || 0;
+    return () => {
+      val = item.val() || 0;
+
+      if (val === '-') {
+        return;
+      }
+
+      this.slider.data({
+        [nameAtr]: +val
+      });
+    };
+  }
+
+  inputChange(nameAtr, value) {
+    this.form.find(`input[name='${nameAtr}']`).val(value);
+  }
+
+  checkChange(nameAtr, value) {
+    const [active, disable] = value;
+    const item = this.form.find(`input[name='${nameAtr}']`);
+    item.on('click', this.makeEventCheck(nameAtr, active, disable));
+
+    if (item.prop('checked')) {
+      this.slider.data({
+        [nameAtr]: active
       });
     } else {
-      plugItem.data({
-        [nameAtr]: value[1]
+      this.slider.data({
+        [nameAtr]: disable
       });
     }
-  });
-
-  if (item.prop('checked')) {
-    plugItem.data({
-      [nameAtr]: value[0]
-    });
-  } else {
-    plugItem.data({
-      [nameAtr]: value[1]
-    });
   }
-}
 
-function inputChange(elem, nameAtr, value) {
-  elem.find(`input[name='${nameAtr}']`).val(value);
-}
-
-function runChange(elem, nameAtr, plugItem) {
-  const item = elem.find(`input[name='${nameAtr}']`);
-  let val = item.val() || 0;
-  item.on('input', () => {
-    val = item.val() || 0;
-
-    if (val === '-') {
-      return;
-    }
-
-    plugItem.data({
-      [nameAtr]: +val
-    });
-  });
-
-  if (val !== '-' || val !== undefined) {
-    plugItem.data({
-      [nameAtr]: +val
-    });
+  actionForm() {
+    this.runChange('maxValue');
+    this.runChange('minValue');
+    this.runChange('currentVal1');
+    this.runChange('currentVal2');
+    this.runChange('round');
+    this.runChange('intervalCount');
+    this.runChange('stepSize');
+    this.runChange('stepSizePercent');
+    this.runChange('stepSizeCount');
+    this.checkChange('rotate', ['vertical', 'horizontal']);
+    this.checkChange('showInterval', [true, false]);
+    this.checkChange('show', [true, false]);
+    this.checkChange('range', ['two', 'one']);
   }
-}
 
-function actionForm(form, el) {
-  runChange(form, 'maxValue', el);
-  runChange(form, 'minValue', el);
-  runChange(form, 'currentVal1', el);
-  runChange(form, 'currentVal2', el);
-  runChange(form, 'round', el);
-  runChange(form, 'intervalCount', el);
-  runChange(form, 'stepSize', el);
-  runChange(form, 'stepSizePercent', el);
-  checkChange(form, 'rotate', ['vertical', 'horizontal'], el);
-  checkChange(form, 'showInterval', [true, false], el);
-  checkChange(form, 'show', [true, false], el);
-  checkChange(form, 'range', ['two', 'one'], el);
 }
 
 
@@ -92,7 +138,7 @@ const $form2 = demo_$('#form2');
 const $form3 = demo_$('#form3');
 const $form4 = demo_$('#form4');
 const plug1 = $plug1.sliderRqik({
-  maxValue: 1000,
+  maxValue: -1000,
   range: 'one'
 });
 const plug2 = $plug2.sliderRqik({
@@ -102,45 +148,10 @@ const plug2 = $plug2.sliderRqik({
 });
 const plug3 = $plug3.sliderRqik();
 const plug4 = $plug4.sliderRqik();
-const $input1 = $form1.find("input[name='rotate']");
-const $input2 = $form2.find("input[name='rotate']");
-const $input3 = $form3.find("input[name='rotate']");
-const $input4 = $form4.find("input[name='rotate']");
-addClassForm($input1, $plug1, 'slider_vertical');
-addClassForm($input2, $plug2, 'slider_vertical');
-addClassForm($input3, $plug3, 'slider_vertical');
-addClassForm($input4, $plug4, 'slider_min-width');
-
-function addClassForm($input, $elem, className) {
-  $input.click(() => {
-    if ($input.is(':checked')) {
-      $elem.addClass(className);
-    } else {
-      $elem.removeClass(className);
-    }
-  });
-}
-
-actionForm($form1, plug1);
-actionForm($form2, plug2);
-actionForm($form3, plug3);
-actionForm($form4, plug4);
-$plug1.on('click', () => {
-  inputChange($form1, 'currentVal2', plug1.getData()[0].currentVal2);
-  inputChange($form1, 'currentVal1', plug1.getData()[0].currentVal1);
-});
-$plug2.on('click', () => {
-  inputChange($form2, 'currentVal2', plug2.getData()[0].currentVal2);
-  inputChange($form2, 'currentVal1', plug2.getData()[0].currentVal1);
-});
-$plug3.on('click', () => {
-  inputChange($form3, 'currentVal2', plug3.getData()[0].currentVal2);
-  inputChange($form3, 'currentVal1', plug3.getData()[0].currentVal1);
-});
-$plug4.on('click', () => {
-  inputChange($form4, 'currentVal2', plug4.getData()[0].currentVal2);
-  inputChange($form4, 'currentVal1', plug4.getData()[0].currentVal1);
-});
+new InputChecker($form1, $plug1, plug1, 'slider_vertical').init();
+new InputChecker($form2, $plug2, plug2, 'slider_vertical').init();
+new InputChecker($form3, $plug3, plug3, 'slider_vertical').init();
+new InputChecker($form4, $plug4, plug4, 'slider_vertical').init();
 
 /***/ }),
 
@@ -163,11 +174,13 @@ class Button {
   }
 
   addEvent(type, action) {
-    function eventA(event) {
-      action(event);
-    }
+    this.button.addEventListener(type, this.makeEvent(action));
+  }
 
-    this.button.addEventListener(type, eventA);
+  makeEvent(action) {
+    return event => {
+      action(event);
+    };
   }
 
   width() {
@@ -680,6 +693,7 @@ class Model {
       showInterval: true,
       intervalCount: 2,
       stepSizePercent: 0,
+      stepSizeCount: 10,
       stepSize: 1,
       currentVal1: 22,
       currentVal2: 11,
@@ -746,6 +760,7 @@ class Model {
     this.state.maxValue = Number(this.state.maxValue);
     this.state.intervalCount = Number(this.state.intervalCount);
     this.state.stepSize = Number(this.state.stepSize);
+    this.state.stepSizeCount = Number(this.state.stepSizeCount);
     this.state.stepSizePercent = Number(this.state.stepSizePercent);
     this.state.currentVal1 = Number(this.state.currentVal1);
     this.state.currentVal2 = Number(this.state.currentVal2);
@@ -761,7 +776,9 @@ class Model {
   step(position) {
     const percent = this.mathPercent(position);
 
-    if (this.state.stepSizePercent) {
+    if (this.state.stepSizeCount) {
+      this.state.step = this.mathStepCount(percent);
+    } else if (this.state.stepSizePercent) {
       this.state.step = this.mathStepPercent(percent);
     } else if (this.state.stepSize > 1) {
       this.state.step = this.mathStepPixel(percent);
@@ -784,6 +801,10 @@ class Model {
     }
 
     return (num - this.coords.y) / this.coords.height * 100;
+  }
+
+  mathStepCount(num) {
+    return Math.round(num / this.state.stepSizeCount) * this.state.stepSizeCount;
   }
 
   mathStepPercent(num) {
@@ -1000,7 +1021,7 @@ class SliderPlugin {
 /******/ 		};
 /******/ 		
 /******/ 		var deferredModules = [
-/******/ 			[726,638]
+/******/ 			[42,638]
 /******/ 		];
 /******/ 		// no chunk on demand loading
 /******/ 		

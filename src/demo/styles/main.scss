@@ -1,7 +1,7 @@
 // @import '~normalize.css';
-@import 'fonts/montserrat.css';
+@import '../assets/fonts/montserrat.css';
 @import 'variables';
-@import 'src/slider/style/slider';
+@import '../../slider/styles/slider';
 @import 'index';
 @import "../components/checkbox-list/checkbox-list";
 @import "../components/slider/slider";

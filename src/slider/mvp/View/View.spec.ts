@@ -9,7 +9,7 @@ const state: IState = {
   maxValue: 120, // максимальное значение
   range: 'two', // 1 или 2 указателя
   rotate: rotation.HORIZONTAL, // ориентация vertical horizontal
-  show: true, // показыватьть текущее значение над указателем
+  show: true, // показывать текущее значение над указателем
   showInterval: true, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 1, // шаг движения указателя в px
@@ -20,6 +20,7 @@ const state: IState = {
   shiftXl: 0,
   shiftXr: 100,
   stepSizePercent: 0,
+  stepSizeCount: 0,
   step: 0,
   activeLeft: false,
 };
@@ -30,7 +31,7 @@ const state2: IState = {
   maxValue: 120, // максимальное значение
   range: 'one', // 1 или 2 указателя
   rotate: rotation.VERTICAL, // ориентация vertical horizontal
-  show: false, // показыватьть текущее значение над указателем
+  show: false, // показывать текущее значение над указателем
   showInterval: false, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 20, // шаг движения указателя в px
@@ -41,6 +42,7 @@ const state2: IState = {
   shiftXl: 0,
   shiftXr: 200,
   stepSizePercent: 0,
+  stepSizeCount: 0,
   step: 0,
   activeLeft: false,
 };

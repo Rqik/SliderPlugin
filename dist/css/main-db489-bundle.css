@@ -3,7 +3,7 @@
     src: url(../fonts/Montserrat-Bolddbf9c.woff2) format('woff2'),
         url(../fonts/Montserrat-Bold0329b.woff) format('woff'),
         url(../fonts/Montserrat-Boldcfaa6.ttf) format('truetype'),
-        url("export default __webpack_public_path__ + &quot;fonts/Montserrat-Bold54416.svg&quot;;#Montserrat-Bold") format('svg');
+        url("export default __webpack_public_path__ + &quot;fonts/Montserrat-Boldb8553.svg&quot;;#Montserrat-Bold") format('svg');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -14,7 +14,7 @@
     src: url(../fonts/Montserrat-Regular51880.woff2) format('woff2'),
         url(../fonts/Montserrat-Regular498c8.woff) format('woff'),
         url(../fonts/Montserrat-Regulard4f77.ttf) format('truetype'),
-        url("export default __webpack_public_path__ + &quot;fonts/Montserrat-Regular2c3ed.svg&quot;;#Montserrat-Regular") format('svg');
+        url("export default __webpack_public_path__ + &quot;fonts/Montserrat-Regular6b43d.svg&quot;;#Montserrat-Regular") format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: swap;

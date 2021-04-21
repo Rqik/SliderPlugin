@@ -1,6 +1,6 @@
-import { Coords, IState, StateEl } from '../../utils/Interface';
-import { EventObserver } from '../../utils/EventObserver';
-import { keyChanges, rotation } from '../../utils/constatnts';
+import {Coords, IState, StateEl} from '../../utils/Interface';
+import {EventObserver} from '../../utils/EventObserver';
+import {keyChanges, rotation} from '../../utils/constatnts';
 
 class Model {
   private state: IState = {
@@ -13,6 +13,7 @@ class Model {
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
     stepSizePercent: 0, // шаг движения указателя в %
+    stepSizeCount: 10, // шаг движения указателя в числах
     stepSize: 1, // шаг движения указателя в px
     currentVal1: 22, // установка значений в числах
     currentVal2: 11, // установка значений в числах
@@ -82,18 +83,17 @@ class Model {
     this.state.maxValue = Number(this.state.maxValue);
     this.state.intervalCount = Number(this.state.intervalCount);
     this.state.stepSize = Number(this.state.stepSize);
+    this.state.stepSizeCount = Number(this.state.stepSizeCount);
     this.state.stepSizePercent = Number(this.state.stepSizePercent);
     this.state.currentVal1 = Number(this.state.currentVal1);
     this.state.currentVal2 = Number(this.state.currentVal2);
     this.state.round = Number(this.state.round);
-    this.state.shiftXl =
-      ((this.state.currentVal2 - this.state.minValue) /
-        (this.state.maxValue - this.state.minValue)) *
-      100;
-    this.state.shiftXr =
-      ((this.state.currentVal1 - this.state.minValue) /
-        (this.state.maxValue - this.state.minValue)) *
-      100;
+    this.state.shiftXl = ((this.state.currentVal2 - this.state.minValue)
+      / (this.state.maxValue - this.state.minValue))
+      * 100;
+    this.state.shiftXr = ((this.state.currentVal1 - this.state.minValue)
+      / (this.state.maxValue - this.state.minValue))
+      * 100;
   }
 
   private updateCoordinate(coords: Coords): void {
@@ -103,9 +103,11 @@ class Model {
     };
   }
 
-  private step(position: number): void{
+  private step(position: number): void {
     const percent = this.mathPercent(position);
-    if (this.state.stepSizePercent) {
+    if (this.state.stepSizeCount) {
+      this.state.step = this.mathStepCount(percent);
+    } else if (this.state.stepSizePercent) {
       this.state.step = this.mathStepPercent(percent);
     } else if (this.state.stepSize > 1) {
       this.state.step = this.mathStepPixel(percent);
@@ -114,10 +116,9 @@ class Model {
     }
   }
 
-  private activeButton(): void{
-    this.state.activeLeft =
-      Math.abs(this.state.shiftXl - this.state.step) <
-      Math.abs(this.state.shiftXr - this.state.step);
+  private activeButton(): void {
+    this.state.activeLeft = Math.abs(this.state.shiftXl - this.state.step)
+      < Math.abs(this.state.shiftXr - this.state.step);
     if (this.state.shiftXl === this.state.shiftXr) {
       this.state.activeLeft = this.state.step < this.state.shiftXr;
     }
@@ -130,10 +131,13 @@ class Model {
     return ((num - this.coords.y) / this.coords.height) * 100;
   }
 
+  private mathStepCount(num: number): number {
+    return Math.round(num / this.state.stepSizeCount)  * this.state.stepSizeCount
+  }
+
   private mathStepPercent(num: number): number {
-    return (
-      Math.round(num / this.state.stepSizePercent) * this.state.stepSizePercent
-    );
+    return Math.round(num / this.state.stepSizePercent)
+      * this.state.stepSizePercent
   }
 
   private mathStepPixel(num: number): number {
@@ -155,4 +159,4 @@ class Model {
   }
 }
 
-export { Model };
+export {Model};

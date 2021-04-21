@@ -28,9 +28,7 @@ class View {
     this,
   );
 
-  private mouseDownHandler: (e: MouseEvent) => void = this.buttonAction.bind(
-    this,
-  );
+  private mouseDownHandler: (e: MouseEvent) => void = this.buttonAction.bind(this);
 
   private currentButton: HTMLElement = this.buttonRight.button; // абстрактный тумблер
 
@@ -86,11 +84,14 @@ class View {
 
   private addAction(): void {
     this.buttonRight.addEvent('mousedown', this.mouseDownHandler);
+    // this.buttonRight.addEvent('touchstart', this.mouseDownHandler)
     this.buttonLeft.addEvent('mousedown', this.mouseDownHandler);
+    // this.buttonLeft.addEvent('touchstart', this.mouseDownHandler)
     this.currentValLeft.currentVal.addEventListener(
       'mousedown',
       this.mouseDownHandler,
     );
+
     this.currentValRight.currentVal.addEventListener(
       'mousedown',
       this.mouseDownHandler,
@@ -208,7 +209,7 @@ class View {
   }
 
   private onClickMove(e: MouseEvent): void {
-    this.buttonAction(e)
+    this.buttonAction(e);
     if (this.state.rotate === rotation.HORIZONTAL) {
       this.observer.broadcast({ [keyChanges.POSITION]: e.clientX });
     } else if (this.state.rotate === rotation.VERTICAL) {
@@ -262,8 +263,7 @@ class View {
       this.currentValueText();
       this.showCurrentValue();
       if (this.state.range === 'two') {
-        const oneCurrent =
-          this.currentValLeft.rectRight() > this.currentValRight.rectLeft();
+        const oneCurrent = this.currentValLeft.rectRight() > this.currentValRight.rectLeft();
         this.responsiveCurrent(oneCurrent);
       }
     }

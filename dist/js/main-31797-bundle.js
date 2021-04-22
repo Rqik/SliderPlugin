@@ -111,7 +111,6 @@ class InputChecker {
     this.runChange('intervalCount');
     this.runChange('stepSize');
     this.runChange('stepSizePercent');
-    this.runChange('stepSizeCount');
     this.checkChange('rotate', ['vertical', 'horizontal']);
     this.checkChange('showInterval', [true, false]);
     this.checkChange('show', [true, false]);
@@ -138,7 +137,7 @@ const $form2 = demo_$('#form2');
 const $form3 = demo_$('#form3');
 const $form4 = demo_$('#form4');
 const plug1 = $plug1.sliderRqik({
-  maxValue: -1000,
+  maxValue: 1000,
   range: 'one'
 });
 const plug2 = $plug2.sliderRqik({
@@ -174,10 +173,10 @@ class Button {
   }
 
   addEvent(type, action) {
-    this.button.addEventListener(type, this.makeEvent(action));
+    this.button.addEventListener(type, Button.makeEvent(action));
   }
 
-  makeEvent(action) {
+  static makeEvent(action) {
     return event => {
       action(event);
     };
@@ -387,6 +386,7 @@ class View {
     this.clickHandler = this.onMouseMove.bind(this);
     this.clickMoveHandler = this.onClickMove.bind(this);
     this.mouseDownHandler = this.buttonAction.bind(this);
+    this.currentValHandler = this.currentButtonAction.bind(this);
     this.currentButton = this.buttonRight.button;
     this.tumbler = false;
     this.state = state;
@@ -424,10 +424,19 @@ class View {
 
   addAction() {
     this.buttonRight.addEvent('mousedown', this.mouseDownHandler);
-    this.buttonLeft.addEvent('mousedown', this.mouseDownHandler);
-    this.currentValLeft.currentVal.addEventListener('mousedown', this.mouseDownHandler);
-    this.currentValRight.currentVal.addEventListener('mousedown', this.mouseDownHandler);
-    this.slider.addEventListener('mousedown', this.clickMoveHandler);
+    this.buttonRight.addEvent('touchstart', this.mouseDownHandler);
+    this.currentValRight.currentVal.addEventListener('mousedown', this.currentValHandler);
+    this.currentValRight.currentVal.addEventListener('touchstart', this.currentValHandler);
+
+    if (this.state.range === 'two') {
+      this.buttonLeft.addEvent('mousedown', this.mouseDownHandler);
+      this.buttonLeft.addEvent('touchstart', this.mouseDownHandler);
+      this.currentValLeft.currentVal.addEventListener('touchstart', this.currentValHandler);
+      this.currentValLeft.currentVal.addEventListener('mousedown', this.currentValHandler);
+    }
+
+    this.sliderRange.addEventListener('mousedown', this.clickMoveHandler);
+    this.sliderRange.addEventListener('touchstart', this.clickMoveHandler);
     window.addEventListener('resize', this.resizeSlider.bind(this));
   }
 
@@ -509,10 +518,47 @@ class View {
     this.slider.append(this.interval.interval);
   }
 
+  currentButtonAction(e) {
+    let event;
+
+    if (e instanceof TouchEvent) {
+      event = e.targetTouches[0].target;
+    } else {
+      event = e.currentTarget;
+    }
+
+    if (this.currentValLeft.currentVal === event) {
+      this.overridingButtons(true);
+    } else {
+      this.overridingButtons(false);
+    }
+
+    if (e instanceof TouchEvent) {
+      document.addEventListener('touchmove', this.clickHandler);
+      document.addEventListener('touchend', this.remove.bind(this));
+    } else {
+      document.addEventListener('mousemove', this.clickHandler);
+      document.addEventListener('mouseup', this.remove.bind(this));
+    }
+
+    this.currentButton.ondragstart = () => false;
+  }
+
   buttonAction(e) {
-    document.addEventListener('mousemove', this.clickHandler);
-    document.addEventListener('mouseup', this.remove.bind(this));
-    this.currentButton = e.currentTarget;
+    if (e instanceof TouchEvent) {
+      document.addEventListener('touchmove', this.clickHandler);
+      document.addEventListener('touchend', this.remove.bind(this));
+      this.currentButton = e.targetTouches[0].target;
+    } else {
+      document.addEventListener('mousemove', this.clickHandler);
+      document.addEventListener('mouseup', this.remove.bind(this));
+      this.currentButton = e.currentTarget;
+    }
+
+    if (this.state.range === 'one') {
+      this.currentButton = this.buttonRight.button;
+    }
+
     this.tumbler = this.currentButton === this.buttonLeft.button;
 
     this.currentButton.ondragstart = () => false;
@@ -535,31 +581,33 @@ class View {
   }
 
   onMouseMove(e) {
+    this.observerPosition(e);
+    this.eventButton(this.state.step);
+  }
+
+  observerPosition(e) {
+    let event;
+
+    if (e instanceof TouchEvent) {
+      [event] = e.touches;
+    } else {
+      event = e;
+    }
+
     if (this.state.rotate === "horizontal") {
       this.observer.broadcast({
-        ["position"]: e.clientX
+        ["position"]: event.clientX
       });
     } else if (this.state.rotate === "vertical") {
       this.observer.broadcast({
-        ["position"]: e.clientY
+        ["position"]: event.clientY
       });
     }
-
-    this.eventButton(this.state.step);
   }
 
   onClickMove(e) {
     this.buttonAction(e);
-
-    if (this.state.rotate === "horizontal") {
-      this.observer.broadcast({
-        ["position"]: e.clientX
-      });
-    } else if (this.state.rotate === "vertical") {
-      this.observer.broadcast({
-        ["position"]: e.clientY
-      });
-    }
+    this.observerPosition(e);
 
     if (this.state.range === 'two') {
       this.observer.broadcast({
@@ -687,14 +735,13 @@ class Model {
       selector: 'slider-range',
       minValue: 0,
       maxValue: 1200,
-      range: 'two',
+      range: 'one',
       rotate: "horizontal",
       show: true,
       showInterval: true,
       intervalCount: 2,
       stepSizePercent: 0,
-      stepSizeCount: 10,
-      stepSize: 1,
+      stepSize: 10,
       currentVal1: 22,
       currentVal2: 11,
       round: 1,
@@ -760,7 +807,6 @@ class Model {
     this.state.maxValue = Number(this.state.maxValue);
     this.state.intervalCount = Number(this.state.intervalCount);
     this.state.stepSize = Number(this.state.stepSize);
-    this.state.stepSizeCount = Number(this.state.stepSizeCount);
     this.state.stepSizePercent = Number(this.state.stepSizePercent);
     this.state.currentVal1 = Number(this.state.currentVal1);
     this.state.currentVal2 = Number(this.state.currentVal2);
@@ -776,12 +822,10 @@ class Model {
   step(position) {
     const percent = this.mathPercent(position);
 
-    if (this.state.stepSizeCount) {
+    if (this.state.stepSize) {
       this.state.step = this.mathStepCount(percent);
     } else if (this.state.stepSizePercent) {
       this.state.step = this.mathStepPercent(percent);
-    } else if (this.state.stepSize > 1) {
-      this.state.step = this.mathStepPixel(percent);
     } else {
       this.state.step = percent;
     }
@@ -804,15 +848,12 @@ class Model {
   }
 
   mathStepCount(num) {
-    return Math.round(num / this.state.stepSizeCount) * this.state.stepSizeCount;
+    const precent = this.state.stepSize / (this.state.maxValue + Math.abs(this.state.minValue)) * 100;
+    return Math.round(num / precent) * precent;
   }
 
   mathStepPercent(num) {
     return Math.round(num / this.state.stepSizePercent) * this.state.stepSizePercent;
-  }
-
-  mathStepPixel(num) {
-    return Math.round(num / this.state.stepSize) * this.state.stepSize;
   }
 
   leftVal() {
@@ -920,7 +961,7 @@ class Present {
   };
 
   $(() => {
-    $('.slider-rqik').sliderRqik();
+    $('.js-slider-rqik').sliderRqik();
   });
 })(jQuery);
 

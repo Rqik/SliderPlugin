@@ -20,7 +20,6 @@ const state: IState = {
   shiftXl: 0,
   shiftXr: 100,
   stepSizePercent: 0,
-  stepSizeCount: 0,
   step: 0,
   activeLeft: false,
 };
@@ -42,7 +41,6 @@ const state2: IState = {
   shiftXl: 0,
   shiftXr: 200,
   stepSizePercent: 0,
-  stepSizeCount: 0,
   step: 0,
   activeLeft: false,
 };

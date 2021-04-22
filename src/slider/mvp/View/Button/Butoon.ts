@@ -1,4 +1,4 @@
-import {button as className} from '../../../utils/constatnts';
+import { button as className } from '../../../utils/constatnts';
 
 class Button {
   button: HTMLElement = document.createElement('div');
@@ -14,13 +14,13 @@ class Button {
   }
 
   addEvent(type: string, action: (e: MouseEvent) => void): void {
-    this.button.addEventListener(type, this.makeEvent(action));
+    this.button.addEventListener(type, Button.makeEvent(action));
   }
 
-  makeEvent(action: Function) {
+  private static makeEvent(action: (e: MouseEvent) => void) {
     return (event: Event) => {
       action(event as MouseEvent);
-    }
+    };
   }
 
   width(): number {
@@ -29,4 +29,4 @@ class Button {
   }
 }
 
-export {Button};
+export { Button };

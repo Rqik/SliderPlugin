@@ -18,7 +18,7 @@ const $form3 = $('#form3');
 const $form4 = $('#form4');
 
 const plug1 = $plug1.sliderRqik({
-  maxValue: -1000,
+  maxValue: 1000,
   range: 'one',
 });
 

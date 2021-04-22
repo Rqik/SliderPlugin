@@ -25,17 +25,17 @@ class InputChecker {
     this.classRotate = classRotate;
   }
 
-  init() {
+  public init(): void {
     this.actionForm();
     this.addEventSlider();
   }
 
-  addEventSlider() {
+  private addEventSlider(): void {
     this.sliderDOM.on('click', this.eventChange.bind(this));
     this.inputRotate.on('click', this.addClassForm.bind(this));
   }
 
-  addClassForm() {
+  private addClassForm(): void {
     if (this.inputRotate.is(':checked')) {
       this.sliderDOM.addClass(this.classRotate);
     } else {
@@ -43,17 +43,17 @@ class InputChecker {
     }
   }
 
-  eventChange() {
+  private eventChange(): void {
     this.inputChange('currentVal2', this.slider.getData()[0].currentVal2);
     this.inputChange('currentVal1', this.slider.getData()[0].currentVal1);
   }
 
-  makeEventCheck(
+  private makeEventCheck(
     nameAtr: string,
     active: (string | number | boolean),
     disable: (string | number | boolean),
-  ): any {
-    return (event: JQueryEventObject) => {
+  ): (e: JQueryEventObject) => void {
+    return (event: JQueryEventObject): void => {
       if ($(event.currentTarget).prop('checked')) {
         this.slider.data({ [nameAtr]: active });
       } else {
@@ -62,7 +62,7 @@ class InputChecker {
     };
   }
 
-  runChange(nameAtr: string): void {
+  private runChange(nameAtr: string): void {
     const item = this.form.find(`input[name='${nameAtr}']`);
     const val = item.val() || 0;
     item.on('input', this.makeEventInputChange(nameAtr));
@@ -71,10 +71,10 @@ class InputChecker {
     }
   }
 
-  makeEventInputChange(nameAtr: string): any {
+  private makeEventInputChange(nameAtr: string): any {
     const item = this.form.find(`input[name='${nameAtr}']`);
     let val = item.val() || 0;
-    return () => {
+    return (): void => {
       val = item.val() || 0;
       if (val === '-') {
         return;
@@ -83,11 +83,11 @@ class InputChecker {
     };
   }
 
-  inputChange(nameAtr: string, value: string | number): void {
+  private inputChange(nameAtr: string, value: string | number): void {
     this.form.find(`input[name='${nameAtr}']`).val(value);
   }
 
-  checkChange(nameAtr: string, value: (string | number | boolean)[]): void {
+  private checkChange(nameAtr: string, value: (string | number | boolean)[]): void {
     const [active, disable] = value;
     const item: JQuery = this.form.find(`input[name='${nameAtr}']`);
 
@@ -100,7 +100,7 @@ class InputChecker {
     }
   }
 
-  actionForm(): void {
+  private actionForm(): void {
     this.runChange('maxValue');
     this.runChange('minValue');
     this.runChange('currentVal1');
@@ -109,7 +109,6 @@ class InputChecker {
     this.runChange('intervalCount');
     this.runChange('stepSize');
     this.runChange('stepSizePercent');
-    this.runChange('stepSizeCount');
     this.checkChange('rotate', ['vertical', 'horizontal']);
     this.checkChange('showInterval', [true, false]);
     this.checkChange('show', [true, false]);

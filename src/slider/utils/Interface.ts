@@ -27,7 +27,6 @@ interface IState {
   intervalCount: number;
   stepSize: number;
   stepSizePercent: number;
-  stepSizeCount: number;
   currentVal1: number;
   currentVal2: number;
   [keyChanges.SHIFT_XL]: number;

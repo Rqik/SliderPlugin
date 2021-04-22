@@ -1,20 +1,19 @@
-import {Coords, IState, StateEl} from '../../utils/Interface';
-import {EventObserver} from '../../utils/EventObserver';
-import {keyChanges, rotation} from '../../utils/constatnts';
+import { Coords, IState, StateEl } from '../../utils/Interface';
+import { EventObserver } from '../../utils/EventObserver';
+import { keyChanges, rotation } from '../../utils/constatnts';
 
 class Model {
   private state: IState = {
     selector: 'slider-range', // селектор
     minValue: 0, // минимальное значение
     maxValue: 1200, // максимальное значение
-    range: 'two', // 1 или 2 указателя
+    range: 'one', // 1 или 2 указателя
     rotate: rotation.HORIZONTAL, // ориентация vertical horizontal
     show: true, // показывать текущее значение над указателем
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
     stepSizePercent: 0, // шаг движения указателя в %
-    stepSizeCount: 10, // шаг движения указателя в числах
-    stepSize: 1, // шаг движения указателя в px
+    stepSize: 10, // шаг движения указателя в числах
     currentVal1: 22, // установка значений в числах
     currentVal2: 11, // установка значений в числах
     round: 1, // округление,
@@ -83,7 +82,6 @@ class Model {
     this.state.maxValue = Number(this.state.maxValue);
     this.state.intervalCount = Number(this.state.intervalCount);
     this.state.stepSize = Number(this.state.stepSize);
-    this.state.stepSizeCount = Number(this.state.stepSizeCount);
     this.state.stepSizePercent = Number(this.state.stepSizePercent);
     this.state.currentVal1 = Number(this.state.currentVal1);
     this.state.currentVal2 = Number(this.state.currentVal2);
@@ -105,12 +103,10 @@ class Model {
 
   private step(position: number): void {
     const percent = this.mathPercent(position);
-    if (this.state.stepSizeCount) {
+    if (this.state.stepSize) {
       this.state.step = this.mathStepCount(percent);
     } else if (this.state.stepSizePercent) {
       this.state.step = this.mathStepPercent(percent);
-    } else if (this.state.stepSize > 1) {
-      this.state.step = this.mathStepPixel(percent);
     } else {
       this.state.step = percent;
     }
@@ -132,16 +128,14 @@ class Model {
   }
 
   private mathStepCount(num: number): number {
-    return Math.round(num / this.state.stepSizeCount)  * this.state.stepSizeCount
+    const precent = (this.state.stepSize / (this.state.maxValue
+      + Math.abs(this.state.minValue))) * 100;
+    return Math.round(num / precent) * precent;
   }
 
   private mathStepPercent(num: number): number {
     return Math.round(num / this.state.stepSizePercent)
-      * this.state.stepSizePercent
-  }
-
-  private mathStepPixel(num: number): number {
-    return Math.round(num / this.state.stepSize) * this.state.stepSize;
+      * this.state.stepSizePercent;
   }
 
   private leftVal(): void {
@@ -155,8 +149,9 @@ class Model {
     const res = Number(
       ((t.maxValue - t.minValue) * t.shiftXr) / 100 + t.minValue,
     );
-    t.currentVal1 = Number(Math.round(res * 10 ** t.round) / 10 ** t.round);
+    t.currentVal1 = Number(Math.round(res * 10 ** t.round)
+      / 10 ** t.round);
   }
 }
 
-export {Model};
+export { Model };

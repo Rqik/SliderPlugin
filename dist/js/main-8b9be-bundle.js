@@ -535,10 +535,10 @@ class View {
 
     if (e instanceof TouchEvent) {
       document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.remove.bind(this));
+      document.addEventListener('touchend', this.removeTouch.bind(this));
     } else {
       document.addEventListener('mousemove', this.clickHandler);
-      document.addEventListener('mouseup', this.remove.bind(this));
+      document.addEventListener('mouseup', this.removeMouse.bind(this));
     }
 
     this.currentButton.ondragstart = () => false;
@@ -547,11 +547,11 @@ class View {
   buttonAction(e) {
     if (e instanceof TouchEvent) {
       document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.remove.bind(this));
+      document.addEventListener('touchend', this.removeTouch.bind(this));
       this.currentButton = e.targetTouches[0].target;
     } else {
       document.addEventListener('mousemove', this.clickHandler);
-      document.addEventListener('mouseup', this.remove.bind(this));
+      document.addEventListener('mouseup', this.removeMouse.bind(this));
       this.currentButton = e.currentTarget;
     }
 
@@ -564,7 +564,12 @@ class View {
     this.currentButton.ondragstart = () => false;
   }
 
-  remove() {
+  removeTouch() {
+    document.removeEventListener('touchmove', this.clickHandler);
+    document.onmouseup = null;
+  }
+
+  removeMouse() {
     document.removeEventListener('mousemove', this.clickHandler);
     document.onmouseup = null;
   }

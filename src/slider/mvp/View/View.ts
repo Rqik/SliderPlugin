@@ -203,10 +203,10 @@ class View {
     }
     if (e instanceof TouchEvent) {
       document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.remove.bind(this));
+      document.addEventListener('touchend', this.removeTouch.bind(this));
     } else {
       document.addEventListener('mousemove', this.clickHandler);
-      document.addEventListener('mouseup', this.remove.bind(this));
+      document.addEventListener('mouseup', this.removeMouse.bind(this));
     }
     this.currentButton.ondragstart = () => false;
   }
@@ -214,11 +214,11 @@ class View {
   private buttonAction(e: MouseEvent | TouchEvent): void {
     if (e instanceof TouchEvent) {
       document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.remove.bind(this));
+      document.addEventListener('touchend', this.removeTouch.bind(this));
       this.currentButton = <HTMLElement>e.targetTouches[0].target;
     } else {
       document.addEventListener('mousemove', this.clickHandler);
-      document.addEventListener('mouseup', this.remove.bind(this));
+      document.addEventListener('mouseup', this.removeMouse.bind(this));
       this.currentButton = <HTMLElement>e.currentTarget;
     }
     if (this.state.range === 'one') {
@@ -228,7 +228,11 @@ class View {
     this.currentButton.ondragstart = () => false;
   }
 
-  private remove(): void {
+  private removeTouch(): void {
+    document.removeEventListener('touchmove', this.clickHandler);
+    document.onmouseup = null;
+  }
+  private removeMouse(): void {
     document.removeEventListener('mousemove', this.clickHandler);
     document.onmouseup = null;
   }

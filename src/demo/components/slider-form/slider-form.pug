@@ -22,12 +22,10 @@ mixin sliderForm(props)
       text: "Тек. значение Btn 2",
       value: currentVal2
     })
-    +field({name: "round", text: "Округление после запятой", value: round})
     +field({
       name: "intervalCount",
       text: "Количество интервалов",
       value: intervalCount
     })
     +field({name: "stepSize", text: "Шаг в цифрах"})
-    +field({name: "stepSizePercent", text: "Шаг в %"})
     +checkBox(sliderForm)

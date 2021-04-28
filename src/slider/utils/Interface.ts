@@ -26,15 +26,12 @@ interface IState {
   rotate: rotate;
   intervalCount: number;
   stepSize: number;
-  stepSizePercent: number;
   currentVal1: number;
   currentVal2: number;
   [keyChanges.SHIFT_XL]: number;
   [keyChanges.SHIFT_XR]: number;
-  round: number;
   step: number;
   activeLeft: boolean;
-
   [k: string]: string | number | boolean;
 }
 

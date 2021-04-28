@@ -22,7 +22,6 @@ class Interval {
     minValue: number,
     maxValue: number,
     count: number,
-    round: number,
   ): HTMLElement {
     // interval это кол подписей минимум 2
     this.interval.textContent = '';
@@ -34,7 +33,7 @@ class Interval {
     for (let i = 0; i <= count; i += 1) {
       const li = document.createElement('li');
       li.className = className.INTERVAL_ITEM;
-      sum = Math.round((i * interval + minValue) * 10 ** round) / 10 ** round;
+      sum = (i * interval + minValue);
       li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`;
       this.interval.append(li);
     }

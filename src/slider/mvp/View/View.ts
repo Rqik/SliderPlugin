@@ -77,7 +77,6 @@ class View {
       this.state.minValue,
       this.state.maxValue,
       this.state.intervalCount,
-      this.state.round,
     );
   }
 
@@ -88,6 +87,7 @@ class View {
 
   private addAction(): void {
     this.buttonRight.addEvent('mousedown', this.mouseDownHandler);
+    this.buttonRight.addEvent('dragstart', this.mouseDownHandler);
     this.buttonRight.addEvent('touchstart', this.mouseDownHandler);
     this.currentValRight.currentVal.addEventListener(
       'mousedown',
@@ -190,10 +190,10 @@ class View {
 
   private currentButtonAction(e: MouseEvent | TouchEvent): void {
     let event;
-    if (e instanceof TouchEvent) {
-      event = <HTMLElement>e.targetTouches[0].target;
-    } else {
+    if (e instanceof MouseEvent) {
       event = <HTMLElement>e.currentTarget;
+    } else {
+      event = <HTMLElement>e.targetTouches[0].target;
     }
 
     if (this.currentValLeft.currentVal === event) {
@@ -201,25 +201,25 @@ class View {
     } else {
       this.overridingButtons(false);
     }
-    if (e instanceof TouchEvent) {
-      document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.removeTouch.bind(this));
-    } else {
+    if (e instanceof MouseEvent) {
       document.addEventListener('mousemove', this.clickHandler);
       document.addEventListener('mouseup', this.removeMouse.bind(this));
+    } else {
+      document.addEventListener('touchmove', this.clickHandler);
+      document.addEventListener('touchend', this.removeTouch.bind(this));
     }
     this.currentButton.ondragstart = () => false;
   }
 
   private buttonAction(e: MouseEvent | TouchEvent): void {
-    if (e instanceof TouchEvent) {
-      document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.removeTouch.bind(this));
-      this.currentButton = <HTMLElement>e.targetTouches[0].target;
-    } else {
+    if (e instanceof MouseEvent) {
       document.addEventListener('mousemove', this.clickHandler);
       document.addEventListener('mouseup', this.removeMouse.bind(this));
       this.currentButton = <HTMLElement>e.currentTarget;
+    } else {
+      document.addEventListener('touchmove', this.clickHandler);
+      document.addEventListener('touchend', this.removeTouch.bind(this));
+      this.currentButton = <HTMLElement>e.targetTouches[0].target;
     }
     if (this.state.range === 'one') {
       this.currentButton = this.buttonRight.button;
@@ -232,6 +232,7 @@ class View {
     document.removeEventListener('touchmove', this.clickHandler);
     document.onmouseup = null;
   }
+
   private removeMouse(): void {
     document.removeEventListener('mousemove', this.clickHandler);
     document.onmouseup = null;
@@ -256,12 +257,11 @@ class View {
 
   private observerPosition(e: MouseEvent | TouchEvent) {
     let event;
-    if (e instanceof TouchEvent) {
-      [event] = e.touches;
-    } else {
+    if (e instanceof MouseEvent) {
       event = e;
+    } else {
+      [event] = e.touches;
     }
-
     if (this.state.rotate === rotation.HORIZONTAL) {
       this.observer.broadcast({ [keyChanges.POSITION]: event.clientX });
     } else if (this.state.rotate === rotation.VERTICAL) {

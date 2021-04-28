@@ -12,16 +12,16 @@ class Model {
     show: true, // показывать текущее значение над указателем
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
-    stepSizePercent: 0, // шаг движения указателя в %
     stepSize: 10, // шаг движения указателя в числах
     currentVal1: 22, // установка значений в числах
     currentVal2: 11, // установка значений в числах
-    round: 1, // округление,
     [keyChanges.SHIFT_XL]: 2,
     [keyChanges.SHIFT_XR]: 100,
     step: 0,
     activeLeft: false,
   };
+
+  private percent = 0;
 
   public coords: Coords = {
     x: 0,
@@ -41,12 +41,11 @@ class Model {
     return this.state;
   }
 
-  edit(key: StateEl): void {
+  private edit(key: StateEl): void {
     this.state = {
       ...this.state,
       ...key,
     };
-
     this.observer.broadcast(this.stateCurrent);
   }
 
@@ -77,21 +76,35 @@ class Model {
   }
 
   editMode(key: StateEl): void {
-    this.edit(key);
-    this.state.minValue = Number(this.state.minValue);
-    this.state.maxValue = Number(this.state.maxValue);
-    this.state.intervalCount = Number(this.state.intervalCount);
-    this.state.stepSize = Number(this.state.stepSize);
-    this.state.stepSizePercent = Number(this.state.stepSizePercent);
-    this.state.currentVal1 = Number(this.state.currentVal1);
-    this.state.currentVal2 = Number(this.state.currentVal2);
-    this.state.round = Number(this.state.round);
+    this.state = {
+      ...this.state,
+      ...key,
+    };
+    this.convertToNumber();
+    this.observer.broadcast(this.stateCurrent);
+  }
+
+  private convertToNumber(): void {
+    this.state.minValue = Model.convertCorrectNumber(this.state.minValue);
+    this.state.maxValue = Model.convertCorrectNumber(this.state.maxValue);
+    this.state.intervalCount = Model.convertCorrectNumber(
+      this.state.intervalCount,
+    );
+    this.state.stepSize = Model.convertCorrectNumber(this.state.stepSize);
+    this.state.currentVal1 = Model.convertCorrectNumber(this.state.currentVal1);
+    this.state.currentVal2 = Model.convertCorrectNumber(this.state.currentVal2);
     this.state.shiftXl = ((this.state.currentVal2 - this.state.minValue)
-      / (this.state.maxValue - this.state.minValue))
+        / (this.state.maxValue - this.state.minValue))
       * 100;
     this.state.shiftXr = ((this.state.currentVal1 - this.state.minValue)
-      / (this.state.maxValue - this.state.minValue))
+        / (this.state.maxValue - this.state.minValue))
       * 100;
+    this.state.shiftXr = Number.isFinite(this.state.shiftXr)
+      ? Model.transformRange(this.state.shiftXr)
+      : 0;
+    this.state.shiftXl = Number.isFinite(this.state.shiftXl)
+      ? Model.transformRange(this.state.shiftXl)
+      : 0;
   }
 
   private updateCoordinate(coords: Coords): void {
@@ -105,8 +118,6 @@ class Model {
     const percent = this.mathPercent(position);
     if (this.state.stepSize) {
       this.state.step = this.mathStepCount(percent);
-    } else if (this.state.stepSizePercent) {
-      this.state.step = this.mathStepPercent(percent);
     } else {
       this.state.step = percent;
     }
@@ -128,29 +139,52 @@ class Model {
   }
 
   private mathStepCount(num: number): number {
-    const precent = (this.state.stepSize / (this.state.maxValue
-      + Math.abs(this.state.minValue))) * 100;
-    return Math.round(num / precent) * precent;
+    this.percent = (this.state.stepSize
+        / (this.state.maxValue - Math.abs(this.state.minValue)))
+      * 100;
+    return Math.round(num / this.percent) * this.percent;
   }
 
-  private mathStepPercent(num: number): number {
-    return Math.round(num / this.state.stepSizePercent)
-      * this.state.stepSizePercent;
+  private fixedCount(): number {
+    let res = 0;
+    const str: any = this.state.stepSize.toString();
+    if (str.includes('.')) {
+      res = str.split('.').pop().length;
+    }
+    return res;
   }
 
   private leftVal(): void {
-    const t = this.state;
-    const res = ((t.maxValue - t.minValue) * t.shiftXl) / 100 + t.minValue;
-    t.currentVal2 = Math.round(res * 10 ** t.round) / 10 ** t.round;
+    const res = ((this.state.maxValue - this.state.minValue) * this.state.shiftXl) / 100
+      + this.state.minValue;
+    this.state.currentVal2 = +res.toFixed(this.fixedCount());
   }
 
   private rightVal(): void {
-    const t = this.state;
-    const res = Number(
-      ((t.maxValue - t.minValue) * t.shiftXr) / 100 + t.minValue,
-    );
-    t.currentVal1 = Number(Math.round(res * 10 ** t.round)
-      / 10 ** t.round);
+    const res = ((this.state.maxValue - this.state.minValue) * this.state.shiftXr) / 100
+      + this.state.minValue;
+    this.state.currentVal1 = +res.toFixed(this.fixedCount());
+  }
+
+  private static convertCorrectNumber(num: string | number): number {
+    const result = Number(num);
+    if (Number.isNaN(result)) {
+      return 0;
+    }
+    if (!Number.isFinite(result)) {
+      return 0;
+    }
+    return result;
+  }
+
+  private static transformRange(num: number): number {
+    let pos = num;
+    if (pos <= 0) {
+      pos = 0;
+    } else if (pos >= 100) {
+      pos = 100;
+    }
+    return pos;
   }
 }
 

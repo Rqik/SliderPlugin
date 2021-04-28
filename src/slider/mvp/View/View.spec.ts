@@ -15,11 +15,9 @@ const state: IState = {
   stepSize: 1, // шаг движения указателя в px
   currentVal1: 0, // установка значений в числах
   currentVal2: 70, // установка значений в числах
-  round: 1, // округление,
   pixelSize: '6',
   shiftXl: 0,
   shiftXr: 100,
-  stepSizePercent: 0,
   step: 0,
   activeLeft: false,
 };
@@ -36,7 +34,6 @@ const state2: IState = {
   stepSize: 20, // шаг движения указателя в px
   currentVal1: 0, // установка значений в числах
   currentVal2: 70, // установка значений в числах
-  round: 4, // округление,
   pixelSize: '6',
   shiftXl: 0,
   shiftXr: 200,
@@ -88,6 +85,7 @@ describe('View test', () => {
     beforeEach(() => {
       view = new View(state);
     });
+
     test('slider style property check', () => {
       const startView = jest.spyOn(View.prototype as any, 'startView');
       const test = new View(state);

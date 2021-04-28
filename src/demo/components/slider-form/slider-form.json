@@ -2,7 +2,8 @@
   "checkElements": [
     {
       "name": "showInterval",
-      "text": "Показать интервалы"
+      "text": "Показать интервалы",
+      "checked": true
     },
     {
       "name": "show",

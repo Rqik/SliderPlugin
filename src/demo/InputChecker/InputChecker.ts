@@ -108,7 +108,6 @@ class InputChecker {
     this.runChange('round');
     this.runChange('intervalCount');
     this.runChange('stepSize');
-    this.runChange('stepSizePercent');
     this.checkChange('rotate', ['vertical', 'horizontal']);
     this.checkChange('showInterval', [true, false]);
     this.checkChange('show', [true, false]);

@@ -59,11 +59,5 @@ class CurrentValue {
     }
     return clientRect.bottom;
   }
-
-  fixedSize(bool: boolean): void {
-    if (!bool) {
-      this.size = this.rectLeft();
-    }
-  }
 }
 export { CurrentValue };

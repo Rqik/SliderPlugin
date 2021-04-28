@@ -40,6 +40,14 @@ npm install
 npm run start
 ```
 
+Build 
+```console
+npm run build
+```
+Test 
+```console
+npm run testCW
+```
 ---
 
 ## **Model - View - Presenter**
@@ -88,10 +96,8 @@ $('.plug').sliderRqik({
   showInterval: true, // показать интервал
   intervalCount: 2, // количество интервалов
   stepSize: 1, // шаг движения указателя в числах
-  stepSizePercent: 0, // шаг движения указателя в %
   currentVal1: 50, // установка значений в числах
   currentVal2: 0, // установка значений в числах
-  round: 1, // округление,
   shiftXl: 0,
   shiftXr: 0,
 });
@@ -192,35 +198,9 @@ $('.plug').sliderRqik({ intervalCount: 4 });
 Задает шаг движения в **числах**
 Принимает числовой параметр от 0 и выше  
 По умолчанию **_0_**  
-Имеет приоритет выше чем **_stepSizePerc_**
 
 ```javascript
 $('.plug').sliderRqik({ stepSize: 10 });
-```
-
-### stepSizePercent
-
----
-
-Задает шаг движения в **%**
-Принимает числовой параметр от 0 и выше  
-По умолчанию **_0_**  
-Имеет приоритет ниже чем **_stepSize_**
-
-```javascript
-$('.plug').sliderRqik({ stepSizePercent: 10 });
-```
-
-### round
-
----
-
-Устанавливает округление чисел **N** знаков после запятой  
-Принимает числовой параметр от 0 и выше
-По умолчанию **_1_**
-
-```javascript
-$('.plug').sliderRqik({ round: 0 });
 ```
 
 ## Передача параметров через data атрибут

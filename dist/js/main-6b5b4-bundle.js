@@ -110,7 +110,6 @@ class InputChecker {
     this.runChange('round');
     this.runChange('intervalCount');
     this.runChange('stepSize');
-    this.runChange('stepSizePercent');
     this.checkChange('rotate', ['vertical', 'horizontal']);
     this.checkChange('showInterval', [true, false]);
     this.checkChange('show', [true, false]);
@@ -138,7 +137,8 @@ const $form3 = demo_$('#form3');
 const $form4 = demo_$('#form4');
 const plug1 = $plug1.sliderRqik({
   maxValue: 1000,
-  range: 'one'
+  range: 'one',
+  showInterval: true
 });
 const plug2 = $plug2.sliderRqik({
   rotate: 'vertical',
@@ -206,7 +206,7 @@ class Interval {
     }
   }
 
-  valueInterval(minValue, maxValue, count, round) {
+  valueInterval(minValue, maxValue, count) {
     this.interval.textContent = '';
 
     if (count <= 0) {
@@ -219,7 +219,7 @@ class Interval {
     for (let i = 0; i <= count; i += 1) {
       const li = document.createElement('li');
       li.className = "interval-point__item";
-      sum = Math.round((i * interval + minValue) * Math.pow(10, round)) / Math.pow(10, round);
+      sum = i * interval + minValue;
       li.innerHTML = `<div class=${"interval-point__item-text"}> ${sum} </div>`;
       this.interval.append(li);
     }
@@ -292,12 +292,6 @@ class CurrentValue {
     }
 
     return clientRect.bottom;
-  }
-
-  fixedSize(bool) {
-    if (!bool) {
-      this.size = this.rectLeft();
-    }
   }
 
 }
@@ -414,7 +408,7 @@ class View {
   }
 
   renderInterval() {
-    this.interval.valueInterval(this.state.minValue, this.state.maxValue, this.state.intervalCount, this.state.round);
+    this.interval.valueInterval(this.state.minValue, this.state.maxValue, this.state.intervalCount);
   }
 
   addElem() {
@@ -424,6 +418,7 @@ class View {
 
   addAction() {
     this.buttonRight.addEvent('mousedown', this.mouseDownHandler);
+    this.buttonRight.addEvent('dragstart', this.mouseDownHandler);
     this.buttonRight.addEvent('touchstart', this.mouseDownHandler);
     this.currentValRight.currentVal.addEventListener('mousedown', this.currentValHandler);
     this.currentValRight.currentVal.addEventListener('touchstart', this.currentValHandler);
@@ -521,10 +516,10 @@ class View {
   currentButtonAction(e) {
     let event;
 
-    if (e instanceof TouchEvent) {
-      event = e.targetTouches[0].target;
-    } else {
+    if (e instanceof MouseEvent) {
       event = e.currentTarget;
+    } else {
+      event = e.targetTouches[0].target;
     }
 
     if (this.currentValLeft.currentVal === event) {
@@ -533,26 +528,26 @@ class View {
       this.overridingButtons(false);
     }
 
-    if (e instanceof TouchEvent) {
-      document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.removeTouch.bind(this));
-    } else {
+    if (e instanceof MouseEvent) {
       document.addEventListener('mousemove', this.clickHandler);
       document.addEventListener('mouseup', this.removeMouse.bind(this));
+    } else {
+      document.addEventListener('touchmove', this.clickHandler);
+      document.addEventListener('touchend', this.removeTouch.bind(this));
     }
 
     this.currentButton.ondragstart = () => false;
   }
 
   buttonAction(e) {
-    if (e instanceof TouchEvent) {
-      document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.removeTouch.bind(this));
-      this.currentButton = e.targetTouches[0].target;
-    } else {
+    if (e instanceof MouseEvent) {
       document.addEventListener('mousemove', this.clickHandler);
       document.addEventListener('mouseup', this.removeMouse.bind(this));
       this.currentButton = e.currentTarget;
+    } else {
+      document.addEventListener('touchmove', this.clickHandler);
+      document.addEventListener('touchend', this.removeTouch.bind(this));
+      this.currentButton = e.targetTouches[0].target;
     }
 
     if (this.state.range === 'one') {
@@ -593,10 +588,10 @@ class View {
   observerPosition(e) {
     let event;
 
-    if (e instanceof TouchEvent) {
-      [event] = e.touches;
-    } else {
+    if (e instanceof MouseEvent) {
       event = e;
+    } else {
+      [event] = e.touches;
     }
 
     if (this.state.rotate === "horizontal") {
@@ -745,16 +740,15 @@ class Model {
       show: true,
       showInterval: true,
       intervalCount: 2,
-      stepSizePercent: 0,
       stepSize: 10,
       currentVal1: 22,
       currentVal2: 11,
-      round: 1,
       ["shiftXl"]: 2,
       ["shiftXr"]: 100,
       step: 0,
       activeLeft: false
     };
+    this.percent = 0;
     this.coords = {
       x: 0,
       y: 0,
@@ -807,17 +801,22 @@ class Model {
   }
 
   editMode(key) {
-    this.edit(key);
-    this.state.minValue = Number(this.state.minValue);
-    this.state.maxValue = Number(this.state.maxValue);
-    this.state.intervalCount = Number(this.state.intervalCount);
-    this.state.stepSize = Number(this.state.stepSize);
-    this.state.stepSizePercent = Number(this.state.stepSizePercent);
-    this.state.currentVal1 = Number(this.state.currentVal1);
-    this.state.currentVal2 = Number(this.state.currentVal2);
-    this.state.round = Number(this.state.round);
+    this.state = Object.assign(Object.assign({}, this.state), key);
+    this.convertToNumber();
+    this.observer.broadcast(this.stateCurrent);
+  }
+
+  convertToNumber() {
+    this.state.minValue = Model.convertCorrectNumber(this.state.minValue);
+    this.state.maxValue = Model.convertCorrectNumber(this.state.maxValue);
+    this.state.intervalCount = Model.convertCorrectNumber(this.state.intervalCount);
+    this.state.stepSize = Model.convertCorrectNumber(this.state.stepSize);
+    this.state.currentVal1 = Model.convertCorrectNumber(this.state.currentVal1);
+    this.state.currentVal2 = Model.convertCorrectNumber(this.state.currentVal2);
     this.state.shiftXl = (this.state.currentVal2 - this.state.minValue) / (this.state.maxValue - this.state.minValue) * 100;
     this.state.shiftXr = (this.state.currentVal1 - this.state.minValue) / (this.state.maxValue - this.state.minValue) * 100;
+    this.state.shiftXr = Number.isFinite(this.state.shiftXr) ? Model.transformRange(this.state.shiftXr) : 0;
+    this.state.shiftXl = Number.isFinite(this.state.shiftXl) ? Model.transformRange(this.state.shiftXl) : 0;
   }
 
   updateCoordinate(coords) {
@@ -829,8 +828,6 @@ class Model {
 
     if (this.state.stepSize) {
       this.state.step = this.mathStepCount(percent);
-    } else if (this.state.stepSizePercent) {
-      this.state.step = this.mathStepPercent(percent);
     } else {
       this.state.step = percent;
     }
@@ -853,24 +850,55 @@ class Model {
   }
 
   mathStepCount(num) {
-    const precent = this.state.stepSize / (this.state.maxValue + Math.abs(this.state.minValue)) * 100;
-    return Math.round(num / precent) * precent;
+    this.percent = this.state.stepSize / (this.state.maxValue - Math.abs(this.state.minValue)) * 100;
+    return Math.round(num / this.percent) * this.percent;
   }
 
-  mathStepPercent(num) {
-    return Math.round(num / this.state.stepSizePercent) * this.state.stepSizePercent;
+  fixedCount() {
+    let res = 0;
+    const str = this.state.stepSize.toString();
+
+    if (str.includes('.')) {
+      res = str.split('.').pop().length;
+    }
+
+    return res;
   }
 
   leftVal() {
-    const t = this.state;
-    const res = (t.maxValue - t.minValue) * t.shiftXl / 100 + t.minValue;
-    t.currentVal2 = Math.round(res * Math.pow(10, t.round)) / Math.pow(10, t.round);
+    const res = (this.state.maxValue - this.state.minValue) * this.state.shiftXl / 100 + this.state.minValue;
+    this.state.currentVal2 = +res.toFixed(this.fixedCount());
   }
 
   rightVal() {
-    const t = this.state;
-    const res = Number((t.maxValue - t.minValue) * t.shiftXr / 100 + t.minValue);
-    t.currentVal1 = Number(Math.round(res * Math.pow(10, t.round)) / Math.pow(10, t.round));
+    const res = (this.state.maxValue - this.state.minValue) * this.state.shiftXr / 100 + this.state.minValue;
+    this.state.currentVal1 = +res.toFixed(this.fixedCount());
+  }
+
+  static convertCorrectNumber(num) {
+    const result = Number(num);
+
+    if (Number.isNaN(result)) {
+      return 0;
+    }
+
+    if (!Number.isFinite(result)) {
+      return 0;
+    }
+
+    return result;
+  }
+
+  static transformRange(num) {
+    let pos = num;
+
+    if (pos <= 0) {
+      pos = 0;
+    } else if (pos >= 100) {
+      pos = 100;
+    }
+
+    return pos;
   }
 
 }

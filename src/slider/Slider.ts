@@ -44,7 +44,8 @@ declare global {
   };
 
   $(() => {
-    $('.js-slider-rqik').sliderRqik();
+    const defaultSelector = '.js-slider-rqik'
+    $(defaultSelector).sliderRqik();
   });
 })(jQuery);
 

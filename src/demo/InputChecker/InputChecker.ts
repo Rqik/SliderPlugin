@@ -1,4 +1,3 @@
-/* eslint-disable fsd/no-function-declaration-in-event-listener */
 import { Slider } from '../../slider/utils/Interface';
 
 class InputChecker {

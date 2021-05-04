@@ -1,8 +1,4 @@
-/* eslint-disable fsd/no-function-declaration-in-event-listener */
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
-import '@/demo/styles/main.scss';
-import '../slider/mvp/View/SubView.ts';
+import './styles/main.scss';
 import { InputChecker } from './InputChecker/InputChecker';
 
 require('../slider/Slider.ts');

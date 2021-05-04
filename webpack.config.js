@@ -49,8 +49,6 @@ const plugins = () => {
   ];
 
   if (isDev) {
-    // only enable hot in development
-
     base.push(new webpack.HotModuleReplacementPlugin());
   }
 
@@ -59,8 +57,6 @@ const plugins = () => {
 
 module.exports = {
   stats: { errorDetails: true, children: true },
-
-  // target: process.env.NODE_ENV === 'development' ? 'web' : 'browserslist',
 
   context: PATHS.src,
   mode: 'development',

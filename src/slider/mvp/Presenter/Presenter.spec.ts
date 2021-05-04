@@ -3,8 +3,8 @@ import { View } from '../View/View';
 import { EventObserver } from '../../utils/EventObserver';
 import { rotation } from '../../utils/constatnts';
 
-// jest.mock('../Model/Model.ts');
-// jest.mock('../View/View.ts');
+jest.mock('../Model/Model.ts');
+jest.mock('../View/View.ts');
 
 const ObserverMock = EventObserver as jest.MockedClass<typeof EventObserver>;
 beforeEach(() => {

@@ -1,8 +1,8 @@
 import { rotate } from '../../../utils/Interface';
-import { rotation, currentValue as className } from '../../../utils/constatnts';
+import { rotation, tooltipValue as className } from '../../../utils/constatnts';
 
-class CurrentValue {
-  currentVal: HTMLElement = document.createElement('div');
+class Tooltip {
+  tooltipVal: HTMLElement = document.createElement('div');
 
   private size = 10;
 
@@ -11,11 +11,11 @@ class CurrentValue {
   }
 
   private init(): void {
-    this.currentVal.className = className.CURRENT;
+    this.tooltipVal.className = className.TOOLTIP;
   }
 
   text(text: string | number): void {
-    this.currentVal.textContent = `${text}`;
+    this.tooltipVal.textContent = `${text}`;
   }
 
   position(position: number): void {
@@ -27,17 +27,17 @@ class CurrentValue {
   }
 
   positionHorizontal(shiftX: string | number): void {
-    this.currentVal.style.top = `${-(+this.currentVal.offsetHeight + 10)}px`;
-    this.currentVal.style.left = `calc(${shiftX}% - ${
-      this.currentVal.offsetWidth / 2
+    this.tooltipVal.style.top = `${-(+this.tooltipVal.offsetHeight + 10)}px`;
+    this.tooltipVal.style.left = `calc(${shiftX}% - ${
+      this.tooltipVal.offsetWidth / 2
     }px)`;
   }
 
   positionVertical(shiftX: string | number): void {
-    this.currentVal.style.top = `calc(${shiftX}% - ${
-      this.currentVal.offsetHeight / 2
+    this.tooltipVal.style.top = `calc(${shiftX}% - ${
+      this.tooltipVal.offsetHeight / 2
     }px)`;
-    this.currentVal.style.left = `${-(+this.currentVal.offsetWidth + 15)}px`;
+    this.tooltipVal.style.left = `${-(+this.tooltipVal.offsetWidth + 15)}px`;
   }
 
   setRotate(orientation: rotate): void {
@@ -45,7 +45,7 @@ class CurrentValue {
   }
 
   rectLeft(): number {
-    const clientRect = this.currentVal.getBoundingClientRect();
+    const clientRect = this.tooltipVal.getBoundingClientRect();
     if (this.orientation === rotation.HORIZONTAL) {
       return clientRect.left;
     }
@@ -53,11 +53,11 @@ class CurrentValue {
   }
 
   rectRight(): number {
-    const clientRect = this.currentVal.getBoundingClientRect();
+    const clientRect = this.tooltipVal.getBoundingClientRect();
     if (this.orientation === rotation.HORIZONTAL) {
       return clientRect.right;
     }
     return clientRect.bottom;
   }
 }
-export { CurrentValue };
+export { Tooltip };

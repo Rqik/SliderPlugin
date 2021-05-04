@@ -13,13 +13,13 @@ const state: IState = {
   showInterval: true, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 1, // шаг движения указателя в px
-  currentVal1: 0, // установка значений в числах
-  currentVal2: 70, // установка значений в числах
+  currentValRight: 0, // установка значений в числах
+  currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
-  shiftXl: 0,
-  shiftXr: 100,
+  shiftLeft: 0,
+  shiftRight: 100,
   step: 0,
-  activeLeft: false,
+  isActiveLeft: false,
 };
 
 const state2: IState = {
@@ -32,14 +32,14 @@ const state2: IState = {
   showInterval: false, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 20, // шаг движения указателя в px
-  currentVal1: 0, // установка значений в числах
-  currentVal2: 70, // установка значений в числах
+  currentValRight: 0, // установка значений в числах
+  currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
-  shiftXl: 0,
-  shiftXr: 200,
+  shiftLeft: 0,
+  shiftRight: 200,
   stepSizePercent: 0,
   step: 0,
-  activeLeft: false,
+  isActiveLeft: false,
 };
 
 jest.mock('../../utils/EventObserver.ts');

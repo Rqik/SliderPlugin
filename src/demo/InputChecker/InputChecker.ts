@@ -44,8 +44,8 @@ class InputChecker {
   }
 
   private eventChange(): void {
-    this.inputChange('currentVal2', this.slider.getData()[0].currentVal2);
-    this.inputChange('currentVal1', this.slider.getData()[0].currentVal1);
+    this.inputChange('currentValLeft', this.slider.getData()[0].currentValLeft);
+    this.inputChange('currentValRight', this.slider.getData()[0].currentValRight);
   }
 
   private makeEventCheck(
@@ -103,8 +103,8 @@ class InputChecker {
   private actionForm(): void {
     this.runChange('maxValue');
     this.runChange('minValue');
-    this.runChange('currentVal1');
-    this.runChange('currentVal2');
+    this.runChange('currentValRight');
+    this.runChange('currentValLeft');
     this.runChange('round');
     this.runChange('intervalCount');
     this.runChange('stepSize');

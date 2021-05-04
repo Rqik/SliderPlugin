@@ -1,6 +1,6 @@
 const enum keyChanges {
-  SHIFT_XL = 'shiftXl',
-  SHIFT_XR = 'shiftXr',
+  SHIFT_LEFT = 'shiftLeft',
+  SHIFT_RIGHT = 'shiftRight',
   POSITION = 'position',
   COORDINATES = 'coordinates',
   ACTIVE = 'active',
@@ -20,8 +20,8 @@ const enum interval {
   INTERVAL_ITEM_TEXT = 'interval-point__item-text',
 }
 
-const enum currentValue {
-  CURRENT = 'slider-range__current-value',
+const enum tooltipValue {
+  TOOLTIP = 'slider-range__current-value',
 }
 
 const enum button {
@@ -34,4 +34,4 @@ const enum slider {
   SLIDER_ACTIVE_ZONE = 'slider-range__active-zone',
 }
 
-export { keyChanges, interval, currentValue, button, slider, rotation };
+export { keyChanges, interval, tooltipValue, button, slider, rotation };

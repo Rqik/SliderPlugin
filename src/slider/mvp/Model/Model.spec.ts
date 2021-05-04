@@ -12,15 +12,15 @@ const stateHorizontal: IState = {
   showInterval: true, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 1, // шаг движения указателя в px
-  currentVal1: 0, // установка значений в числах
-  currentVal2: 70, // установка значений в числах
+  currentValRight: 0, // установка значений в числах
+  currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
-  [keyChanges.SHIFT_XL]: -22,
-  [keyChanges.SHIFT_XR]: 43,
+  [keyChanges.SHIFT_LEFT]: -22,
+  [keyChanges.SHIFT_RIGHT]: 43,
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
   step: 0,
-  activeLeft: false,
+  isActiveLeft: false,
 };
 
 const stateVertical: IState = {
@@ -33,16 +33,16 @@ const stateVertical: IState = {
   showInterval: false, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 20, // шаг движения указателя в px
-  currentVal1: 0, // установка значений в числах
-  currentVal2: 70, // установка значений в числах
+  currentValRight: 0, // установка значений в числах
+  currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
-  [keyChanges.SHIFT_XL]: 0,
-  [keyChanges.SHIFT_XR]: 54,
+  [keyChanges.SHIFT_LEFT]: 0,
+  [keyChanges.SHIFT_RIGHT]: 54,
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
   stepSizePercent: 0, // шаг движения указателя в %
   step: 0,
-  activeLeft: false,
+  isActiveLeft: false,
 };
 
 const stateHorCorrect: IState = {
@@ -55,15 +55,15 @@ const stateHorCorrect: IState = {
   showInterval: true, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 1, // шаг движения указателя в px
-  currentVal1: 0, // установка значений в числах
-  currentVal2: 70, // установка значений в числах
+  currentValRight: 0, // установка значений в числах
+  currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
-  [keyChanges.SHIFT_XL]: ((70 - 10) / 110) * 100,
-  [keyChanges.SHIFT_XR]: 0,
+  [keyChanges.SHIFT_LEFT]: ((70 - 10) / 110) * 100,
+  [keyChanges.SHIFT_RIGHT]: 0,
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
   step: 0,
-  activeLeft: false,
+  isActiveLeft: false,
 };
 const stateVerCorrect: IState = {
   selector: 'slider-rqik', // селектор
@@ -75,16 +75,16 @@ const stateVerCorrect: IState = {
   showInterval: false, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 20, // шаг движения указателя в px
-  currentVal1: 0, // установка значений в числах
-  currentVal2: 70, // установка значений в числах
+  currentValRight: 0, // установка значений в числах
+  currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
-  [keyChanges.SHIFT_XL]: 0,
-  [keyChanges.SHIFT_XR]: 0,
+  [keyChanges.SHIFT_LEFT]: 0,
+  [keyChanges.SHIFT_RIGHT]: 0,
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
   stepSizePercent: 0, // шаг движения указателя в %
   step: 0,
-  activeLeft: false,
+  isActiveLeft: false,
 };
 
 describe('Model test', () => {
@@ -105,8 +105,8 @@ describe('Model test', () => {
       minValue: '232',
       maxValue: '322',
       intervalCount: '5',
-      currentVal1: '190',
-      currentVal2: '290',
+      currentValRight: '190',
+      currentValLeft: '290',
     });
 
     expect(model.stateCurrent.minValue).not.toEqual('232');
@@ -118,11 +118,11 @@ describe('Model test', () => {
     expect(model.stateCurrent.intervalCount).not.toEqual('5');
     expect(model.stateCurrent.intervalCount).toEqual(5);
 
-    expect(model.stateCurrent.currentVal1).not.toEqual('190');
-    expect(model.stateCurrent.currentVal1).toEqual(190);
+    expect(model.stateCurrent.currentValRight).not.toEqual('190');
+    expect(model.stateCurrent.currentValRight).toEqual(190);
 
-    expect(model.stateCurrent.currentVal2).not.toEqual('290');
-    expect(model.stateCurrent.currentVal2).toEqual(290);
+    expect(model.stateCurrent.currentValLeft).not.toEqual('290');
+    expect(model.stateCurrent.currentValLeft).toEqual(290);
   });
 
   test('editState', () => {
@@ -136,11 +136,11 @@ describe('Model test', () => {
     );
     const activeButton = jest.spyOn(Model.prototype as any, 'activeButton');
 
-    model.editState({ shiftXl: '44' });
+    model.editState({ shiftLeft: '44' });
     expect(leftVal).toHaveBeenCalled();
     expect(edit).toHaveBeenCalled();
 
-    model.editState({ shiftXr: '44' });
+    model.editState({ shiftRight: '44' });
     expect(edit).toHaveBeenCalledTimes(2);
     expect(rightVal).toHaveBeenCalled();
 

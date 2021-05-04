@@ -8,7 +8,9 @@ class EventObserver {
   }
 
   subscribe(fn: callBack): void {
-    this.observers.push(fn);
+    if (!this.observers.some((el) => el === fn)) {
+      this.observers.push(fn);
+    }
   }
 
   broadcast(data: StateEl | any): void {

@@ -96,10 +96,10 @@ $('.plug').sliderRqik({
   showInterval: true, // показать интервал
   intervalCount: 2, // количество интервалов
   stepSize: 1, // шаг движения указателя в числах
-  currentVal1: 50, // установка значений в числах
-  currentVal2: 0, // установка значений в числах
-  shiftXl: 0,
-  shiftXr: 0,
+  currentValRight: 50, // установка значений в числах
+  currentValLeft: 0, // установка значений в числах
+  shiftLeft: 0,
+  shiftRight: 0,
 });
 ```
 
@@ -117,7 +117,7 @@ $('.plug').sliderRqik({
 });
 ```
 
-### currentVal1 и currentVal2
+### currentValRight и currentValLeft
 
 ---
 
@@ -126,8 +126,8 @@ $('.plug').sliderRqik({
 
 ```javascript
 $('.plug').sliderRqik({
-  currentVal1: 10, // правая кнопка
-  currentVal2: 0, // левая кнопка
+  currentValRight: 10, // правая кнопка
+  currentValLeft: 0, // левая кнопка
 });
 ```
 

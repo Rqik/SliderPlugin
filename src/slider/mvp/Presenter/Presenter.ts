@@ -9,11 +9,11 @@ class Present {
 
   private rotate: rotate;
 
-  private subFunctionModel: (data: StateEl) => void = this.setStateModel.bind(this);
+  private subFunctionModel: (data: StateEl) => void
+    = this.setStateModel.bind(this);
 
-  private subFunctionView: (data: StateEl) => void = this.setStateView.bind(
-    this,
-  );
+  private subFunctionView: (data: StateEl) => void
+    = this.setStateView.bind(this);
 
   constructor(public selector: string) {
     this.model = new Model(selector);
@@ -35,8 +35,8 @@ class Present {
   }
 
   private init(): void {
-    this.view.observer.subscribe(this.subFunctionModel);
     this.model.observer.subscribe(this.subFunctionView);
+    this.view.observer.subscribe(this.subFunctionModel);
     this.view.render();
   }
 

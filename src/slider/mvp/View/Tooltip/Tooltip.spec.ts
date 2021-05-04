@@ -1,18 +1,18 @@
-import {CurrentValue} from './CurrentVal';
+import {Tooltip} from './Toolitp';
 import {rotation} from '../../../utils/constatnts';
 
 describe('Current Val tool tip test', () => {
-    let curVal: CurrentValue;
+    let curVal: Tooltip;
 
     beforeEach(() => {
-      curVal = new CurrentValue(rotation.HORIZONTAL)
+      curVal = new Tooltip(rotation.HORIZONTAL)
     })
 
     test('text content', () => {
       curVal.text('100')
 
-      expect(curVal.currentVal.textContent).toEqual('100')
-      expect(curVal.currentVal.textContent).not.toEqual(100)
+      expect(curVal.tooltipVal.textContent).toEqual('100')
+      expect(curVal.tooltipVal.textContent).not.toEqual(100)
     })
 
     test('position rotation', () => {

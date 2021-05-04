@@ -773,16 +773,16 @@ class Model {
     switch (Object.keys(data)[0]) {
       case "shiftLeft":
         this.edit(data);
-        this.leftVal();
+        this.defineLeftVal();
         break;
 
       case "shiftRight":
         this.edit(data);
-        this.rightVal();
+        this.defineRightVal();
         break;
 
       case "position":
-        this.step(+data["position"]);
+        this.defineStep(+data["position"]);
         break;
 
       case "coordinates":
@@ -824,7 +824,7 @@ class Model {
     this.coords = Object.assign(Object.assign({}, this.coords), coords);
   }
 
-  step(position) {
+  defineStep(position) {
     const percent = this.mathPercent(position);
 
     if (this.state.stepSize > 0) {
@@ -881,12 +881,12 @@ class Model {
     return res;
   }
 
-  leftVal() {
+  defineLeftVal() {
     const res = (this.state.maxValue - this.state.minValue) * this.state.shiftLeft / 100 + this.state.minValue;
     this.state.currentValLeft = +res.toFixed(this.fixedCount());
   }
 
-  rightVal() {
+  defineRightVal() {
     const res = (this.state.maxValue - this.state.minValue) * this.state.shiftRight / 100 + this.state.minValue;
     this.state.currentValRight = +res.toFixed(this.fixedCount());
   }
@@ -953,7 +953,7 @@ class Present {
     this.view.render();
   }
 
-  sliderMode(options) {
+  sliderModify(options) {
     this.model.editMode(options);
     this.view.editView(this.model.stateCurrent);
 
@@ -1027,14 +1027,14 @@ class SliderPlugin {
     const className = `${selector.replace(/\W+/gi, '')}-${ind}_i-slider`;
     this.sliders.classList.add(className);
     const pr = new Present(`.${className}`);
-    pr.sliderMode(opt);
+    pr.sliderModify(opt);
     this.presents = pr;
     return this;
   }
 
   data(data) {
     if (this.presents) {
-      this.presents.sliderMode(data);
+      this.presents.sliderModify(data);
     }
 
     return this;

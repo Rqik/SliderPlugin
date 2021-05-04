@@ -53,14 +53,14 @@ class Model {
     switch (Object.keys(data)[0]) {
       case keyChanges.SHIFT_LEFT:
         this.edit(data);
-        this.leftVal();
+        this.defineLeftVal();
         break;
       case keyChanges.SHIFT_RIGHT:
         this.edit(data);
-        this.rightVal();
+        this.defineRightVal();
         break;
       case keyChanges.POSITION:
-        this.step(+data[keyChanges.POSITION]);
+        this.defineStep(+data[keyChanges.POSITION]);
         break;
       case keyChanges.COORDINATES:
         this.updateCoordinate(data[keyChanges.COORDINATES]);
@@ -118,7 +118,7 @@ class Model {
     };
   }
 
-  private step(position: number): void {
+  private defineStep(position: number): void {
     const percent = this.mathPercent(position);
     if (this.state.stepSize > 0) {
       this.state.step = this.mathStepCount(percent);
@@ -172,14 +172,14 @@ class Model {
     return res;
   }
 
-  private leftVal(): void {
+  private defineLeftVal(): void {
     const res = ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft)
         / 100
       + this.state.minValue;
     this.state.currentValLeft = +res.toFixed(this.fixedCount());
   }
 
-  private rightVal(): void {
+  private defineRightVal(): void {
     const res = ((this.state.maxValue - this.state.minValue) * this.state.shiftRight)
         / 100
       + this.state.minValue;

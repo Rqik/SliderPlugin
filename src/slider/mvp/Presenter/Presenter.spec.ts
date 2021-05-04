@@ -40,10 +40,10 @@ describe('Presenter test', () => {
     expect(init).toHaveBeenCalled();
     expect(render).toHaveBeenCalled();
     present.model.stateCurrent.rotate = rotation.HORIZONTAL;
-    present.sliderMode({ rotate: rotation.HORIZONTAL });
+    present.sliderModify({ rotate: rotation.HORIZONTAL });
 
     present.model.stateCurrent.rotate = rotation.VERTICAL;
-    present.sliderMode({ rotate: rotation.VERTICAL });
+    present.sliderModify({ rotate: rotation.VERTICAL });
 
     expect(init).toHaveBeenCalled();
     expect(init).toHaveBeenCalledTimes(3);

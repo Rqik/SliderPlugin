@@ -126,10 +126,10 @@ describe('Model test', () => {
   });
 
   test('editState', () => {
-    const leftVal = jest.spyOn(Model.prototype as any, 'leftVal');
-    const rightVal = jest.spyOn(Model.prototype as any, 'rightVal');
+    const defineLeftVal = jest.spyOn(Model.prototype as any, 'defineLeftVal');
+    const defineRightVal = jest.spyOn(Model.prototype as any, 'defineRightVal');
     const edit = jest.spyOn(Model.prototype as any, 'edit');
-    const step = jest.spyOn(Model.prototype as any, 'step');
+    const defineStep = jest.spyOn(Model.prototype as any, 'defineStep');
     const updateCoordinate = jest.spyOn(
       Model.prototype as any,
       'updateCoordinate',
@@ -137,18 +137,18 @@ describe('Model test', () => {
     const activeButton = jest.spyOn(Model.prototype as any, 'activeButton');
 
     model.editState({ shiftLeft: '44' });
-    expect(leftVal).toHaveBeenCalled();
+    expect(defineLeftVal).toHaveBeenCalled();
     expect(edit).toHaveBeenCalled();
 
     model.editState({ shiftRight: '44' });
     expect(edit).toHaveBeenCalledTimes(2);
-    expect(rightVal).toHaveBeenCalled();
+    expect(defineRightVal).toHaveBeenCalled();
 
     model.editState({ notCorrect: '44' });
     expect(edit).toHaveBeenCalledTimes(3);
 
     model.editState({ position: '44' });
-    expect(step).toHaveBeenCalled();
+    expect(defineStep).toHaveBeenCalled();
 
     model.editState({ coordinates: '44' });
     expect(updateCoordinate).toHaveBeenCalled();

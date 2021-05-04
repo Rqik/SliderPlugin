@@ -40,7 +40,7 @@ class Present {
     this.view.render();
   }
 
-  sliderMode(options: StateEl): void {
+  sliderModify(options: StateEl): void {
     this.model.editMode(options);
     this.view.editView(this.model.stateCurrent);
     if (this.rotate !== this.model.stateCurrent.rotate) {

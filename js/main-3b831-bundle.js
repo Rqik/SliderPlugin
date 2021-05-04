@@ -124,7 +124,6 @@ class InputChecker {
 
 
 
-
 __webpack_require__(427);
 
 const $plug1 = demo_$('.js-plug1');

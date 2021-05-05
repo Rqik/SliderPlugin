@@ -159,7 +159,7 @@ class Model {
       / Math.abs(this.state.maxValue - this.state.minValue))
       * 100;
     this.percent = Model.transformRange(this.percent);
-    return num / this.percent * this.percent;
+    return Math.round(num / this.percent)* this.percent;
   }
 
   private fixedCount(): number {

@@ -36,7 +36,7 @@ class View {
 
   private currentButton: HTMLElement = this.buttonRight.button; // абстрактный тумблер
 
-  private tumbler = false;
+  private isLeftOn = false;
 
   public observer: Observer;
 
@@ -223,7 +223,7 @@ class View {
     if (this.state.range === 'one') {
       this.currentButton = this.buttonRight.button;
     }
-    this.tumbler = this.currentButton === this.buttonLeft.button;
+    this.isLeftOn = this.currentButton === this.buttonLeft.button;
     this.currentButton.ondragstart = () => false;
   }
 
@@ -282,17 +282,17 @@ class View {
   private overridingButtons(bool: boolean): void {
     if (bool) {
       this.currentButton = this.buttonLeft.button;
-      this.tumbler = true;
+      this.isLeftOn = true;
     } else {
       this.currentButton = this.buttonRight.button;
-      this.tumbler = false;
+      this.isLeftOn = false;
     }
   }
 
   private eventButton(position: number): void {
     let pos = position;
 
-    if (this.tumbler) {
+    if (this.isLeftOn) {
       pos = this.state[keyChanges.SHIFT_RIGHT] < pos ? this.state[keyChanges.SHIFT_RIGHT] : pos;
       this.observer.broadcast({[keyChanges.SHIFT_LEFT]: pos});
     } else {
@@ -325,7 +325,7 @@ class View {
   }
 
   private currentValueText(): void {
-    if (this.tumbler) {
+    if (this.isLeftOn) {
       this.currentValLeft.text(this.state.currentValLeft);
     } else {
       this.currentValRight.text(this.state.currentValRight);
@@ -357,7 +357,7 @@ class View {
   }
 
   private showCurrentValue(): void {
-    if (this.tumbler) {
+    if (this.isLeftOn) {
       this.currentValLeft.position(this.state.shiftLeft);
     } else {
       this.currentValRight.position(this.state.shiftRight);

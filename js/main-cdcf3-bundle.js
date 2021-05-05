@@ -571,7 +571,7 @@ class View {
   }
 
   installMove() {
-    this.initMove(this.state.shiftLeft, this.state.shiftRight);
+    this.initMove(this.state["shiftLeft"], this.state["shiftRight"]);
   }
 
   initMove(min, max) {
@@ -634,19 +634,13 @@ class View {
   eventButton(position) {
     let pos = position;
 
-    if (pos <= 0) {
-      pos = 0;
-    } else if (pos >= 100) {
-      pos = 100;
-    }
-
     if (this.tumbler) {
-      pos = this.state.shiftRight < pos ? this.state.shiftRight : pos;
+      pos = this.state["shiftRight"] < pos ? this.state["shiftRight"] : pos;
       this.observer.broadcast({
         ["shiftLeft"]: pos
       });
     } else {
-      pos = this.state.shiftLeft > pos ? this.state.shiftLeft : pos;
+      pos = this.state["shiftLeft"] > pos ? this.state["shiftLeft"] : pos;
       this.observer.broadcast({
         ["shiftRight"]: pos
       });
@@ -828,14 +822,14 @@ class Model {
     const percent = this.mathPercent(position);
 
     if (this.state.stepSize > 0) {
-      this.state.step = this.mathStepCount(percent);
+      this.state.step = Model.transformRange(this.mathStepCount(percent));
     } else {
-      this.state.step = percent;
+      this.state.step = Model.transformRange(percent);
     }
   }
 
   activeButton() {
-    this.state.isActiveLeft = Math.abs(this.state.shiftLeft - this.state.step) < Math.abs(this.state.shiftRight - this.state.step);
+    this.state.isActiveLeft = Math.abs(this.state["shiftLeft"] - this.state.step) <= Math.abs(this.state["shiftRight"] - this.state.step);
 
     if (this.state["shiftLeft"] === this.state["shiftRight"]) {
       this.state.isActiveLeft = this.state.step < this.state.shiftRight;
@@ -867,7 +861,7 @@ class Model {
 
     this.percent = this.state.stepSize / Math.abs(this.state.maxValue - this.state.minValue) * 100;
     this.percent = Model.transformRange(this.percent);
-    return Math.round(num / this.percent) * this.percent;
+    return num / this.percent * this.percent;
   }
 
   fixedCount() {

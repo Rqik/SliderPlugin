@@ -383,7 +383,7 @@ class View {
     this.mouseDownHandler = this.buttonAction.bind(this);
     this.currentValHandler = this.currentButtonAction.bind(this);
     this.currentButton = this.buttonRight.button;
-    this.tumbler = false;
+    this.isLeftOn = false;
     this.state = state;
     this.observer = new EventObserver();
     this.currentValLeft = new Tooltip(this.state.rotate);
@@ -555,7 +555,7 @@ class View {
       this.currentButton = this.buttonRight.button;
     }
 
-    this.tumbler = this.currentButton === this.buttonLeft.button;
+    this.isLeftOn = this.currentButton === this.buttonLeft.button;
 
     this.currentButton.ondragstart = () => false;
   }
@@ -624,17 +624,17 @@ class View {
   overridingButtons(bool) {
     if (bool) {
       this.currentButton = this.buttonLeft.button;
-      this.tumbler = true;
+      this.isLeftOn = true;
     } else {
       this.currentButton = this.buttonRight.button;
-      this.tumbler = false;
+      this.isLeftOn = false;
     }
   }
 
   eventButton(position) {
     let pos = position;
 
-    if (this.tumbler) {
+    if (this.isLeftOn) {
       pos = this.state["shiftRight"] < pos ? this.state["shiftRight"] : pos;
       this.observer.broadcast({
         ["shiftLeft"]: pos
@@ -672,7 +672,7 @@ class View {
   }
 
   currentValueText() {
-    if (this.tumbler) {
+    if (this.isLeftOn) {
       this.currentValLeft.text(this.state.currentValLeft);
     } else {
       this.currentValRight.text(this.state.currentValRight);
@@ -703,7 +703,7 @@ class View {
   }
 
   showCurrentValue() {
-    if (this.tumbler) {
+    if (this.isLeftOn) {
       this.currentValLeft.position(this.state.shiftLeft);
     } else {
       this.currentValRight.position(this.state.shiftRight);

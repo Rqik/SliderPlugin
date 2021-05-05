@@ -1,6 +1,6 @@
-import { Coords, IState, StateEl } from '../../utils/Interface';
-import { EventObserver } from '../../utils/EventObserver';
-import { keyChanges, rotation } from '../../utils/constatnts';
+import {Coords, IState, StateEl} from '../../utils/Interface';
+import {EventObserver} from '../../utils/EventObserver';
+import {keyChanges, rotation} from '../../utils/constatnts';
 
 class Model {
   private state: IState = {
@@ -98,10 +98,10 @@ class Model {
       this.state.currentValLeft,
     );
     this.state.shiftLeft = ((this.state.currentValLeft - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
+      / (this.state.maxValue - this.state.minValue))
       * 100;
     this.state.shiftRight = ((this.state.currentValRight - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
+      / (this.state.maxValue - this.state.minValue))
       * 100;
     this.state.shiftRight = Number.isFinite(this.state.shiftRight)
       ? Model.transformRange(this.state.shiftRight)
@@ -121,16 +121,15 @@ class Model {
   private defineStep(position: number): void {
     const percent = this.mathPercent(position);
     if (this.state.stepSize > 0) {
-      this.state.step = this.mathStepCount(percent);
+      this.state.step = Model.transformRange(this.mathStepCount(percent));
     } else {
-      this.state.step = percent;
+      this.state.step = Model.transformRange(percent);
     }
   }
 
   private activeButton(): void {
-    this.state.isActiveLeft = Math.abs(this.state.shiftLeft - this.state.step)
-      < Math.abs(this.state.shiftRight - this.state.step);
-
+    this.state.isActiveLeft = Math.abs(this.state[keyChanges.SHIFT_LEFT] - this.state.step)
+      <= Math.abs(this.state[keyChanges.SHIFT_RIGHT] - this.state.step);
     if (
       this.state[keyChanges.SHIFT_LEFT] === this.state[keyChanges.SHIFT_RIGHT]
     ) {
@@ -157,10 +156,10 @@ class Model {
       return Math.round(num / this.state.stepSize) * this.state.stepSize;
     }
     this.percent = (this.state.stepSize
-        / Math.abs(this.state.maxValue - this.state.minValue))
+      / Math.abs(this.state.maxValue - this.state.minValue))
       * 100;
     this.percent = Model.transformRange(this.percent);
-    return Math.round(num / this.percent) * this.percent;
+    return num / this.percent * this.percent;
   }
 
   private fixedCount(): number {
@@ -173,16 +172,14 @@ class Model {
   }
 
   private defineLeftVal(): void {
-    const res = ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft)
-        / 100
-      + this.state.minValue;
+    const res = (((this.state.maxValue - this.state.minValue) * this.state.shiftLeft)
+      / 100) + this.state.minValue;
     this.state.currentValLeft = +res.toFixed(this.fixedCount());
   }
 
   private defineRightVal(): void {
-    const res = ((this.state.maxValue - this.state.minValue) * this.state.shiftRight)
-        / 100
-      + this.state.minValue;
+    const res = (((this.state.maxValue - this.state.minValue) * this.state.shiftRight)
+      / 100) + this.state.minValue;
     this.state.currentValRight = +res.toFixed(this.fixedCount());
   }
 
@@ -208,4 +205,4 @@ class Model {
   }
 }
 
-export { Model };
+export {Model};

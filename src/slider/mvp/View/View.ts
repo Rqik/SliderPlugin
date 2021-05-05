@@ -1,7 +1,7 @@
-import { IState } from '../../utils/Interface';
-import { keyChanges, rotation } from '../../utils/constatnts';
-import { Button, Tooltip, Interval, SliderRange } from './SubView';
-import { EventObserver as Observer } from '../../utils/EventObserver';
+import {IState} from '../../utils/Interface';
+import {keyChanges, rotation} from '../../utils/constatnts';
+import {Button, Interval, SliderRange, Tooltip} from './SubView';
+import {EventObserver as Observer} from '../../utils/EventObserver';
 
 class View {
   private slider: HTMLElement = document.createElement('div');
@@ -179,7 +179,7 @@ class View {
     this.currentValGeneral.tooltipVal.remove();
     this.buttonLeft.button.remove();
     this.currentValLeft.tooltipVal.remove();
-    this.observer.broadcast({ [keyChanges.SHIFT_LEFT]: 0 });
+    this.observer.broadcast({[keyChanges.SHIFT_LEFT]: 0});
   }
 
   private intervalExpose(): void {
@@ -238,7 +238,7 @@ class View {
   }
 
   private installMove(): void {
-    this.initMove(this.state.shiftLeft, this.state.shiftRight);
+    this.initMove(this.state[keyChanges.SHIFT_LEFT], this.state[keyChanges.SHIFT_RIGHT]);
   }
 
   // сброс позиций кнопок
@@ -262,9 +262,9 @@ class View {
       [event] = e.touches;
     }
     if (this.state.rotate === rotation.HORIZONTAL) {
-      this.observer.broadcast({ [keyChanges.POSITION]: event.clientX });
+      this.observer.broadcast({[keyChanges.POSITION]: event.clientX});
     } else if (this.state.rotate === rotation.VERTICAL) {
-      this.observer.broadcast({ [keyChanges.POSITION]: event.clientY });
+      this.observer.broadcast({[keyChanges.POSITION]: event.clientY});
     }
   }
 
@@ -272,7 +272,7 @@ class View {
     this.buttonAction(e);
     this.observerPosition(e);
     if (this.state.range === 'two') {
-      this.observer.broadcast({ [keyChanges.ACTIVE]: true });
+      this.observer.broadcast({[keyChanges.ACTIVE]: true});
       this.overridingButtons(this.state.isActiveLeft);
     }
     this.resizeSlider();
@@ -291,17 +291,13 @@ class View {
 
   private eventButton(position: number): void {
     let pos = position;
-    if (pos <= 0) {
-      pos = 0;
-    } else if (pos >= 100) {
-      pos = 100;
-    }
+
     if (this.tumbler) {
-      pos = this.state.shiftRight < pos ? this.state.shiftRight : pos;
-      this.observer.broadcast({ [keyChanges.SHIFT_LEFT]: pos });
+      pos = this.state[keyChanges.SHIFT_RIGHT] < pos ? this.state[keyChanges.SHIFT_RIGHT] : pos;
+      this.observer.broadcast({[keyChanges.SHIFT_LEFT]: pos});
     } else {
-      pos = this.state.shiftLeft > pos ? this.state.shiftLeft : pos;
-      this.observer.broadcast({ [keyChanges.SHIFT_RIGHT]: pos });
+      pos = this.state[keyChanges.SHIFT_LEFT] > pos ? this.state[keyChanges.SHIFT_LEFT] : pos;
+      this.observer.broadcast({[keyChanges.SHIFT_RIGHT]: pos});
     }
     this.moveButton(pos);
   }
@@ -377,4 +373,4 @@ class View {
   }
 }
 
-export { View };
+export {View};

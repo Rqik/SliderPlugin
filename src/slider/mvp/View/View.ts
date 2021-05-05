@@ -256,15 +256,23 @@ class View {
 
   private observerPosition(e: MouseEvent | TouchEvent) {
     let event;
+    let cordClient;
     if (e instanceof MouseEvent) {
       event = e;
     } else {
       [event] = e.touches;
     }
+
     if (this.state.rotate === rotation.HORIZONTAL) {
-      this.observer.broadcast({[keyChanges.POSITION]: event.clientX});
+      cordClient = event.clientX
     } else if (this.state.rotate === rotation.VERTICAL) {
-      this.observer.broadcast({[keyChanges.POSITION]: event.clientY});
+      cordClient = event.clientY
+    }
+
+    this.observer.broadcast({[keyChanges.POSITION]: cordClient});
+
+    if (this.state.range === 'two') {
+      this.observer.broadcast({[keyChanges.ACTIVE]: cordClient});
     }
   }
 
@@ -272,11 +280,10 @@ class View {
     this.buttonAction(e);
     this.observerPosition(e);
     if (this.state.range === 'two') {
-      this.observer.broadcast({[keyChanges.ACTIVE]: true});
       this.overridingButtons(this.state.isActiveLeft);
     }
     this.resizeSlider();
-    this.onMouseMove(e);
+    this.eventButton(this.state.step);
   }
 
   private overridingButtons(bool: boolean): void {

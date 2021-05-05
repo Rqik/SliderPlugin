@@ -66,7 +66,7 @@ class Model {
         this.updateCoordinate(data[keyChanges.COORDINATES]);
         break;
       case keyChanges.ACTIVE:
-        this.activeButton();
+        this.activeButton(data[keyChanges.ACTIVE]);
         break;
       default:
         this.edit(data);
@@ -127,13 +127,13 @@ class Model {
     }
   }
 
-  private activeButton(): void {
+  private activeButton(position : number): void {
     this.state.isActiveLeft = Math.abs(this.state[keyChanges.SHIFT_LEFT] - this.state.step)
       <= Math.abs(this.state[keyChanges.SHIFT_RIGHT] - this.state.step);
     if (
       this.state[keyChanges.SHIFT_LEFT] === this.state[keyChanges.SHIFT_RIGHT]
     ) {
-      this.state.isActiveLeft = this.state.step < this.state.shiftRight;
+      this.state.isActiveLeft = this.mathPercent(position) < this.state.shiftRight;
       if (this.state.step <= 0) {
         this.state.isActiveLeft = false;
       }

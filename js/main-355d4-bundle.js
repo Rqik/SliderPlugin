@@ -588,6 +588,7 @@ class View {
 
   observerPosition(e) {
     let event;
+    let cordClient;
 
     if (e instanceof MouseEvent) {
       event = e;
@@ -596,12 +597,18 @@ class View {
     }
 
     if (this.state.rotate === "horizontal") {
-      this.observer.broadcast({
-        ["position"]: event.clientX
-      });
+      cordClient = event.clientX;
     } else if (this.state.rotate === "vertical") {
+      cordClient = event.clientY;
+    }
+
+    this.observer.broadcast({
+      ["position"]: cordClient
+    });
+
+    if (this.state.range === 'two') {
       this.observer.broadcast({
-        ["position"]: event.clientY
+        ["active"]: cordClient
       });
     }
   }
@@ -611,14 +618,11 @@ class View {
     this.observerPosition(e);
 
     if (this.state.range === 'two') {
-      this.observer.broadcast({
-        ["active"]: true
-      });
       this.overridingButtons(this.state.isActiveLeft);
     }
 
     this.resizeSlider();
-    this.onMouseMove(e);
+    this.eventButton(this.state.step);
   }
 
   overridingButtons(bool) {
@@ -784,7 +788,7 @@ class Model {
         break;
 
       case "active":
-        this.activeButton();
+        this.activeButton(data["active"]);
         break;
 
       default:
@@ -828,11 +832,11 @@ class Model {
     }
   }
 
-  activeButton() {
+  activeButton(position) {
     this.state.isActiveLeft = Math.abs(this.state["shiftLeft"] - this.state.step) <= Math.abs(this.state["shiftRight"] - this.state.step);
 
     if (this.state["shiftLeft"] === this.state["shiftRight"]) {
-      this.state.isActiveLeft = this.state.step < this.state.shiftRight;
+      this.state.isActiveLeft = this.mathPercent(position) < this.state.shiftRight;
 
       if (this.state.step <= 0) {
         this.state.isActiveLeft = false;

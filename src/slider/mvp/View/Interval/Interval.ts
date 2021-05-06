@@ -1,5 +1,5 @@
-import { rotate } from '../../../utils/Interface';
-import { interval as className, rotation } from '../../../utils/constatnts';
+import {rotate} from '../../../utils/Interface';
+import {interval as className, rotation} from '../../../utils/constatnts';
 
 class Interval {
   interval: HTMLUListElement = document.createElement('ul');
@@ -30,14 +30,15 @@ class Interval {
     }
     const interval: number = (maxValue - minValue) / count;
     let sum;
+    let fragment = document.createDocumentFragment()
     for (let i = 0; i <= count; i += 1) {
       const li = document.createElement('li');
       li.className = className.INTERVAL_ITEM;
       sum = (i * interval + minValue);
       li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`;
-      this.interval.append(li);
+      fragment.append(li);
     }
-
+    this.interval.append(fragment)
     return this.interval;
   }
 
@@ -46,4 +47,5 @@ class Interval {
     this.init();
   }
 }
-export { Interval };
+
+export {Interval};

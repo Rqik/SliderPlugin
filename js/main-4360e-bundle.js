@@ -214,15 +214,17 @@ class Interval {
 
     const interval = (maxValue - minValue) / count;
     let sum;
+    let fragment = document.createDocumentFragment();
 
     for (let i = 0; i <= count; i += 1) {
       const li = document.createElement('li');
       li.className = "interval-point__item";
       sum = i * interval + minValue;
       li.innerHTML = `<div class=${"interval-point__item-text"}> ${sum} </div>`;
-      this.interval.append(li);
+      fragment.append(li);
     }
 
+    this.interval.append(fragment);
     return this.interval;
   }
 

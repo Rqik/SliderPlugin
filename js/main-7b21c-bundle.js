@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 42:
+/***/ 129:
 /***/ ((__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 
@@ -119,21 +119,21 @@ class InputChecker {
 }
 
 
-;// CONCATENATED MODULE: ./demo/demo.ts
-/* provided dependency */ var demo_$ = __webpack_require__(638);
+;// CONCATENATED MODULE: ./demo/page/index.ts
+/* provided dependency */ var page_$ = __webpack_require__(638);
 
 
 
 __webpack_require__(427);
 
-const $plug1 = demo_$('.js-plug1');
-const $plug2 = demo_$('.js-plug2');
-const $plug3 = demo_$('.js-plug3');
-const $plug4 = demo_$('.js-plug4');
-const $form1 = demo_$('#form1');
-const $form2 = demo_$('#form2');
-const $form3 = demo_$('#form3');
-const $form4 = demo_$('#form4');
+const $plug1 = page_$('.js-plug1');
+const $plug2 = page_$('.js-plug2');
+const $plug3 = page_$('.js-plug3');
+const $plug4 = page_$('.js-plug4');
+const $form1 = page_$('#form1');
+const $form2 = page_$('#form2');
+const $form3 = page_$('#form3');
+const $form4 = page_$('#form4');
 const plug1 = $plug1.sliderRqik({
   maxValue: 1000,
   range: 'one',
@@ -205,7 +205,7 @@ class Interval {
     }
   }
 
-  valueInterval(minValue, maxValue, count) {
+  renderInterval(minValue, maxValue, count) {
     this.interval.textContent = '';
 
     if (count <= 0) {
@@ -214,7 +214,7 @@ class Interval {
 
     const interval = (maxValue - minValue) / count;
     let sum;
-    let fragment = document.createDocumentFragment();
+    const fragment = document.createDocumentFragment();
 
     for (let i = 0; i <= count; i += 1) {
       const li = document.createElement('li');
@@ -241,7 +241,6 @@ class Tooltip {
   constructor(orientation) {
     this.orientation = orientation;
     this.tooltipVal = document.createElement('div');
-    this.size = 10;
     this.init();
   }
 
@@ -262,13 +261,14 @@ class Tooltip {
   }
 
   positionHorizontal(shiftX) {
-    this.tooltipVal.style.top = `${-(+this.tooltipVal.offsetHeight + 10)}px`;
+    this.tooltipVal.style.top = `-${this.tooltipVal.offsetHeight + 10}px`;
     this.tooltipVal.style.left = `calc(${shiftX}% - ${this.tooltipVal.offsetWidth / 2}px)`;
   }
 
   positionVertical(shiftX) {
-    this.tooltipVal.style.top = `calc(${shiftX}% - ${this.tooltipVal.offsetHeight / 2}px)`;
-    this.tooltipVal.style.left = `${-(+this.tooltipVal.offsetWidth + 15)}px`;
+    this.tooltipVal.style.top = `calc(${shiftX}% -
+    ${this.tooltipVal.offsetHeight / 2}px)`;
+    this.tooltipVal.style.left = `-${this.tooltipVal.offsetWidth + 15}px`;
   }
 
   setRotate(orientation) {
@@ -411,7 +411,7 @@ class View {
   }
 
   renderInterval() {
-    this.interval.valueInterval(this.state.minValue, this.state.maxValue, this.state.intervalCount);
+    this.interval.renderInterval(this.state.minValue, this.state.maxValue, this.state.intervalCount);
   }
 
   addElem() {
@@ -839,14 +839,18 @@ class Model {
 
     if (this.state["shiftLeft"] === this.state["shiftRight"]) {
       this.state.isActiveLeft = this.mathPercent(position) < this.state.shiftRight;
+      this.isActiveLeftButton();
+    }
+  }
 
-      if (this.state.step <= 0) {
-        this.state.isActiveLeft = false;
-      }
+  isActiveLeftButton() {
+    if (this.state.step <= 0) {
+      this.state.isActiveLeft = false;
+      return;
+    }
 
-      if (this.state.step >= 100) {
-        this.state.isActiveLeft = true;
-      }
+    if (this.state.step >= 100) {
+      this.state.isActiveLeft = true;
     }
   }
 
@@ -870,25 +874,25 @@ class Model {
     return Math.round(num / this.percent) * this.percent;
   }
 
-  fixedCount() {
-    let res = 12;
+  defineDecimalPlacesCount() {
+    let decimalPlaces = 12;
     const str = this.state.stepSize.toString();
 
     if (str.includes('.')) {
-      res = str.split('.').pop().length;
+      decimalPlaces = str.split('.').pop().length;
     }
 
-    return res;
+    return decimalPlaces;
   }
 
   defineLeftVal() {
-    const res = (this.state.maxValue - this.state.minValue) * this.state.shiftLeft / 100 + this.state.minValue;
-    this.state.currentValLeft = +res.toFixed(this.fixedCount());
+    const leftValue = (this.state.maxValue - this.state.minValue) * this.state.shiftLeft / 100 + this.state.minValue;
+    this.state.currentValLeft = Number(leftValue.toFixed(this.defineDecimalPlacesCount()));
   }
 
   defineRightVal() {
-    const res = (this.state.maxValue - this.state.minValue) * this.state.shiftRight / 100 + this.state.minValue;
-    this.state.currentValRight = +res.toFixed(this.fixedCount());
+    const rightValue = (this.state.maxValue - this.state.minValue) * this.state.shiftRight / 100 + this.state.minValue;
+    this.state.currentValRight = Number(rightValue.toFixed(this.defineDecimalPlacesCount()));
   }
 
   static convertCorrectNumber(num) {
@@ -906,15 +910,15 @@ class Model {
   }
 
   static transformRange(num) {
-    let pos = num;
-
-    if (pos <= 0) {
-      pos = 0;
-    } else if (pos >= 100) {
-      pos = 100;
+    if (num <= 0) {
+      return 0;
     }
 
-    return pos;
+    if (num >= 100) {
+      return 100;
+    }
+
+    return num;
   }
 
 }
@@ -1185,7 +1189,7 @@ class SliderPlugin {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [638], () => (__webpack_require__(42)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [638], () => (__webpack_require__(129)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

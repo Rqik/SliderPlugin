@@ -1,4 +1,4 @@
-import { button as className } from '../../../utils/constatnts';
+import { button as className } from '../../../types/constatnts';
 
 class Button {
   button: HTMLElement = document.createElement('div');

@@ -1,5 +1,5 @@
-import {IState} from '../../utils/Interface';
-import {keyChanges, rotation} from '../../utils/constatnts';
+import {IState} from '../../types/interfaces';
+import {keyChanges, rotation} from '../../types/constatnts';
 import {Button, Interval, SliderRange, Tooltip} from './SubView';
 import {EventObserver as Observer} from '../../utils/EventObserver';
 
@@ -22,17 +22,21 @@ class View {
 
   private buttonWidth = 10;
 
-  private clickHandler: (e: MouseEvent | TouchEvent) => void
-    = this.onMouseMove.bind(this);
+  private clickHandler: (
+    e: MouseEvent | TouchEvent,
+  ) => void = this.onMouseMove.bind(this);
 
-  private clickMoveHandler: (e: MouseEvent | TouchEvent) => void
-    = this.onClickMove.bind(this);
+  private clickMoveHandler: (
+    e: MouseEvent | TouchEvent,
+  ) => void = this.onClickMove.bind(this);
 
-  private mouseDownHandler: (e: MouseEvent | TouchEvent) => void
-    = this.buttonAction.bind(this);
+  private mouseDownHandler: (
+    e: MouseEvent | TouchEvent,
+  ) => void = this.buttonAction.bind(this);
 
-  private currentValHandler: (e: MouseEvent | TouchEvent) => void
-    = this.currentButtonAction.bind(this);
+  private currentValHandler: (
+    e: MouseEvent | TouchEvent,
+  ) => void = this.currentButtonAction.bind(this);
 
   private currentButton: HTMLElement = this.buttonRight.button; // абстрактный тумблер
 
@@ -73,7 +77,7 @@ class View {
   }
 
   private renderInterval(): void {
-    this.interval.valueInterval(
+    this.interval.renderInterval(
       this.state.minValue,
       this.state.maxValue,
       this.state.intervalCount,
@@ -238,7 +242,10 @@ class View {
   }
 
   private installMove(): void {
-    this.initMove(this.state[keyChanges.SHIFT_LEFT], this.state[keyChanges.SHIFT_RIGHT]);
+    this.initMove(
+      this.state[keyChanges.SHIFT_LEFT],
+      this.state[keyChanges.SHIFT_RIGHT],
+    );
   }
 
   // сброс позиций кнопок
@@ -264,9 +271,9 @@ class View {
     }
 
     if (this.state.rotate === rotation.HORIZONTAL) {
-      cordClient = event.clientX
+      cordClient = event.clientX;
     } else if (this.state.rotate === rotation.VERTICAL) {
-      cordClient = event.clientY
+      cordClient = event.clientY;
     }
 
     this.observer.broadcast({[keyChanges.POSITION]: cordClient});
@@ -300,10 +307,14 @@ class View {
     let pos = position;
 
     if (this.isLeftOn) {
-      pos = this.state[keyChanges.SHIFT_RIGHT] < pos ? this.state[keyChanges.SHIFT_RIGHT] : pos;
+      pos = this.state[keyChanges.SHIFT_RIGHT] < pos
+        ? this.state[keyChanges.SHIFT_RIGHT]
+        : pos;
       this.observer.broadcast({[keyChanges.SHIFT_LEFT]: pos});
     } else {
-      pos = this.state[keyChanges.SHIFT_LEFT] > pos ? this.state[keyChanges.SHIFT_LEFT] : pos;
+      pos = this.state[keyChanges.SHIFT_LEFT] > pos
+        ? this.state[keyChanges.SHIFT_LEFT]
+        : pos;
       this.observer.broadcast({[keyChanges.SHIFT_RIGHT]: pos});
     }
     this.moveButton(pos);
@@ -326,7 +337,6 @@ class View {
         this.responsiveCurrent(oneCurrent);
       }
     }
-
     // размеры для активной зоны
     this.activeZoneAction();
   }
@@ -354,7 +364,9 @@ class View {
           `${this.state.currentValLeft} — ${+this.state.currentValRight}`,
         );
       }
-      this.currentValGeneral.position((this.state.shiftRight + this.state.shiftLeft) / 2);
+      this.currentValGeneral.position(
+        (this.state.shiftRight + this.state.shiftLeft) / 2,
+      );
     } else {
       this.currentValGeneral.tooltipVal.style.opacity = '0';
       this.currentValGeneral.tooltipVal.style.display = 'none';

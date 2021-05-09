@@ -24,7 +24,7 @@ const plugins = () => {
     new CleanWebpackPlugin(),
 
     new HtmlWebpackPlugin({
-      template: `./demo/demo.pug`,
+      template: `./demo/page/index.pug`,
       filename: `index.html`,
     }),
     new MiniCssExtractPlugin({
@@ -60,7 +60,7 @@ module.exports = {
 
   context: PATHS.src,
   mode: 'development',
-  entry: './demo/demo.ts',
+  entry: './demo/page/index.ts',
   output: {
     filename: 'js/[name]-[contenthash:5]-bundle.js',
     path: PATHS.dist,

@@ -1,10 +1,8 @@
-import { rotate } from '../../../utils/Interface';
-import { rotation, tooltipValue as className } from '../../../utils/constatnts';
+import { rotate } from '../../../types/interfaces';
+import { rotation, tooltipValue as className } from '../../../types/constatnts';
 
 class Tooltip {
   tooltipVal: HTMLElement = document.createElement('div');
-
-  private size = 10;
 
   constructor(private orientation: rotate) {
     this.init();
@@ -27,17 +25,16 @@ class Tooltip {
   }
 
   positionHorizontal(shiftX: string | number): void {
-    this.tooltipVal.style.top = `${-(+this.tooltipVal.offsetHeight + 10)}px`;
+    this.tooltipVal.style.top = `-${this.tooltipVal.offsetHeight + 10}px`;
     this.tooltipVal.style.left = `calc(${shiftX}% - ${
       this.tooltipVal.offsetWidth / 2
     }px)`;
   }
 
   positionVertical(shiftX: string | number): void {
-    this.tooltipVal.style.top = `calc(${shiftX}% - ${
-      this.tooltipVal.offsetHeight / 2
-    }px)`;
-    this.tooltipVal.style.left = `${-(+this.tooltipVal.offsetWidth + 15)}px`;
+    this.tooltipVal.style.top = `calc(${shiftX}% -
+    ${this.tooltipVal.offsetHeight / 2}px)`;
+    this.tooltipVal.style.left = `-${this.tooltipVal.offsetWidth + 15}px`;
   }
 
   setRotate(orientation: rotate): void {
@@ -60,4 +57,5 @@ class Tooltip {
     return clientRect.bottom;
   }
 }
+
 export { Tooltip };

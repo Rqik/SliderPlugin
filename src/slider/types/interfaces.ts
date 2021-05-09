@@ -1,4 +1,4 @@
-import { keyChanges, rotation } from './constatnts';
+import {keyChanges, rotation} from './constatnts';
 
 type rotate = rotation.HORIZONTAL | rotation.VERTICAL;
 type range = 'one' | 'two';
@@ -32,26 +32,18 @@ interface IState {
   [keyChanges.SHIFT_RIGHT]: number;
   step: number;
   isActiveLeft: boolean;
+
   [k: string]: string | number | boolean;
 }
 
 interface StateEl {
-  [k: string]: string | number | boolean;
+  [k: string]: options;
 }
 
 type options = number | string | boolean;
 
-interface settingOption {
-  min?: number;
-  max?: number;
-  interval?: number;
-  step?: number;
-  range?: range;
-}
-
 export {
   Coords,
-  settingOption,
   IState,
   rotate,
   range,

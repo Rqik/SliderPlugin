@@ -1,4 +1,4 @@
-import { Slider } from '../../slider/utils/Interface';
+import { Slider } from '../../slider/types/interfaces';
 
 class InputChecker {
   private form: JQuery;

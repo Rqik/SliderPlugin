@@ -1,7 +1,7 @@
-import './styles/main.scss';
-import { InputChecker } from './InputChecker/InputChecker';
+import '../styles/main.scss';
+import { InputChecker } from '../InputChecker/InputChecker';
 
-require('../slider/Slider.ts');
+require('../../slider/Slider.ts');
 
 const $plug1 = $('.js-plug1');
 const $plug2 = $('.js-plug2');

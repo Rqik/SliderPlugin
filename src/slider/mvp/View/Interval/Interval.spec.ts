@@ -1,16 +1,16 @@
 import { Interval } from './Interval';
-import { interval as className } from '../../../utils/constatnts';
+import { interval as className } from '../../../types/constatnts';
 
 describe('Interval test', () => {
   let inter: Interval;
   beforeEach(() => {
     inter = new Interval();
   });
-  test('valueInterval', () => {
-    inter.valueInterval = jest.fn();
-    inter.valueInterval(10, 100, 0);
+  test('renderInterval', () => {
+    inter.renderInterval(10, 100, 0);
     const s = document.createElement('ul');
     s.className = className.INTERVAL;
     expect(inter.interval).toEqual(s);
+    expect(inter.interval.textContent).toEqual('')
   });
 });

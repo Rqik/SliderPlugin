@@ -1,4 +1,4 @@
-import { IState, rotate, StateEl } from '../../utils/Interface';
+import { IState, rotate, StateEl } from '../../types/interfaces';
 import { View } from '../View/View';
 import { Model } from '../Model/Model';
 

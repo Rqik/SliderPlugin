@@ -1,4 +1,4 @@
-import { Slider, StateEl } from './utils/Interface';
+import { Slider, StateEl } from './types/interfaces';
 
 declare global {
   interface JQuery {

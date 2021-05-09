@@ -1,4 +1,4 @@
-import { IState, Slider, StateEl } from './utils/Interface';
+import { IState, Slider, StateEl } from './types/interfaces';
 import { Present } from './mvp/Presenter/Presenter';
 
 declare global {

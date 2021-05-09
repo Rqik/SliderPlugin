@@ -1,8 +1,8 @@
 //- checkElements -- Array<>
 mixin checkBox({checkElements})
-  .checkbox
+  .checkbox-list
     each check in checkElements
       - const {text , name , checked = false} = check
-      label.checkbox__element
-        input.checkbox__input(type="checkbox" name=name checked=checked)
-        span.checkbox__text= text
+      label.checkbox-list__element
+        input.checkbox-list__input(type="checkbox" name=name checked=checked)
+        span.checkbox-list__text= text

@@ -1,7 +1,8 @@
-import {View} from './View';
-import {EventObserver} from '../../utils/EventObserver';
-import {IState} from '../../utils/Interface';
-import {rotation} from '../../utils/constatnts';
+import '@testing-library/jest-dom';
+import { View } from './View';
+import { EventObserver } from '../../utils/EventObserver';
+import { IState } from '../../types/interfaces';
+import { rotation } from '../../types/constatnts';
 
 const state: IState = {
   selector: 'slider-rqik', // селектор
@@ -70,8 +71,7 @@ describe('Observer test', () => {
   test('calls observer', () => {
     expect(EventObserver).not.toHaveBeenCalled();
 
-    const view = new View(state);
-
+    new View(state);
     expect(ObserverMock).toHaveBeenCalled();
     expect(ObserverMock).toHaveBeenCalledTimes(1);
     expect(ObserverMock).not.toHaveBeenCalledTimes(2);
@@ -85,10 +85,14 @@ describe('View test', () => {
     beforeEach(() => {
       view = new View(state);
     });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
 
     test('slider style property check', () => {
       const startView = jest.spyOn(View.prototype as any, 'startView');
-      const test = new View(state);
+      let view = new View(state);
+      view.editView(state2);
       expect(startView).toHaveBeenCalled();
       expect(startView).toHaveBeenCalledTimes(1);
     });
@@ -99,6 +103,7 @@ describe('View test', () => {
       const addAction = jest.spyOn(View.prototype as any, 'addAction');
       const resizeSlider = jest.spyOn(View.prototype as any, 'resizeSlider');
       const installMove = jest.spyOn(View.prototype as any, 'installMove');
+      const initMove = jest.spyOn(View.prototype as any, 'initMove');
       view.render();
 
       expect(show).toHaveBeenCalled();
@@ -115,13 +120,61 @@ describe('View test', () => {
 
       expect(installMove).toHaveBeenCalled();
       expect(installMove).toHaveBeenCalledTimes(1);
+
+      expect(initMove).toHaveBeenCalled();
+      expect(initMove).toHaveBeenCalledTimes(1);
+    });
+
+    test('call private method from ts-ignore', () => {
+      let eventMouse = new MouseEvent('mousedown', {
+        bubbles: true,
+      });
+      let target = document.createElement('div');
+      let eventTouch = new TouchEvent('touchstart', {
+        bubbles: true,
+        // @ts-ignore
+        targetTouches: [target],
+      });
+      let view = new View(state);
+
+      // @ts-ignore
+      const currentButtonAction = jest.spyOn(
+        View.prototype as any,
+        'currentButtonAction',
+      );
+      // @ts-ignore
+      view.currentButtonAction(eventMouse);
+      // @ts-ignore
+      view.currentButtonAction(eventTouch);
+
+      expect(currentButtonAction).toHaveBeenCalled();
+      expect(currentButtonAction).toHaveBeenCalledTimes(2);
+
+      const responsiveCurrent = jest.spyOn(
+        View.prototype as any,
+        'responsiveCurrent',
+      );
+
+      // @ts-ignore
+      view.responsiveCurrent(true);
+      expect(responsiveCurrent).toHaveBeenCalled();
+      // @ts-ignore
+      view.state.currentValLeft = view.state.currentValRight;
+      // @ts-ignore
+      view.responsiveCurrent(true);
+      expect(responsiveCurrent).toHaveBeenCalledTimes(2);
+
+      const onMouseMove = jest.spyOn(View.prototype as any, 'onMouseMove');
+      // @ts-ignore
+      view.onMouseMove(eventMouse);
+      expect(onMouseMove).toHaveBeenCalled();
     });
 
     test('call render', () => {
-      const init = jest.spyOn(view, 'render');
+      const render = jest.spyOn(view, 'render');
       view.render();
-      expect(init).toHaveBeenCalled();
-      expect(init).toHaveBeenCalledTimes(1);
+      expect(render).toHaveBeenCalled();
+      expect(render).toHaveBeenCalledTimes(1);
     });
 
     test('drawing interval showInterval : true', () => {

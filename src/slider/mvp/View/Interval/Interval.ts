@@ -1,5 +1,5 @@
-import {rotate} from '../../../utils/Interface';
-import {interval as className, rotation} from '../../../utils/constatnts';
+import {rotate} from '../../../types/interfaces';
+import {interval as className, rotation} from '../../../types/constatnts';
 
 class Interval {
   interval: HTMLUListElement = document.createElement('ul');
@@ -18,19 +18,19 @@ class Interval {
     }
   }
 
-  valueInterval(
+  renderInterval(
     minValue: number,
     maxValue: number,
     count: number,
   ): HTMLElement {
-    // interval это кол подписей минимум 2
     this.interval.textContent = '';
     if (count <= 0) {
       return this.interval;
     }
     const interval: number = (maxValue - minValue) / count;
     let sum;
-    let fragment = document.createDocumentFragment()
+    const fragment = document.createDocumentFragment();
+
     for (let i = 0; i <= count; i += 1) {
       const li = document.createElement('li');
       li.className = className.INTERVAL_ITEM;
@@ -38,7 +38,8 @@ class Interval {
       li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`;
       fragment.append(li);
     }
-    this.interval.append(fragment)
+
+    this.interval.append(fragment);
     return this.interval;
   }
 

@@ -1,32 +1,35 @@
-.checkbox{
+.checkbox-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
-  &__element{
+
+  &__element {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
     gap: 20px;
-    cursor:pointer;
+    cursor: pointer;
   }
-  &__input{
+
+  &__input {
     align-self: center;
     width: 15px;
     display: none;
-
   }
-  &__text{
+
+  &__text {
     transition: background-color .3s ease-in-out;
     border-radius: 5px;
     padding: 7px 10px;
     background-color: $input-disable;
   }
-  &__input:checked~&__text {
+
+  &__input:checked ~ &__text {
     background-color: $input-active;
   }
 }

@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom';
 import { View } from './View';
 import { EventObserver } from '../../utils/EventObserver';
 import { IState } from '../../types/interfaces';

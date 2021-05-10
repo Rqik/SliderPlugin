@@ -6,8 +6,8 @@ describe('Interval test', () => {
   beforeEach(() => {
     inter = new Interval();
   });
-  test('renderInterval', () => {
-    inter.renderInterval(10, 100, 0);
+  test('renderIntervals', () => {
+    inter.renderIntervals(10, 100, 0);
     const s = document.createElement('ul');
     s.className = className.INTERVAL;
     expect(inter.interval).toEqual(s);

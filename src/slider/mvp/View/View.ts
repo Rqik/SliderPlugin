@@ -1,7 +1,7 @@
-import {IState} from '../../types/interfaces';
-import {keyChanges, rotation} from '../../types/constatnts';
-import {Button, Interval, SliderRange, Tooltip} from './SubView';
-import {EventObserver as Observer} from '../../utils/EventObserver';
+import { IState } from '../../types/interfaces';
+import { keyChanges, rotation } from '../../types/constatnts';
+import { Button, Interval, SliderRange, Tooltip } from './SubView';
+import { EventObserver as Observer } from '../../utils/EventObserver';
 
 class View {
   private slider: HTMLElement = document.createElement('div');
@@ -77,7 +77,7 @@ class View {
   }
 
   private renderInterval(): void {
-    this.interval.renderInterval(
+    this.interval.renderIntervals(
       this.state.minValue,
       this.state.maxValue,
       this.state.intervalCount,
@@ -183,7 +183,7 @@ class View {
     this.currentValGeneral.tooltipVal.remove();
     this.buttonLeft.button.remove();
     this.currentValLeft.tooltipVal.remove();
-    this.observer.broadcast({[keyChanges.SHIFT_LEFT]: 0});
+    this.observer.broadcast({ [keyChanges.SHIFT_LEFT]: 0 });
   }
 
   private intervalExpose(): void {
@@ -276,10 +276,10 @@ class View {
       cordClient = event.clientY;
     }
 
-    this.observer.broadcast({[keyChanges.POSITION]: cordClient});
+    this.observer.broadcast({ [keyChanges.POSITION]: cordClient });
 
     if (this.state.range === 'two') {
-      this.observer.broadcast({[keyChanges.ACTIVE]: cordClient});
+      this.observer.broadcast({ [keyChanges.ACTIVE]: cordClient });
     }
   }
 
@@ -310,12 +310,12 @@ class View {
       pos = this.state[keyChanges.SHIFT_RIGHT] < pos
         ? this.state[keyChanges.SHIFT_RIGHT]
         : pos;
-      this.observer.broadcast({[keyChanges.SHIFT_LEFT]: pos});
+      this.observer.broadcast({ [keyChanges.SHIFT_LEFT]: pos });
     } else {
       pos = this.state[keyChanges.SHIFT_LEFT] > pos
         ? this.state[keyChanges.SHIFT_LEFT]
         : pos;
-      this.observer.broadcast({[keyChanges.SHIFT_RIGHT]: pos});
+      this.observer.broadcast({ [keyChanges.SHIFT_RIGHT]: pos });
     }
     this.moveButton(pos);
   }
@@ -392,4 +392,4 @@ class View {
   }
 }
 
-export {View};
+export { View };

@@ -18,7 +18,7 @@ class Interval {
     }
   }
 
-  renderInterval(
+  renderIntervals(
     minValue: number,
     maxValue: number,
     count: number,
@@ -31,13 +31,13 @@ class Interval {
     let sum;
     const fragment = document.createDocumentFragment();
 
-    for (let i = 0; i <= count; i += 1) {
+    Array(count + 1).fill('').forEach((el, i) => {
       const li = document.createElement('li');
-      li.className = className.INTERVAL_ITEM;
       sum = (i * interval + minValue);
+      li.className = className.INTERVAL_ITEM;
       li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`;
-      fragment.append(li);
-    }
+      fragment.append(li)
+    })
 
     this.interval.append(fragment);
     return this.interval;

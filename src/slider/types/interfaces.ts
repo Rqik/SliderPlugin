@@ -1,4 +1,4 @@
-import {keyChanges, rotation} from './constatnts';
+import { keyChanges, rotation } from './constatnts';
 
 type rotate = rotation.HORIZONTAL | rotation.VERTICAL;
 type range = 'one' | 'two';

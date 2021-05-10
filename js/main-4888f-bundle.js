@@ -205,7 +205,7 @@ class Interval {
     }
   }
 
-  renderInterval(minValue, maxValue, count) {
+  renderIntervals(minValue, maxValue, count) {
     this.interval.textContent = '';
 
     if (count <= 0) {
@@ -215,15 +215,13 @@ class Interval {
     const interval = (maxValue - minValue) / count;
     let sum;
     const fragment = document.createDocumentFragment();
-
-    for (let i = 0; i <= count; i += 1) {
+    Array(count + 1).fill('').forEach((el, i) => {
       const li = document.createElement('li');
-      li.className = "interval-point__item";
       sum = i * interval + minValue;
+      li.className = "interval-point__item";
       li.innerHTML = `<div class=${"interval-point__item-text"}> ${sum} </div>`;
       fragment.append(li);
-    }
-
+    });
     this.interval.append(fragment);
     return this.interval;
   }
@@ -411,7 +409,7 @@ class View {
   }
 
   renderInterval() {
-    this.interval.renderInterval(this.state.minValue, this.state.maxValue, this.state.intervalCount);
+    this.interval.renderIntervals(this.state.minValue, this.state.maxValue, this.state.intervalCount);
   }
 
   addElem() {

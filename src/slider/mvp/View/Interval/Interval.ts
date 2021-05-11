@@ -1,5 +1,5 @@
-import {rotate} from '../../../types/interfaces';
-import {interval as className, rotation} from '../../../types/constatnts';
+import { rotate } from '../../../types/interfaces';
+import { interval as className, rotation } from '../../../types/constatnts';
 
 class Interval {
   interval: HTMLUListElement = document.createElement('ul');
@@ -36,8 +36,8 @@ class Interval {
       sum = (i * interval + minValue);
       li.className = className.INTERVAL_ITEM;
       li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`;
-      fragment.append(li)
-    })
+      fragment.append(li);
+    });
 
     this.interval.append(fragment);
     return this.interval;
@@ -49,4 +49,4 @@ class Interval {
   }
 }
 
-export {Interval};
+export { Interval };

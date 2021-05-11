@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 129:
+/***/ 323:
 /***/ ((__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 
@@ -119,21 +119,21 @@ class InputChecker {
 }
 
 
-;// CONCATENATED MODULE: ./demo/page/index.ts
-/* provided dependency */ var page_$ = __webpack_require__(638);
+;// CONCATENATED MODULE: ./demo/page/demo.ts
+/* provided dependency */ var demo_$ = __webpack_require__(638);
 
 
 
 __webpack_require__(427);
 
-const $plug1 = page_$('.js-plug1');
-const $plug2 = page_$('.js-plug2');
-const $plug3 = page_$('.js-plug3');
-const $plug4 = page_$('.js-plug4');
-const $form1 = page_$('#form1');
-const $form2 = page_$('#form2');
-const $form3 = page_$('#form3');
-const $form4 = page_$('#form4');
+const $plug1 = demo_$('.js-plug1');
+const $plug2 = demo_$('.js-plug2');
+const $plug3 = demo_$('.js-plug3');
+const $plug4 = demo_$('.js-plug4');
+const $form1 = demo_$('#form1');
+const $form2 = demo_$('#form2');
+const $form3 = demo_$('#form3');
+const $form4 = demo_$('#form4');
 const plug1 = $plug1.sliderRqik({
   maxValue: 1000,
   range: 'one',
@@ -1187,7 +1187,7 @@ class SliderPlugin {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [638], () => (__webpack_require__(129)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [638], () => (__webpack_require__(323)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

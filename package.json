@@ -8,13 +8,12 @@
     "dev": "cross-env NODE_ENV=development webpack --mode development",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "start": "cross-env NODE_ENV=development webpack serve --mode development --open",
-    "watch": "cross-env NODE_ENV=development webpack --mode development --watch",
+    "watch": "npm run dev -- --watch",
     "test": "jest  --coverage",
     "testW": "jest  --watch",
     "testCW": "jest  --coverage --watch",
-    "eslint": "eslint ./src",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lintfix": "eslint . --ext .js,.jsx,.ts,.tsx --fix ",
+    "lintfix": "npm run lint -- --fix ",
     "deploy": "gh-pages -d dist"
   },
   "jest": {
@@ -77,6 +76,7 @@
     "webpack-dev-server": "^3.11.1"
   },
   "dependencies": {
+    "autobind-decorator": "^2.4.0",
     "jquery": "^3.5.1",
     "normalize.css": "^8.0.1"
   }

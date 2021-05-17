@@ -18,7 +18,7 @@ const state: IState = {
   pixelSize: '6',
   shiftLeft: 0,
   shiftRight: 100,
-  step: 0,
+  step: 3,
   isActiveLeft: false,
 };
 
@@ -37,8 +37,7 @@ const state2: IState = {
   pixelSize: '6',
   shiftLeft: 0,
   shiftRight: 200,
-  stepSizePercent: 0,
-  step: 0,
+  step: 3,
   isActiveLeft: false,
 };
 
@@ -164,6 +163,7 @@ describe('View test', () => {
       expect(responsiveCurrent).toHaveBeenCalledTimes(2);
 
       const onMouseMove = jest.spyOn(View.prototype as any, 'onMouseMove');
+      const observerPosition = jest.spyOn(View.prototype as any, 'observerPosition');
       // @ts-ignore
       view.onMouseMove(eventMouse);
       expect(onMouseMove).toHaveBeenCalled();

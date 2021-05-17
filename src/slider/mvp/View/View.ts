@@ -1,7 +1,8 @@
-import { IState } from '../../types/interfaces';
-import { keyChanges, rotation } from '../../types/constatnts';
-import { Button, Interval, SliderRange, Tooltip } from './SubView';
-import { EventObserver as Observer } from '../../utils/EventObserver';
+import {boundMethod} from 'autobind-decorator';
+import {IState} from '../../types/interfaces';
+import {keyChanges, rotation} from '../../types/constatnts';
+import {Button, Interval, SliderRange, Tooltip} from './SubView';
+import {EventObserver as Observer} from '../../utils/EventObserver';
 
 class View {
   private slider: HTMLElement = document.createElement('div');
@@ -22,23 +23,11 @@ class View {
 
   private buttonWidth = 10;
 
+  private currentButton: HTMLElement = this.buttonRight.button; // абстрактный тумблер
+
   private clickHandler: (
     e: MouseEvent | TouchEvent,
   ) => void = this.onMouseMove.bind(this);
-
-  private clickMoveHandler: (
-    e: MouseEvent | TouchEvent,
-  ) => void = this.onClickMove.bind(this);
-
-  private mouseDownHandler: (
-    e: MouseEvent | TouchEvent,
-  ) => void = this.buttonAction.bind(this);
-
-  private currentValHandler: (
-    e: MouseEvent | TouchEvent,
-  ) => void = this.currentButtonAction.bind(this);
-
-  private currentButton: HTMLElement = this.buttonRight.button; // абстрактный тумблер
 
   private isLeftOn = false;
 
@@ -90,34 +79,35 @@ class View {
   }
 
   private addAction(): void {
-    this.buttonRight.addEvent('mousedown', this.mouseDownHandler);
-    this.buttonRight.addEvent('dragstart', this.mouseDownHandler);
-    this.buttonRight.addEvent('touchstart', this.mouseDownHandler);
+    this.buttonRight.addEvent('mousedown', this.buttonAction);
+    this.buttonRight.addEvent('dragstart', this.buttonAction);
+    this.buttonRight.addEvent('touchstart', this.buttonAction);
     this.currentValRight.tooltipVal.addEventListener(
       'mousedown',
-      this.currentValHandler,
+      this.currentButtonAction,
     );
     this.currentValRight.tooltipVal.addEventListener(
       'touchstart',
-      this.currentValHandler,
+      this.currentButtonAction,
     );
     if (this.state.range === 'two') {
-      this.buttonLeft.addEvent('mousedown', this.mouseDownHandler);
-      this.buttonLeft.addEvent('touchstart', this.mouseDownHandler);
+      this.buttonLeft.addEvent('mousedown', this.buttonAction);
+      this.buttonLeft.addEvent('touchstart', this.buttonAction);
       this.currentValLeft.tooltipVal.addEventListener(
         'touchstart',
-        this.currentValHandler,
+        this.currentButtonAction,
       );
       this.currentValLeft.tooltipVal.addEventListener(
         'mousedown',
-        this.currentValHandler,
+        this.currentButtonAction,
       );
     }
-    this.sliderRange.addEventListener('mousedown', this.clickMoveHandler);
-    this.sliderRange.addEventListener('touchstart', this.clickMoveHandler);
-    window.addEventListener('resize', this.resizeSlider.bind(this));
+    this.sliderRange.addEventListener('mousedown', this.onClickMove);
+    this.sliderRange.addEventListener('touchstart', this.onClickMove);
+    window.addEventListener('resize', this.resizeSlider);
   }
 
+  @boundMethod
   private resizeSlider(): void {
     this.observer.broadcast({
       [keyChanges.WIDTH]: this.sliderRange.offsetWidth,
@@ -183,7 +173,7 @@ class View {
     this.currentValGeneral.tooltipVal.remove();
     this.buttonLeft.button.remove();
     this.currentValLeft.tooltipVal.remove();
-    this.observer.broadcast({ [keyChanges.SHIFT_LEFT]: 0 });
+    this.observer.broadcast({[keyChanges.SHIFT_LEFT]: 0});
   }
 
   private intervalExpose(): void {
@@ -191,6 +181,7 @@ class View {
     this.slider.append(this.interval.interval);
   }
 
+  @boundMethod
   private currentButtonAction(e: MouseEvent | TouchEvent): void {
     let event;
     if (e instanceof MouseEvent) {
@@ -206,22 +197,23 @@ class View {
     }
     if (e instanceof MouseEvent) {
       document.addEventListener('mousemove', this.clickHandler);
-      document.addEventListener('mouseup', this.removeMouse.bind(this));
+      document.addEventListener('mouseup', this.removeMouse);
     } else {
       document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.removeTouch.bind(this));
+      document.addEventListener('touchend', this.removeTouch);
     }
     this.currentButton.ondragstart = () => false;
   }
 
+  @boundMethod
   private buttonAction(e: MouseEvent | TouchEvent): void {
     if (e instanceof MouseEvent) {
       document.addEventListener('mousemove', this.clickHandler);
-      document.addEventListener('mouseup', this.removeMouse.bind(this));
+      document.addEventListener('mouseup', this.removeMouse);
       this.currentButton = <HTMLElement>e.currentTarget;
     } else {
       document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.removeTouch.bind(this));
+      document.addEventListener('touchend', this.removeTouch);
       this.currentButton = <HTMLElement>e.targetTouches[0].target;
     }
     if (this.state.range === 'one') {
@@ -231,11 +223,13 @@ class View {
     this.currentButton.ondragstart = () => false;
   }
 
+  @boundMethod
   private removeTouch(): void {
     document.removeEventListener('touchmove', this.clickHandler);
     document.onmouseup = null;
   }
 
+  @boundMethod
   private removeMouse(): void {
     document.removeEventListener('mousemove', this.clickHandler);
     document.onmouseup = null;
@@ -256,8 +250,9 @@ class View {
     this.eventButton(max);
   }
 
-  private onMouseMove(e: MouseEvent | TouchEvent): void {
-    this.observerPosition(e);
+
+  private onMouseMove(event: MouseEvent | TouchEvent): void {
+    this.observerPosition(event);
     this.eventButton(this.state.step);
   }
 
@@ -276,16 +271,17 @@ class View {
       cordClient = event.clientY;
     }
 
-    this.observer.broadcast({ [keyChanges.POSITION]: cordClient });
+    this.observer.broadcast({[keyChanges.POSITION]: cordClient});
 
     if (this.state.range === 'two') {
-      this.observer.broadcast({ [keyChanges.ACTIVE]: cordClient });
+      this.observer.broadcast({[keyChanges.ACTIVE]: cordClient});
     }
   }
 
-  private onClickMove(e: MouseEvent | TouchEvent): void {
-    this.buttonAction(e);
-    this.observerPosition(e);
+  @boundMethod
+  private onClickMove(event: MouseEvent | TouchEvent): void {
+    this.buttonAction(event);
+    this.observerPosition(event);
     if (this.state.range === 'two') {
       this.overridingButtons(this.state.isActiveLeft);
     }
@@ -310,12 +306,12 @@ class View {
       pos = this.state[keyChanges.SHIFT_RIGHT] < pos
         ? this.state[keyChanges.SHIFT_RIGHT]
         : pos;
-      this.observer.broadcast({ [keyChanges.SHIFT_LEFT]: pos });
+      this.observer.broadcast({[keyChanges.SHIFT_LEFT]: pos});
     } else {
       pos = this.state[keyChanges.SHIFT_LEFT] > pos
         ? this.state[keyChanges.SHIFT_LEFT]
         : pos;
-      this.observer.broadcast({ [keyChanges.SHIFT_RIGHT]: pos });
+      this.observer.broadcast({[keyChanges.SHIFT_RIGHT]: pos});
     }
     this.moveButton(pos);
   }
@@ -392,4 +388,4 @@ class View {
   }
 }
 
-export { View };
+export {View};

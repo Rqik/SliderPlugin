@@ -1,3 +1,4 @@
+import { boundMethod } from 'autobind-decorator';
 import { Slider } from '../../slider/types/interfaces';
 
 class InputChecker {
@@ -30,10 +31,11 @@ class InputChecker {
   }
 
   private addEventSlider(): void {
-    this.sliderDOM.on('click', this.eventChange.bind(this));
-    this.inputRotate.on('click', this.addClassForm.bind(this));
+    this.sliderDOM.on('click', this.eventChange);
+    this.inputRotate.on('click', this.addClassForm);
   }
 
+  @boundMethod
   private addClassForm(): void {
     if (this.inputRotate.is(':checked')) {
       this.sliderDOM.addClass(this.classRotate);
@@ -42,6 +44,7 @@ class InputChecker {
     }
   }
 
+  @boundMethod
   private eventChange(): void {
     this.inputChange('currentValLeft', this.slider.getData()[0].currentValLeft);
     this.inputChange('currentValRight', this.slider.getData()[0].currentValRight);

@@ -1,3 +1,4 @@
+import { boundMethod } from 'autobind-decorator';
 import { IState, rotate, StateEl } from '../../types/interfaces';
 import { View } from '../View/View';
 import { Model } from '../Model/Model';
@@ -8,12 +9,6 @@ class Present {
   private view: View;
 
   private rotate: rotate;
-
-  private subFunctionModel: (data: StateEl) => void
-    = this.setStateModel.bind(this);
-
-  private subFunctionView: (data: StateEl) => void
-    = this.setStateView.bind(this);
 
   constructor(public selector: string) {
     this.model = new Model(selector);
@@ -26,17 +21,19 @@ class Present {
     return this.model.stateCurrent;
   }
 
+  @boundMethod
   private setStateModel(data: StateEl): void {
     this.model.editState(data);
   }
 
+  @boundMethod
   private setStateView() {
     this.view.editView(this.model.stateCurrent);
   }
 
   private init(): void {
-    this.model.observer.subscribe(this.subFunctionView);
-    this.view.observer.subscribe(this.subFunctionModel);
+    this.model.observer.subscribe(this.setStateView);
+    this.view.observer.subscribe(this.setStateModel);
     this.view.render();
   }
 
@@ -45,8 +42,8 @@ class Present {
     this.view.editView(this.model.stateCurrent);
     if (this.rotate !== this.model.stateCurrent.rotate) {
       this.rotate = this.model.stateCurrent.rotate;
-      this.view.observer.unsubscribe(this.subFunctionModel);
-      this.model.observer.unsubscribe(this.subFunctionView);
+      this.view.observer.unsubscribe(this.setStateModel);
+      this.model.observer.unsubscribe(this.setStateView);
     }
     this.init();
   }

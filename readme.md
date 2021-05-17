@@ -1,6 +1,6 @@
 # **SliderRqik**
-<img src="https://img.shields.io/badge/npm-v7.13.0-blue?style=for-the-badge">
-<img src="https://img.shields.io/badge/node->=15.10.0-ff0062?style=for-the-badge">
+<a name="https://www.npmjs.com/"><img src="https://img.shields.io/badge/npm-v7.13.0-blue?style=for-the-badge"></a>
+<a name="https://nodejs.org/en/"><img src="https://img.shields.io/badge/node->=15.10.0-ff0062?style=for-the-badge"></a>
 
 ## 🏷️ Содержание
 - [**Демо страница**](https://rqik.github.io/SliderPlugin/)

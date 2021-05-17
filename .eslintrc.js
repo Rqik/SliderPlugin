@@ -47,7 +47,7 @@ module.exports = {
     'fsd/jq-use-js-prefix-in-selector': 'error',
     'fsd/no-function-declaration-in-event-listener': 'error',
     'fsd/split-conditionals': 'error',
-    'linebreak-style': ['error', 'windows'],
+    'linebreak-style': ['error', 'unix'],
     'import/prefer-default-export': 'off',
     'import/extensions': [
       'error',
@@ -60,8 +60,8 @@ module.exports = {
       },
     ],
     'no-use-before-define': 'off',
-    "no-shadow": "off",
-    "@typescript-eslint/no-shadow": "error"
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'error',
   },
   overrides: [
     {

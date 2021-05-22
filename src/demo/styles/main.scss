@@ -1,12 +1,9 @@
 @import '~normalize.css';
 @import './variables.scss';
-@import '../page/demo';
+//@import '../page/demo';
 @import '../assets/fonts/montserrat.css';
 @import '../../slider/styles/slider';
-@import '../components/checkbox-list/checkbox-list';
-@import '../components/slider/slider';
-@import '../components/slider-form/slider-form';
-@import '../components/field/field';
+
 
 * {
   box-sizing: border-box;

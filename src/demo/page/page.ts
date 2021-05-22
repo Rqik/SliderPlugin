@@ -1,4 +1,5 @@
 import '../styles/main.scss';
+import './page.scss';
 import { InputChecker } from '../InputChecker/InputChecker';
 
 require('../../slider/Slider.ts');

@@ -6,8 +6,20 @@
 /***/ ((__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 
+// EXTERNAL MODULE: ../node_modules/autobind-decorator/lib/esm/index.js
+var esm = __webpack_require__(362);
 ;// CONCATENATED MODULE: ./demo/InputChecker/InputChecker.ts
 /* provided dependency */ var $ = __webpack_require__(638);
+var __decorate = undefined && undefined.__decorate || function (decorators, target, key, desc) {
+  var c = arguments.length,
+      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+      d;
+  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
 class InputChecker {
   constructor(form, sliderDOM, slider, classRotate) {
     this.form = form;
@@ -23,8 +35,8 @@ class InputChecker {
   }
 
   addEventSlider() {
-    this.sliderDOM.on('click', this.eventChange.bind(this));
-    this.inputRotate.on('click', this.addClassForm.bind(this));
+    this.sliderDOM.on('click', this.eventChange);
+    this.inputRotate.on('click', this.addClassForm);
   }
 
   addClassForm() {
@@ -118,6 +130,10 @@ class InputChecker {
 
 }
 
+__decorate([esm/* boundMethod */.MR], InputChecker.prototype, "addClassForm", null);
+
+__decorate([esm/* boundMethod */.MR], InputChecker.prototype, "eventChange", null);
+
 
 ;// CONCATENATED MODULE: ./demo/page/demo.ts
 /* provided dependency */ var demo_$ = __webpack_require__(638);
@@ -159,6 +175,8 @@ new InputChecker($form4, $plug4, plug4, 'slider_vertical').init();
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
+// EXTERNAL MODULE: ../node_modules/autobind-decorator/lib/esm/index.js
+var esm = __webpack_require__(362);
 ;// CONCATENATED MODULE: ./slider/mvp/View/Button/Butoon.ts
 class Button {
   constructor() {
@@ -368,6 +386,15 @@ class EventObserver {
 
 
 ;// CONCATENATED MODULE: ./slider/mvp/View/View.ts
+var __decorate = undefined && undefined.__decorate || function (decorators, target, key, desc) {
+  var c = arguments.length,
+      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+      d;
+  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
 
 
 
@@ -378,11 +405,8 @@ class View {
     this.buttonRight = new Button();
     this.interval = new Interval();
     this.buttonWidth = 10;
-    this.clickHandler = this.onMouseMove.bind(this);
-    this.clickMoveHandler = this.onClickMove.bind(this);
-    this.mouseDownHandler = this.buttonAction.bind(this);
-    this.currentValHandler = this.currentButtonAction.bind(this);
     this.currentButton = this.buttonRight.button;
+    this.clickHandler = this.onMouseMove.bind(this);
     this.isLeftOn = false;
     this.state = state;
     this.observer = new EventObserver();
@@ -418,22 +442,22 @@ class View {
   }
 
   addAction() {
-    this.buttonRight.addEvent('mousedown', this.mouseDownHandler);
-    this.buttonRight.addEvent('dragstart', this.mouseDownHandler);
-    this.buttonRight.addEvent('touchstart', this.mouseDownHandler);
-    this.currentValRight.tooltipVal.addEventListener('mousedown', this.currentValHandler);
-    this.currentValRight.tooltipVal.addEventListener('touchstart', this.currentValHandler);
+    this.buttonRight.addEvent('mousedown', this.buttonAction);
+    this.buttonRight.addEvent('dragstart', this.buttonAction);
+    this.buttonRight.addEvent('touchstart', this.buttonAction);
+    this.currentValRight.tooltipVal.addEventListener('mousedown', this.currentButtonAction);
+    this.currentValRight.tooltipVal.addEventListener('touchstart', this.currentButtonAction);
 
     if (this.state.range === 'two') {
-      this.buttonLeft.addEvent('mousedown', this.mouseDownHandler);
-      this.buttonLeft.addEvent('touchstart', this.mouseDownHandler);
-      this.currentValLeft.tooltipVal.addEventListener('touchstart', this.currentValHandler);
-      this.currentValLeft.tooltipVal.addEventListener('mousedown', this.currentValHandler);
+      this.buttonLeft.addEvent('mousedown', this.buttonAction);
+      this.buttonLeft.addEvent('touchstart', this.buttonAction);
+      this.currentValLeft.tooltipVal.addEventListener('touchstart', this.currentButtonAction);
+      this.currentValLeft.tooltipVal.addEventListener('mousedown', this.currentButtonAction);
     }
 
-    this.sliderRange.addEventListener('mousedown', this.clickMoveHandler);
-    this.sliderRange.addEventListener('touchstart', this.clickMoveHandler);
-    window.addEventListener('resize', this.resizeSlider.bind(this));
+    this.sliderRange.addEventListener('mousedown', this.onClickMove);
+    this.sliderRange.addEventListener('touchstart', this.onClickMove);
+    window.addEventListener('resize', this.resizeSlider);
   }
 
   resizeSlider() {
@@ -531,10 +555,10 @@ class View {
 
     if (e instanceof MouseEvent) {
       document.addEventListener('mousemove', this.clickHandler);
-      document.addEventListener('mouseup', this.removeMouse.bind(this));
+      document.addEventListener('mouseup', this.removeMouse);
     } else {
       document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.removeTouch.bind(this));
+      document.addEventListener('touchend', this.removeTouch);
     }
 
     this.currentButton.ondragstart = () => false;
@@ -543,11 +567,11 @@ class View {
   buttonAction(e) {
     if (e instanceof MouseEvent) {
       document.addEventListener('mousemove', this.clickHandler);
-      document.addEventListener('mouseup', this.removeMouse.bind(this));
+      document.addEventListener('mouseup', this.removeMouse);
       this.currentButton = e.currentTarget;
     } else {
       document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.removeTouch.bind(this));
+      document.addEventListener('touchend', this.removeTouch);
       this.currentButton = e.targetTouches[0].target;
     }
 
@@ -581,8 +605,8 @@ class View {
     this.eventButton(max);
   }
 
-  onMouseMove(e) {
-    this.observerPosition(e);
+  onMouseMove(event) {
+    this.observerPosition(event);
     this.eventButton(this.state.step);
   }
 
@@ -613,9 +637,9 @@ class View {
     }
   }
 
-  onClickMove(e) {
-    this.buttonAction(e);
-    this.observerPosition(e);
+  onClickMove(event) {
+    this.buttonAction(event);
+    this.observerPosition(event);
 
     if (this.state.range === 'two') {
       this.overridingButtons(this.state.isActiveLeft);
@@ -723,6 +747,18 @@ class View {
   }
 
 }
+
+__decorate([esm/* boundMethod */.MR], View.prototype, "resizeSlider", null);
+
+__decorate([esm/* boundMethod */.MR], View.prototype, "currentButtonAction", null);
+
+__decorate([esm/* boundMethod */.MR], View.prototype, "buttonAction", null);
+
+__decorate([esm/* boundMethod */.MR], View.prototype, "removeTouch", null);
+
+__decorate([esm/* boundMethod */.MR], View.prototype, "removeMouse", null);
+
+__decorate([esm/* boundMethod */.MR], View.prototype, "onClickMove", null);
 
 
 ;// CONCATENATED MODULE: ./slider/mvp/Model/Model.ts
@@ -923,14 +959,21 @@ class Model {
 
 
 ;// CONCATENATED MODULE: ./slider/mvp/Presenter/Presenter.ts
+var Presenter_decorate = undefined && undefined.__decorate || function (decorators, target, key, desc) {
+  var c = arguments.length,
+      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+      d;
+  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
 
 
 
 class Present {
   constructor(selector) {
     this.selector = selector;
-    this.subFunctionModel = this.setStateModel.bind(this);
-    this.subFunctionView = this.setStateView.bind(this);
     this.model = new Model(selector);
     this.view = new View(this.model.stateCurrent);
     this.rotate = this.model.stateCurrent.rotate;
@@ -950,8 +993,8 @@ class Present {
   }
 
   init() {
-    this.model.observer.subscribe(this.subFunctionView);
-    this.view.observer.subscribe(this.subFunctionModel);
+    this.model.observer.subscribe(this.setStateView);
+    this.view.observer.subscribe(this.setStateModel);
     this.view.render();
   }
 
@@ -961,14 +1004,18 @@ class Present {
 
     if (this.rotate !== this.model.stateCurrent.rotate) {
       this.rotate = this.model.stateCurrent.rotate;
-      this.view.observer.unsubscribe(this.subFunctionModel);
-      this.model.observer.unsubscribe(this.subFunctionView);
+      this.view.observer.unsubscribe(this.setStateModel);
+      this.model.observer.unsubscribe(this.setStateView);
     }
 
     this.init();
   }
 
 }
+
+Presenter_decorate([esm/* boundMethod */.MR], Present.prototype, "setStateModel", null);
+
+Presenter_decorate([esm/* boundMethod */.MR], Present.prototype, "setStateView", null);
 
 
 ;// CONCATENATED MODULE: ./slider/Slider.ts
@@ -1115,6 +1162,18 @@ class SliderPlugin {
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
@@ -1187,7 +1246,7 @@ class SliderPlugin {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [638], () => (__webpack_require__(323)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [291], () => (__webpack_require__(323)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

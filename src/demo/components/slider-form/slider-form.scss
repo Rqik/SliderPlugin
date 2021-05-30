@@ -3,13 +3,13 @@
 
 .slider-form {
   display: flex;
-  flex-wrap: wrap;
   flex-direction: row;
-  gap: 20px;
-  font-family: "Montserrat", sans-serif;
-  font-style: normal;
+  flex-wrap: wrap;
+  width: 100%;
+  font-family: 'Montserrat', sans-serif;
   font-weight: normal;
+  font-style: normal;
   font-size: 14px;
   line-height: 126.9%;
-  width: 100%;
+  gap: 20px;
 }

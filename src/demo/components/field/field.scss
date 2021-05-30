@@ -1,18 +1,18 @@
 .field {
   display: flex;
   flex-direction: column;
-  font-style: normal;
-  width: 130px;
   border-radius: 8px;
-  font-family: "Montserrat", sans-serif;
+  width: 130px;
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
 
   &__input {
     margin-bottom: 6px;
     border: none;
     border-radius: 4px;
-    width: 100%;
     padding: 8px;
-    font-size: 18px;
+    width: 100%;
     font-weight: 600;
+    font-size: 18px;
   }
 }

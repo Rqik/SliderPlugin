@@ -1,11 +1,13 @@
 $slider-border: rgba(116, 117, 139, 0.5);
-$slider-interval: #C2C2CC;
-$main-color: #FE7D1F;
-$secondary-color: #DB580F;
-
-$active-zone-background: linear-gradient(90deg, $secondary-color 0%, $main-color 100%);
-$active-zone-background-vertical: linear-gradient(180deg, $secondary-color 0%, $main-color 100%);
-
-$inner-shadow:inset 0px 1px 4px #DB580F;
-$shadow-orange : 0px 2px 4px rgba(154, 68, 7, 0.45);
-$shadow-orange2 : 0px 2px 12px rgba(206, 91, 9, 0.836);
+$slider-interval: #c2c2cc;
+$main-color: #fe7d1f;
+$secondary-color: #db580f;
+$active-zone-background: linear-gradient(90deg,
+  $secondary-color 0%,
+  $main-color 100%);
+$active-zone-background-vertical: linear-gradient(180deg,
+  $secondary-color 0%,
+  $main-color 100%);
+$inner-shadow: inset 0 1px 4px #db580f;
+$shadow-orange: 0 2px 4px rgba(154, 68, 7, 0.45);
+$shadow-orange2: 0 2px 12px rgba(206, 91, 9, 0.836);

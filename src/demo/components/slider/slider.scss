@@ -3,18 +3,18 @@
 .slider {
   display: flex;
   flex-direction: column;
-  justify-self: center;
-  align-self: flex-start;
   align-content: center;
-  justify-content: flex-start;
   align-items: center;
+  align-self: flex-start;
+  justify-content: flex-start;
+  justify-self: center;
   padding: 40px;
   width: 100%;
 
   &_vertical {
+    margin-bottom: 30px;
     width: 130px;
     min-height: 300px;
-    margin-bottom: 30px;
 
     &.slider__rqik {
       width: 130px;
@@ -24,32 +24,31 @@
   &__view-block {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     width: 100%;
 
     &_resizable {
-      width: 100%;
-      height: 200px;
-      resize: both;
-      overflow: auto;
-      padding: 70px 60px;
-      margin: 20px 0;
-      max-width: 60vw;
-      background-color: white;
-      border: 4px solid $resize-block-border;
       position: relative;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
       align-content: center;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      margin: 20px 0;
+      border: 4px solid $resize-block-border;
+      padding: 70px 60px;
+      width: 100%;
+      height: 200px;
+      max-width: 60vw;
+      background-color: white;
+      resize: both;
 
       .slider__rqik {
-        margin-left: 0;
         margin-top: 0;
+        margin-left: 0;
         height: 100%;
-
       }
 
       .slider_vertical {

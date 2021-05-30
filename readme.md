@@ -1,8 +1,10 @@
 # **SliderRqik**
+
 <a href="https://www.npmjs.com/"><img src="https://img.shields.io/badge/npm-v7.13.0-blue?style=for-the-badge"></a>
 <a href="https://nodejs.org/en/"><img src="https://img.shields.io/badge/node->=15.10.0-ff0062?style=for-the-badge"></a>
 
 ## 🏷️ Содержание
+
 - [**Демо страница**](https://rqik.github.io/SliderPlugin/)
 - [Использованные технологии](#technology)
 - [Установка](#installation)
@@ -10,7 +12,6 @@
 - [Архитектура](#mvp)
 - [Структура проекта](#structure)
 - [Диаграмма](#diagram)
-
 
 ## <a name="technology"></a> 🤖 Использованные технологии
 
@@ -27,11 +28,12 @@
 `Babel`
 
 ## <a name="installation"></a> 💾 Установка
+
 Инcтрукции данного раздела следует выполнять в командной строке.
 
 1.Clone
 
-```console 
+```console
 // Скачайте репозиторий
 git clone https://github.com/Rqik/SliderPlugin.git
 
@@ -57,51 +59,65 @@ npm install
 
 ## <a name="commands"></a> 📗 Команды
 
-### `npm run dev` 
-Запускает *development* сборку и сохраняет результат 
+### `npm run dev`
+
+Запускает _development_ сборку и сохраняет результат
 в папку `/dist`. Детали работы в [webpack.dev.js](./config/webpack.dev.js).
 
-### `npm run watch` 
-Запускает *development* сборку и сохраняет результат в папку `/dist
-`. Следит за изменениями в коде и переносит изменения в сборку. 
+### `npm run watch`
 
-### `npm run start`  
-Запускает *development* сборку поднимает локальный сервер с результатом cборки. 
-Не сохраняет результат в файловой системе. Запускает ваш браузер по умолчанию 
+Запускает _development_ сборку и сохраняет результат в папку `/dist`. Следит за изменениями в коде и переносит изменения в сборку.
+
+### `npm run start`
+
+Запускает _development_ сборку поднимает локальный сервер с результатом cборки.
+Не сохраняет результат в файловой системе. Запускает ваш браузер по умолчанию
 (если он не запущен), создает вкладку с адресом лок. сервера и переходит к ней.
 
 ### `npm run build`
-Запускает *production* сборку и сохраняет результат в папку `/dist`.
+
+Запускает _production_ сборку и сохраняет результат в папку `/dist`.
 Детали работы в [webpack.prod.js](./config/webpack.prod.js).
 
-### `npm run lint` 
+### `npm run lint`
+
 Запускает eslint проверку на ошибки в коде. Результат вызова отобразится в консоли.
 
-### `npm run lintfix` 
-Запускает eslint проверку на ошибки в коде и автоматически исправит проблемный код. 
-Результат вызова отобразится в консоли.
+### `npm run lintfix`
 
-### `npm run test` 
-Запускает jest тестирование и показывает процент покрытия тестами. 
+Запускает eslint проверку на ошибки в коде и автоматически исправит проблемный код.
+Результат вызова отобразится в консоли.
+автоматически исправит проблемный код. Результат вызова отобразится в консоли.
+
+### `npm run stylelint`
+
+Запускает stylelint проверку на ошибки в css/scss и автоматически исправит проблемный код. Результат вызова отобразится в консоли.
+
+### `npm run test`
+
+Запускает jest тестирование и показывает процент покрытия тестами.
 Сохраняет в `/coverage` результат проверки тестов.
 
-### `npm run testW` 
-Запускает jest тестирование. 
+### `npm run testW`
+
+Запускает jest тестирование.
 Следит за изменениям в тестах и перезапускает проверку.
 
-### `npm run testCW` 
-Запускает jest тестирование и показывает процент покрытия тестами. 
+### `npm run testCW`
+
+Запускает jest тестирование и показывает процент покрытия тестами.
 Следит за изменениям в тестах и перезапускает проверку.
 Сохраняет в `/coverage` результат проверки тестов.
 
 ### `npm run deploy`
-Развертывает содержимое папки `/dist` в `git` ветку *gh-pages*.
+
+Развертывает содержимое папки `/dist` в `git` ветку _gh-pages_.
 
 ---
 
-## <a name="mvp"></a> 🗿 Архитектура 
+## <a name="mvp"></a> 🗿 Архитектура
 
-**Model - View - Presenter**
+## Model - View - Presenter
 
 **Model** -отвечает за текущее состояние слайдера, хранит в себе стартовые значения. Имеет методы для изменения текущего состояния и его возврата.
 
@@ -283,22 +299,20 @@ let res = slider.getdata()
 
 // res = [{...},{...}]
 ```
-##  <a name="structure"></a> 🗂️ Структура проекта
+
+## <a name="structure"></a> 🗂️ Структура проекта
 
 **/src** - служит для хранения исходников.
-  * **/demo** - демо слайдера
-    - **assets:** вспомогательные файлы проекта
-    - **components:** компоненты проекта
-    - **InputChecker:** компонент для удобного взаимодействия с формами
-    - **page:** демо страница
-    - **styles:** общие стили
-  * **/slider**
-    - **mvp** компоненты архитектуры проекта 
-    - **styles** базовые стили для слайдера
-    - **types** типизированные константы и интерфейсы 
-    - **utils** вспомогательные компоненты
-    
-**/dist** - хранит результат сборки проекта.
+
+- **/demo** - демо слайдера
+  - **assets:** вспомогательные файлы проекта
+  - **components:** компоненты проекта
+  - **InputChecker:** компонент для удобного взаимодействия с формами
+  - **page:** демо страница
+  - **styles:** общие стили
+- **/slider** - **mvp** компоненты архитектуры проекта - **styles** базовые стили для слайдера - **types** типизированные константы и интерфейсы - **utils** вспомогательные компоненты
+  **/dist** - хранит результат сборки проекта.
 
 ## <a name="diagram"></a> 🖇 [Диаграмма](https://viewer.diagrams.net/?highlight=0000ff&edit=_blank&layers=1&nav=1#R7Z1bb%2BI4FMc%2FDdLuQ0fkRsJjuXQuS2eq0p3t7MvKEBc8DTFyzG0%2B%2FdjEIYADNSUm7cpVpWLnJMT%2B%2Fc%2FJie2kNac9WX4kYDq%2BxSGManY9XNacTs22rboTsD%2B8ZpXWeK6oGBEUCqO8oo9%2BwWxPUTtDIUx2DCnGEUXT3cohjmM4pDt1gBC82DV7wtHut07BCEoV%2FSGI5Np%2FUEjHaW1g%2B3n9J4hG4%2BybrUYz3TIBmbFoSTIGIV5sVTndmtMmGNP002TZhhHvvKxfPt3UO%2B1r5%2Bu8efPjr%2F8Gj8vwG71KD3Zzyi6bJhAY01cfeta7%2F5rg3vUX8Pxwh0adngWR2KU%2BB9FM9NcdgQn7GkhEo%2Bkq68lkgSYRiFmp9YRj2hdbLFYGERrF7PMw3dNpzSGhiEG4FhsonrLa4RhFYQ%2Bs8Iw3I6Fg%2BJyVWmNM0C92WBCJY7LNhAo92Y0diz7fk1XXWS07XWZzl%2FWNtVd1C5Y7hj2QUFExxFEEpgkabJoxAWSE4hamFE%2BEkWLXC0S82XC5JTyB4iPEE0jJipmIrYHoeeFVVlOUF7lGrYaoG%2B%2Fo0xa%2BIfxitDl0zp59EPhPkEJTksIkDQZ7MmANpGs8BD%2FDNo4w492JcaoLFEV7VZk0IvhEDwojmYIhike9tU3HzWvuRct5FWb7PkVrDxyjMIQxh4opoCAlyHFNMYrpume8FvtlHdiuf%2FBqHjvxNitbeZn9cnNC2zhmbQFozRcyeSwgl0gB%2BaMe9DJ5gZppWYl0Zlc6aEsCPUdwUePf51i55g3y0pB7dsXIbQm5xDhCa3Yp4%2BxKab0K8IShimBO9IED71xZEnVHpu4UEI7AAEZ3OEEUYX58ktruka8Krh%2BowQ1OZosHP3lGZNfXHSAuwhFLpwhP0wTBRBwvScJEVIVJuA35qDKcrbYJJRnHL00bgb5Yz4pCHyfEAVeKA9%2FXod9kehfL9JympagJV1em50kqYAQolGRgvL%2FQed5PpmfLpL8NEkjmBXd3BvZ5sC%2BZ4z32%2FMGU3H%2Fufln406T11Pzx0LtqSKxbMxbeYkO6ZNKqCZ820rJXt2eEt%2FL7usbwLpe3VXcrjuO%2BBLy%2Fvg0wqMtG7SgOw2nzbUsekf3MM21WNrTLpu1VnaDJ12wJshmXeS3dQDEjO31gRg2uI1%2BnWRtN2NaAWnX2RN%2BdliOxhiGihaMrhvaZt9VW1WHbkmnfFs6VmYG0EgfSnMbuSJrlO2o62ISH8oUgD6iaoTQFn9840JscS3vutu4B%2Bdt%2FXEwe%2Fm3cdEcouilI1cxQmi7Ylc%2BXWnLqZhLz0vDqmzFVc%2BVsCc1%2B1BajaMafywaucRpUkbi85oWn59QsetFIfbNUrbq7Mjk949j7JkXTwtu54MRI8TnLSRrnvbVaxuAuD3ej6mkRK5Bw92cDs6LlwitafEtx9G0TIMofapUd38yaKDp%2BoIz%2FrSxrcQr8fj0feg%2FikYn0pQOv%2FHbckSfAzYoHncQvucSl%2BJTlp1HMaiY9rKtf3pI9YGdG27TwVV3Tois5s%2BXkrDtnrTw4fm6S9RKTdW9v1sy1VbN1T9esmS1fzjMtJJIYTHwvdqb3k67bcrpuwntpeFWTc2233vLFO5kNkiFBA5OYl067oRi8HV2x25FnUgYEg3DIL3cGd8m4Vde1acNty%2Fdhs9j4tzbglmp2ps%2FBZeIHHjYwabq%2BMXVPNUnX9joQV76uf3q47X3F%2FG0%2Bxu%2BP%2Bv3Gh95Pku7KS1oPvwnI4D4Td%2BUj6q6cxpl7stLwXnCBWzFdu4Aua26dHX6Mwz%2Foagr%2FrDnXrIZ%2FNP5dtgAuueCt8DHCusQUhiOYpWisS8Z4hGMQdfNa1tGzOISh6ObcpofX3sqd9SekdCVyMDCjmGdhdJJnaNuRwj45W0rwjAzhMV2LixTLBEfwGDHRfN7mo7gIjABF822jYhhi1zuuvTxpc3aTts2bArMjpOcpdsqJXhMCVltmQtEHv2b%2FuQexOvlGzdyu14%2BaB9Yxc%2FYhPd1ci5v%2Be7085YvNBeTJNEhWj2L%2FdeEHL7BYIYqd5fbGzkqUtMs6ey3mS6r2ylb1WSHGfU8MSybmKxLLVqqUHIjODCCe454SQHzfq2mPCH4Vanq9Ko69l%2BNlVfhvQhXe%2FpBDcFQVe%2BZB3dKviuB%2FoIqGoiqyJS8Vq2Ivp3HFU%2FSHVLFnHtiND82tn0C%2FRrJnO961SLIltC%2FHjsabUIl0SWkcTzL37RviLduHZXWeve%2Fu2GtSXiVprPZ0tKkasJyq8tHCZ7ya7ysMHHvI%2BMWut0vPIM57vK6S4YY3ci9gq6Z95UN7Veh290KlK96CdCi0yvZnhVZWzP9lQmqe%2F%2BMJp%2Fsb)
+
 ![диаграмма](src/demo/assets/img/diagramm.jpg)

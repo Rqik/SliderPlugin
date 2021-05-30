@@ -2,88 +2,82 @@
 @import 'interval-point';
 
 .slider-range {
+  z-index: 10;
+  border: 0.5px solid $slider-border;
+  border-radius: 1rem;
   width: 100%;
   height: 7px;
-  border-radius: 1rem;
-  cursor: pointer;
   background-color: white;
-  border: 0.5px solid $slider-border;
-  z-index: 10;
+  cursor: pointer;
 
   &_vertical {
-    height: 100%;
-    width: 7px;
     margin: 0;
+    width: 7px;
+    height: 100%;
 
     .slider-range__active-zone {
-      bottom: 0;
       top: 0;
-      height: 100%;
+      bottom: 0;
       width: 7px;
+      height: 100%;
       background: $active-zone-background-vertical;
     }
   }
 
   &__active-zone {
     position: absolute;
-    background: $active-zone-background;
-    border-radius: 14px;
-    top: 0;
     left: 0;
     right: 0;
+    top: 0;
+    z-index: 1;
+    border-radius: 14px;
     width: 5px;
     height: 7px;
-    z-index: 1;
+    background: $active-zone-background;
   }
 
   &__current-value {
-    box-sizing: border-box;
+    position: absolute;
+    top: -40px;
     display: inline-block;
-    background-color: $main-color;
+    margin: auto;
+    border: 2px solid white;
+    border-radius: 14px;
+    padding: 3px 8px;
+    min-height: 20px;
+    box-shadow: $inner-shadow;
+    box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     font-size: 13px;
-    color: white;
-    border-radius: 14px;
-    border: 2px solid white;
-    padding: 3px 8px;
-    margin: auto;
-    min-height: 20px;
     line-height: 20px;
-    position: absolute;
-    top: -40px;
     text-align: center;
-    box-shadow: $inner-shadow;
+    color: white;
+    background-color: $main-color;
     user-select: none;
   }
 
   &__button {
+    position: absolute;
+    z-index: 30;
+    border-radius: 50%;
+    padding: 0;
     width: 20px;
     height: 20px;
-    border-radius: 50%;
-    position: absolute;
-    cursor: pointer;
-    box-sizing: border-box;
-    z-index: 30;
-    border: -1px solid transparent;
-    padding: 0;
     box-shadow: $shadow-orange;
-    background: linear-gradient(180deg, #FFFFFF 0%, #F7DDC5 100%) center;
-    transition: box-shadow .3s ease-in-out;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+    box-sizing: border-box;
+    background: linear-gradient(180deg, #fff 0%, #f7ddc5 100%) center;
+    transition: box-shadow 0.3s ease-in-out;
+    cursor: pointer;
     user-select: none;
 
     &::before {
       content: '';
       position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
       left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
       z-index: -1;
       margin: 2px;
       border-radius: 50%;
@@ -94,7 +88,4 @@
       box-shadow: $shadow-orange2;
     }
   }
-
 }
-
-

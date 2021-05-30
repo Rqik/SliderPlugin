@@ -2,31 +2,31 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
   gap: 20px;
 
   &__element {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
     align-items: flex-start;
-    gap: 20px;
+    justify-content: space-between;
     cursor: pointer;
+    gap: 20px;
   }
 
   &__input {
+    display: none;
     align-self: center;
     width: 15px;
-    display: none;
   }
 
   &__text {
-    transition: background-color .3s ease-in-out;
     border-radius: 5px;
     padding: 7px 10px;
     background-color: $input-disable;
+    transition: background-color 0.3s ease-in-out;
   }
 
   &__input:checked ~ &__text {

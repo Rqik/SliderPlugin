@@ -1,15 +1,13 @@
 .checkbox-list {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: 20px;
 
   &__element {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
     align-items: flex-start;
     justify-content: space-between;
     cursor: pointer;

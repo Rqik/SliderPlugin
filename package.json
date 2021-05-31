@@ -1,7 +1,7 @@
 {
   "homepage": "https://rqik.github.io/SliderPlugin/",
   "name": "sliderplugin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "TS JS PLUGIN ",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack --mode development",

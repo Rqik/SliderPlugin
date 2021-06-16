@@ -1,6 +1,6 @@
-import {IState} from '../../types/interfaces';
-import {Model} from './Model';
-import {keyChanges, rotation} from '../../types/constatnts';
+import { IState } from '../../types/interfaces';
+import { Model } from './Model';
+import { keyChanges, rotation } from '../../types/constants';
 
 const stateHorizontal: IState = {
   selector: 'slider-rqik', // селектор
@@ -137,71 +137,73 @@ describe('Model test', () => {
       'updateCoordinate',
     );
     const activeButton = jest.spyOn(Model.prototype as any, 'activeButton');
-    const isActiveLeftButton = jest.spyOn(Model.prototype as any, 'isActiveLeftButton');
+    const isActiveLeftButton = jest.spyOn(
+      Model.prototype as any,
+      'isActiveLeftButton',
+    );
     const mathPercent = jest.spyOn(Model.prototype as any, 'mathPercent');
-    model.editState({shiftLeft: '44'});
+    model.editState({ shiftLeft: '44' });
     expect(defineLeftVal).toHaveBeenCalled();
     expect(edit).toHaveBeenCalled();
 
-    model.editState({shiftRight: '44'});
+    model.editState({ shiftRight: '44' });
     expect(edit).toHaveBeenCalledTimes(2);
     expect(defineRightVal).toHaveBeenCalled();
 
-    model.editState({notCorrect: '44'});
+    model.editState({ notCorrect: '44' });
     expect(edit).toHaveBeenCalledTimes(3);
 
-    model.editState({position: '44'});
+    model.editState({ position: '44' });
     expect(defineStep).toHaveBeenCalled();
-    expect(mathPercent).toHaveBeenCalled()
+    expect(mathPercent).toHaveBeenCalled();
 
-    model.editState(({stepSize: -1.32}))
-    model.editState({position: '87'});
+    model.editState({ stepSize: -1.32 });
+    model.editState({ position: '87' });
     expect(defineStep).toHaveBeenCalledTimes(2);
 
-    model.editState({coordinates: '44'});
+    model.editState({ coordinates: '44' });
     expect(updateCoordinate).toHaveBeenCalled();
 
-    model.editState({active: '44'});
+    model.editState({ active: '44' });
     expect(activeButton).toHaveBeenCalled();
-    expect(isActiveLeftButton).toHaveBeenCalled()
+    expect(isActiveLeftButton).toHaveBeenCalled();
 
-    model.editState({[keyChanges.SHIFT_LEFT]: 24})
-    model.editState({[keyChanges.SHIFT_RIGHT]: 24})
-    model.editMode({step: -10})
-    model.editState({[keyChanges.ACTIVE]: 24})
-    expect(isActiveLeftButton).toHaveBeenCalledTimes(2)
-    expect(model.stateCurrent.isActiveLeft).toEqual(false)
+    model.editState({ [keyChanges.SHIFT_LEFT]: 24 });
+    model.editState({ [keyChanges.SHIFT_RIGHT]: 24 });
+    model.editMode({ step: -10 });
+    model.editState({ [keyChanges.ACTIVE]: 24 });
+    expect(isActiveLeftButton).toHaveBeenCalledTimes(2);
+    expect(model.stateCurrent.isActiveLeft).toEqual(false);
 
-    model.editMode({step: 210})
-    model.editState({[keyChanges.ACTIVE]: 24})
-    expect(model.stateCurrent.isActiveLeft).toEqual(true)
+    model.editMode({ step: 210 });
+    model.editState({ [keyChanges.ACTIVE]: 24 });
+    expect(model.stateCurrent.isActiveLeft).toEqual(true);
   });
 
   test('call mathStepCount methods', () => {
     const defineStep = jest.spyOn(Model.prototype as any, 'defineStep');
     const mathStepCount = jest.spyOn(Model.prototype as any, 'mathStepCount');
-    model.editMode({maxValue: 10, minValue: 10})
+    model.editMode({ maxValue: 10, minValue: 10 });
 
-    model.editState({[keyChanges.POSITION]: 5})
-    expect(defineStep).toHaveBeenCalled()
-    expect(mathStepCount).toHaveBeenCalled()
-  })
+    model.editState({ [keyChanges.POSITION]: 5 });
+    expect(defineStep).toHaveBeenCalled();
+    expect(mathStepCount).toHaveBeenCalled();
+  });
 
   test('call mathPercent methods', () => {
     const mathPercent = jest.spyOn(Model.prototype as any, 'mathPercent');
-    model.editState({position: '44'});
+    model.editState({ position: '44' });
     expect(mathPercent).toHaveBeenCalled();
     expect(mathPercent).toHaveBeenCalledTimes(1);
-    model.editMode({stepSize: 10});
-    model.editState({position: '23'});
+    model.editMode({ stepSize: 10 });
+    model.editState({ position: '23' });
     expect(mathPercent).toHaveBeenCalledTimes(2);
-    model.editState({position: '23'});
+    model.editState({ position: '23' });
     expect(mathPercent).toHaveBeenCalledTimes(3);
 
-    model.editMode({rotate: 'vertical'})
-    model.editState({position: '73'});
+    model.editMode({ rotate: 'vertical' });
+    model.editState({ position: '73' });
     expect(mathPercent).toHaveBeenCalledTimes(4);
-
   });
 
   test('return state', () => {

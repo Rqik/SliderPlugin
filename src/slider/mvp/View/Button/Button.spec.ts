@@ -1,4 +1,4 @@
-import {Button} from './Butoon'
+import {Button} from './Button'
 
 describe('Button test', () => {
   let button: Button;

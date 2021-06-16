@@ -1,6 +1,6 @@
 import { Coords, IState, StateEl } from '../../types/interfaces';
 import { EventObserver } from '../../utils/EventObserver';
-import { keyChanges, rotation } from '../../types/constatnts';
+import { keyChanges, rotation } from '../../types/constants';
 
 class Model {
   private state: IState = {
@@ -98,10 +98,10 @@ class Model {
       this.state.currentValLeft,
     );
     this.state.shiftLeft = ((this.state.currentValLeft - this.state.minValue)
-      / (this.state.maxValue - this.state.minValue))
+        / (this.state.maxValue - this.state.minValue))
       * 100;
     this.state.shiftRight = ((this.state.currentValRight - this.state.minValue)
-      / (this.state.maxValue - this.state.minValue))
+        / (this.state.maxValue - this.state.minValue))
       * 100;
     this.state.shiftRight = Number.isFinite(this.state.shiftRight)
       ? Model.transformRange(this.state.shiftRight)
@@ -128,11 +128,12 @@ class Model {
   }
 
   private activeButton(position: number): void {
-    this.state.isActiveLeft = Math.abs(this.state[keyChanges.SHIFT_LEFT]
-      - this.state.step) <= Math.abs(this.state[keyChanges.SHIFT_RIGHT]
-      - this.state.step);
+    this.state.isActiveLeft = Math.abs(this.state[keyChanges.SHIFT_LEFT] - this.state.step)
+      <= Math.abs(this.state[keyChanges.SHIFT_RIGHT] - this.state.step);
 
-    if (this.state[keyChanges.SHIFT_LEFT] === this.state[keyChanges.SHIFT_RIGHT]) {
+    if (
+      this.state[keyChanges.SHIFT_LEFT] === this.state[keyChanges.SHIFT_RIGHT]
+    ) {
       this.state.isActiveLeft = this.mathPercent(position) < this.state.shiftRight;
       this.isActiveLeftButton();
     }
@@ -161,7 +162,8 @@ class Model {
       return Math.round(num / this.state.stepSize) * this.state.stepSize;
     }
     this.percent = (this.state.stepSize
-      / Math.abs(this.state.maxValue - this.state.minValue)) * 100;
+        / Math.abs(this.state.maxValue - this.state.minValue))
+      * 100;
     this.percent = Model.transformRange(this.percent);
     return Math.round(num / this.percent) * this.percent;
   }
@@ -177,14 +179,20 @@ class Model {
 
   private defineLeftVal(): void {
     const leftValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft)
-      / 100 + this.state.minValue;
-    this.state.currentValLeft = Number(leftValue.toFixed(this.defineDecimalPlacesCount()));
+        / 100
+      + this.state.minValue;
+    this.state.currentValLeft = Number(
+      leftValue.toFixed(this.defineDecimalPlacesCount()),
+    );
   }
 
   private defineRightVal(): void {
     const rightValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftRight)
-      / 100 + this.state.minValue;
-    this.state.currentValRight = Number(rightValue.toFixed(this.defineDecimalPlacesCount()));
+        / 100
+      + this.state.minValue;
+    this.state.currentValRight = Number(
+      rightValue.toFixed(this.defineDecimalPlacesCount()),
+    );
   }
 
   private static convertCorrectNumber(num: string | number): number {

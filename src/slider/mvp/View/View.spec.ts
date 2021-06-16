@@ -1,7 +1,7 @@
 import { View } from './View';
 import { EventObserver } from '../../utils/EventObserver';
 import { IState } from '../../types/interfaces';
-import { rotation } from '../../types/constatnts';
+import { rotation } from '../../types/constants';
 
 const state: IState = {
   selector: 'slider-rqik', // селектор
@@ -163,7 +163,10 @@ describe('View test', () => {
       expect(responsiveCurrent).toHaveBeenCalledTimes(2);
 
       const onMouseMove = jest.spyOn(View.prototype as any, 'onMouseMove');
-      const observerPosition = jest.spyOn(View.prototype as any, 'observerPosition');
+      const observerPosition = jest.spyOn(
+        View.prototype as any,
+        'observerPosition',
+      );
       // @ts-ignore
       view.onMouseMove(eventMouse);
       expect(onMouseMove).toHaveBeenCalled();

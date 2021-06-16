@@ -1,6 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
 import { IState } from '../../types/interfaces';
-import { keyChanges, rotation } from '../../types/constatnts';
+import { keyChanges, rotation } from '../../types/constants';
 import { Button, Interval, SliderRange, Tooltip } from './SubView';
 import { EventObserver as Observer } from '../../utils/EventObserver';
 
@@ -25,9 +25,8 @@ class View {
 
   private currentButton: HTMLElement = this.buttonRight.button; // абстрактный тумблер
 
-  private clickHandler: (
-    e: MouseEvent | TouchEvent,
-  ) => void = this.onMouseMove.bind(this);
+  private clickHandler: (e: MouseEvent | TouchEvent) => void =
+    this.onMouseMove.bind(this);
 
   private isLeftOn = false;
 

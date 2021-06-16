@@ -1,5 +1,5 @@
 import { rotate } from '../../../types/interfaces';
-import { rotation, tooltipValue as className } from '../../../types/constatnts';
+import { rotation, tooltipValue as className } from '../../../types/constants';
 
 class Tooltip {
   tooltipVal: HTMLElement = document.createElement('div');

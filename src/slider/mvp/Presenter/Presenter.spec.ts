@@ -1,8 +1,7 @@
-import {Present} from './Presenter';
-import {View} from '../View/View';
-import {EventObserver} from '../../utils/EventObserver';
-import {rotation} from '../../types/constatnts';
-
+import { Present } from './Presenter';
+import { View } from '../View/View';
+import { EventObserver } from '../../utils/EventObserver';
+import { rotation } from '../../types/constants';
 
 const ObserverMock = EventObserver as jest.MockedClass<typeof EventObserver>;
 beforeEach(() => {
@@ -39,10 +38,10 @@ describe('Presenter test', () => {
     expect(init).toHaveBeenCalled();
     expect(render).toHaveBeenCalled();
     present.model.stateCurrent.rotate = rotation.HORIZONTAL;
-    present.sliderModify({rotate: rotation.HORIZONTAL});
+    present.sliderModify({ rotate: rotation.HORIZONTAL });
 
     present.model.stateCurrent.rotate = rotation.VERTICAL;
-    present.sliderModify({rotate: rotation.VERTICAL});
+    present.sliderModify({ rotate: rotation.VERTICAL });
 
     expect(init).toHaveBeenCalled();
     expect(init).toHaveBeenCalledTimes(3);

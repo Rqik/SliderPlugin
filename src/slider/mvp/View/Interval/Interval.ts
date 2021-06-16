@@ -1,5 +1,5 @@
 import { rotate } from '../../../types/interfaces';
-import { interval as className, rotation } from '../../../types/constatnts';
+import { interval as className, rotation } from '../../../types/constants';
 
 class Interval {
   interval: HTMLUListElement = document.createElement('ul');
@@ -31,13 +31,15 @@ class Interval {
     let sum;
     const fragment = document.createDocumentFragment();
 
-    Array(count + 1).fill('').forEach((el, i) => {
-      const li = document.createElement('li');
-      sum = (i * interval + minValue);
-      li.className = className.INTERVAL_ITEM;
-      li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`;
-      fragment.append(li);
-    });
+    Array(count + 1)
+      .fill('')
+      .forEach((el, i) => {
+        const li = document.createElement('li');
+        sum = i * interval + minValue;
+        li.className = className.INTERVAL_ITEM;
+        li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`;
+        fragment.append(li);
+      });
 
     this.interval.append(fragment);
     return this.interval;

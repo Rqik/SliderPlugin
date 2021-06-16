@@ -1,5 +1,5 @@
 import { Interval } from './Interval';
-import { interval as className } from '../../../types/constatnts';
+import { interval as className } from '../../../types/constants';
 
 describe('Interval test', () => {
   let inter: Interval;
@@ -11,6 +11,6 @@ describe('Interval test', () => {
     const s = document.createElement('ul');
     s.className = className.INTERVAL;
     expect(inter.interval).toEqual(s);
-    expect(inter.interval.textContent).toEqual('')
+    expect(inter.interval.textContent).toEqual('');
   });
 });

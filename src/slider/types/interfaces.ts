@@ -1,4 +1,4 @@
-import { keyChanges, rotation } from './constatnts';
+import { keyChanges, rotation } from './constants';
 
 type rotate = rotation.HORIZONTAL | rotation.VERTICAL;
 type range = 'one' | 'two';
@@ -42,13 +42,4 @@ interface StateEl {
 
 type options = number | string | boolean;
 
-export {
-  Coords,
-  IState,
-  rotate,
-  range,
-  callBack,
-  options,
-  StateEl,
-  Slider,
-};
+export { Coords, IState, rotate, range, callBack, options, StateEl, Slider };

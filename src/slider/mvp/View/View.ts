@@ -1,8 +1,9 @@
 import { boundMethod } from 'autobind-decorator';
+
 import { IState } from '../../types/interfaces';
 import { keyChanges, rotation } from '../../types/constants';
-import { Button, Interval, SliderRange, Tooltip } from './SubView';
 import { EventObserver as Observer } from '../../utils/EventObserver';
+import { Button, Interval, SliderRange, Tooltip } from './SubView';
 
 class View {
   private slider: HTMLElement = document.createElement('div');
@@ -47,12 +48,7 @@ class View {
     this.startView(this.state.selector);
   }
 
-  private startView(selector: string): void {
-    this.slider = <HTMLElement>document.querySelector(selector);
-    this.slider.style.position = 'relative';
-  }
-
-  public editView(newState: IState): void {
+  editView(newState: IState): void {
     this.state = {
       ...this.state,
       ...newState,
@@ -62,6 +58,21 @@ class View {
     this.currentValLeft.setRotate(this.state.rotate);
     this.currentValRight.setRotate(this.state.rotate);
     this.currentValGeneral.setRotate(this.state.rotate);
+  }
+
+  render(): void {
+    View.removeStyle(this.slider);
+    this.show();
+    this.addElem();
+    this.addAction();
+    this.buttonWidth = this.buttonRight.width();
+    this.resizeSlider();
+    this.installMove();
+  }
+
+  private startView(selector: string): void {
+    this.slider = <HTMLElement>document.querySelector(selector);
+    this.slider.style.position = 'relative';
   }
 
   private renderInterval(): void {
@@ -120,16 +131,6 @@ class View {
         height: this.slider.getBoundingClientRect().height,
       },
     });
-  }
-
-  public render(): void {
-    View.removeStyle(this.slider);
-    this.show();
-    this.addElem();
-    this.addAction();
-    this.buttonWidth = this.buttonRight.width();
-    this.resizeSlider();
-    this.installMove();
   }
 
   private static removeStyle(el: HTMLElement): void {
@@ -241,7 +242,7 @@ class View {
     );
   }
 
-  // сброс позиций кнопок
+  // инициализация позиций кнопок
   private initMove(min: number, max: number): void {
     this.overridingButtons(true);
     this.eventButton(min);

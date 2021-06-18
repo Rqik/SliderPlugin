@@ -2,7 +2,7 @@ import { keyChanges, rotation } from './constants';
 
 type rotate = rotation.HORIZONTAL | rotation.VERTICAL;
 type range = 'one' | 'two';
-type callBack = (args?: any) => any;
+type callBack = (args?: any) => void;
 
 interface Coords {
   x: number;
@@ -33,8 +33,13 @@ interface IState {
   step: number;
   isActiveLeft: boolean;
 
-  [k: string]: string | number | boolean;
+  [k: string]: options;
 }
+
+type IUniversalSate = {
+  [keyChanges.ACTIVE]: number;
+  [keyChanges.COORDINATES]: Coords;
+} & StateEl;
 
 interface StateEl {
   [k: string]: options;
@@ -42,4 +47,14 @@ interface StateEl {
 
 type options = number | string | boolean;
 
-export { Coords, IState, rotate, range, callBack, options, StateEl, Slider };
+export {
+  Coords,
+  IState,
+  rotate,
+  range,
+  callBack,
+  options,
+  StateEl,
+  Slider,
+  IUniversalSate,
+};

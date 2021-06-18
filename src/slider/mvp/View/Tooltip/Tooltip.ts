@@ -8,10 +8,6 @@ class Tooltip {
     this.init();
   }
 
-  private init(): void {
-    this.tooltipVal.className = className.TOOLTIP;
-  }
-
   text(text: string | number): void {
     this.tooltipVal.textContent = `${text}`;
   }
@@ -55,6 +51,10 @@ class Tooltip {
       return clientRect.right;
     }
     return clientRect.bottom;
+  }
+
+  private init(): void {
+    this.tooltipVal.className = className.TOOLTIP;
   }
 }
 

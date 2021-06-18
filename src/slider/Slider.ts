@@ -7,10 +7,12 @@ declare global {
   }
 }
 
-(function ($) {
-  $.fn.sliderRqik = function (options?: StateEl) {
+(function IIFE(jQuery) {
+  const $ = jQuery;
+  $.fn.sliderRqik = function initSlider(options?: StateEl) {
     const allSlider: SliderPlugin[] = [];
-    this.each((id: number, el: any) => {
+
+    this.each((id: number, el: HTMLElement) => {
       const res = new SliderPlugin(el, id);
       if (options) {
         res.data(options);
@@ -25,9 +27,9 @@ declare global {
         });
         return slider;
       },
-      getData(): any {
+      getData(): Array<IState> {
         const stateArr: Array<IState> = [];
-        allSlider.forEach((el: any) => {
+        allSlider.forEach((el: SliderPlugin) => {
           const r = el.getData();
           if (r) {
             stateArr.push(r);

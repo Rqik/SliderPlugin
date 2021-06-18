@@ -10,14 +10,6 @@ class Interval {
     this.init();
   }
 
-  private init(): void {
-    this.interval.className = className.INTERVAL;
-
-    if (this.rotate === rotation.VERTICAL) {
-      this.interval.classList.add(className.INTERVAL_VERTICAL);
-    }
-  }
-
   renderIntervals(
     minValue: number,
     maxValue: number,
@@ -48,6 +40,14 @@ class Interval {
   edit(rot: rotate): void {
     this.rotate = rot;
     this.init();
+  }
+
+  private init(): void {
+    this.interval.className = className.INTERVAL;
+
+    if (this.rotate === rotation.VERTICAL) {
+      this.interval.classList.add(className.INTERVAL_VERTICAL);
+    }
   }
 }
 

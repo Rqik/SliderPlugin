@@ -1,4 +1,5 @@
 import { boundMethod } from 'autobind-decorator';
+
 import { Slider } from '../../slider/types/interfaces';
 
 class InputChecker {
@@ -47,13 +48,16 @@ class InputChecker {
   @boundMethod
   private eventChange(): void {
     this.inputChange('currentValLeft', this.slider.getData()[0].currentValLeft);
-    this.inputChange('currentValRight', this.slider.getData()[0].currentValRight);
+    this.inputChange(
+      'currentValRight',
+      this.slider.getData()[0].currentValRight,
+    );
   }
 
   private makeEventCheck(
     nameAtr: string,
-    active: (string | number | boolean),
-    disable: (string | number | boolean),
+    active: string | number | boolean,
+    disable: string | number | boolean,
   ): (e: JQueryEventObject) => void {
     return (event: JQueryEventObject): void => {
       if ($(event.currentTarget).prop('checked')) {
@@ -73,7 +77,7 @@ class InputChecker {
     }
   }
 
-  private makeEventInputChange(nameAtr: string): any {
+  private makeEventInputChange(nameAtr: string): () => void {
     const item = this.form.find(`input[name='${nameAtr}']`);
     let val = item.val() || 0;
     return (): void => {
@@ -89,7 +93,10 @@ class InputChecker {
     this.form.find(`input[name='${nameAtr}']`).val(value);
   }
 
-  private checkChange(nameAtr: string, value: (string | number | boolean)[]): void {
+  private checkChange(
+    nameAtr: string,
+    value: (string | number | boolean)[],
+  ): void {
     const [active, disable] = value;
     const item: JQuery = this.form.find(`input[name='${nameAtr}']`);
 

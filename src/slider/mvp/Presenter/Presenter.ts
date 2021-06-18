@@ -1,7 +1,13 @@
 import { boundMethod } from 'autobind-decorator';
-import { IState, rotate, StateEl } from '../../types/interfaces';
-import { View } from '../View/View';
+
+import {
+  IState,
+  IUniversalSate,
+  rotate,
+  StateEl,
+} from '../../types/interfaces';
 import { Model } from '../Model/Model';
+import { View } from '../View/View';
 
 class Present {
   model: Model;
@@ -21,8 +27,19 @@ class Present {
     return this.model.stateCurrent;
   }
 
+  sliderModify(options: StateEl): void {
+    this.model.editMode(options);
+    this.view.editView(this.model.stateCurrent);
+    if (this.rotate !== this.model.stateCurrent.rotate) {
+      this.rotate = this.model.stateCurrent.rotate;
+      this.view.observer.unsubscribe(this.setStateModel);
+      this.model.observer.unsubscribe(this.setStateView);
+    }
+    this.init();
+  }
+
   @boundMethod
-  private setStateModel(data: StateEl): void {
+  private setStateModel(data: IUniversalSate): void {
     this.model.editState(data);
   }
 
@@ -35,17 +52,6 @@ class Present {
     this.model.observer.subscribe(this.setStateView);
     this.view.observer.subscribe(this.setStateModel);
     this.view.render();
-  }
-
-  sliderModify(options: StateEl): void {
-    this.model.editMode(options);
-    this.view.editView(this.model.stateCurrent);
-    if (this.rotate !== this.model.stateCurrent.rotate) {
-      this.rotate = this.model.stateCurrent.rotate;
-      this.view.observer.unsubscribe(this.setStateModel);
-      this.model.observer.unsubscribe(this.setStateView);
-    }
-    this.init();
   }
 }
 

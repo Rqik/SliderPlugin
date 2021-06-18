@@ -1,14 +1,28 @@
-import { Coords, IState, StateEl } from '../../types/interfaces';
 import { EventObserver } from '../../utils/EventObserver';
+import {
+  Coords,
+  IState,
+  StateEl,
+  IUniversalSate,
+} from '../../types/interfaces';
 import { keyChanges, rotation } from '../../types/constants';
 
 class Model {
+  public observer: EventObserver;
+
+  public coords: Coords = {
+    x: 0,
+    y: 0,
+    height: 0,
+    width: 0,
+  };
+
   private state: IState = {
     selector: 'slider-range', // селектор
     minValue: 0, // минимальное значение
     maxValue: 1200, // максимальное значение
     range: 'one', // 1 или 2 указателя
-    rotate: rotation.HORIZONTAL, // ориентация vertical horizontal
+    rotate: rotation.HORIZONTAL, // ориентация vertical || horizontal
     show: true, // показывать текущее значение над указателем
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
@@ -23,15 +37,6 @@ class Model {
 
   private percent = 0;
 
-  public coords: Coords = {
-    x: 0,
-    y: 0,
-    height: 0,
-    width: 0,
-  };
-
-  public observer: EventObserver;
-
   constructor(selector = 'slider-rqik') {
     this.state.selector = selector;
     this.observer = new EventObserver();
@@ -41,15 +46,7 @@ class Model {
     return this.state;
   }
 
-  private edit(key: StateEl): void {
-    this.state = {
-      ...this.state,
-      ...key,
-    };
-    this.observer.broadcast(this.stateCurrent);
-  }
-
-  editState(data: StateEl | any): void {
+  editState(data: IUniversalSate): void {
     switch (Object.keys(data)[0]) {
       case keyChanges.SHIFT_LEFT:
         this.edit(data);
@@ -60,7 +57,7 @@ class Model {
         this.defineRightVal();
         break;
       case keyChanges.POSITION:
-        this.defineStep(+data[keyChanges.POSITION]);
+        this.defineStep(Number(data[keyChanges.POSITION]));
         break;
       case keyChanges.COORDINATES:
         this.updateCoordinate(data[keyChanges.COORDINATES]);
@@ -81,6 +78,14 @@ class Model {
       ...key,
     };
     this.convertToNumber();
+    this.observer.broadcast(this.stateCurrent);
+  }
+
+  private edit(key: StateEl): void {
+    this.state = {
+      ...this.state,
+      ...key,
+    };
     this.observer.broadcast(this.stateCurrent);
   }
 
@@ -170,9 +175,9 @@ class Model {
 
   private defineDecimalPlacesCount(): number {
     let decimalPlaces = 12;
-    const str: any = this.state.stepSize.toString();
+    const str: string = this.state.stepSize.toString();
     if (str.includes('.')) {
-      decimalPlaces = str.split('.').pop().length;
+      decimalPlaces = Number(str.split('.').pop());
     }
     return decimalPlaces;
   }
@@ -181,6 +186,7 @@ class Model {
     const leftValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft)
         / 100
       + this.state.minValue;
+
     this.state.currentValLeft = Number(
       leftValue.toFixed(this.defineDecimalPlacesCount()),
     );

@@ -1,5 +1,5 @@
-import { Tooltip } from './Tooltip';
 import { rotation } from '../../../types/constants';
+import { Tooltip } from './Tooltip';
 
 describe('Current Val tool tip test', () => {
   let curVal: Tooltip;

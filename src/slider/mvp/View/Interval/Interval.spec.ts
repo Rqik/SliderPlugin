@@ -1,5 +1,5 @@
-import { Interval } from './Interval';
 import { interval as className } from '../../../types/constants';
+import { Interval } from './Interval';
 
 describe('Interval test', () => {
   let inter: Interval;

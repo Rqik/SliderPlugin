@@ -1,7 +1,7 @@
-import { View } from './View';
 import { EventObserver } from '../../utils/EventObserver';
 import { IState } from '../../types/interfaces';
 import { rotation } from '../../types/constants';
+import { View } from './View';
 
 const state: IState = {
   selector: 'slider-rqik', // селектор

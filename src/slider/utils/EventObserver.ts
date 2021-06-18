@@ -1,4 +1,4 @@
-import { callBack, StateEl } from '../types/interfaces';
+import { callBack } from '../types/interfaces';
 
 class EventObserver {
   observers: callBack[];
@@ -13,7 +13,7 @@ class EventObserver {
     }
   }
 
-  broadcast(data: StateEl | any): void {
+  broadcast(data: unknown): void {
     this.observers.forEach((subscriber) => {
       if (typeof subscriber === 'function') {
         subscriber(data);

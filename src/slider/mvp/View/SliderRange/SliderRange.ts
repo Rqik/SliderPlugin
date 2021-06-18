@@ -12,16 +12,6 @@ class SliderRange {
     this.init(rot);
   }
 
-  private init(rot: rotate): HTMLElement {
-    this.sliderRange.className = className.SLIDER;
-    this.sliderActiveZone.className = className.SLIDER_ACTIVE_ZONE;
-    if (rot === rotation.VERTICAL) {
-      this.sliderRange.classList.add(className.SLIDER_VERTICAL);
-    }
-    this.sliderRange.appendChild(this.sliderActiveZone);
-    return this.sliderRange;
-  }
-
   edit(rot: rotate): void {
     if (rot === rotation.VERTICAL) {
       this.rotate = rot;
@@ -40,6 +30,16 @@ class SliderRange {
       this.sliderActiveZone.style.top = `${left}%`;
       this.sliderActiveZone.style.height = `${right - left}%`;
     }
+  }
+
+  private init(rot: rotate): HTMLElement {
+    this.sliderRange.className = className.SLIDER;
+    this.sliderActiveZone.className = className.SLIDER_ACTIVE_ZONE;
+    if (rot === rotation.VERTICAL) {
+      this.sliderRange.classList.add(className.SLIDER_VERTICAL);
+    }
+    this.sliderRange.appendChild(this.sliderActiveZone);
+    return this.sliderRange;
   }
 }
 

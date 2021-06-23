@@ -1,15 +1,15 @@
-import { IState, Slider, StateEl } from './types/interfaces';
+import { IState, Slider, IStateEl } from './types/interfaces';
 import { Present } from './mvp/Presenter/Presenter';
 
 declare global {
   interface JQuery {
-    sliderRqik: (opt?: StateEl) => Slider;
+    sliderRqik: (opt?: IStateEl) => Slider;
   }
 }
 
 (function IIFE(jQuery) {
   const $ = jQuery;
-  $.fn.sliderRqik = function initSlider(options?: StateEl) {
+  $.fn.sliderRqik = function initSlider(options?: IStateEl) {
     const allSlider: SliderPlugin[] = [];
 
     this.each((id: number, el: HTMLElement) => {
@@ -65,12 +65,12 @@ class SliderPlugin {
     const className = `${selector.replace(/\W+/gi, '')}-${ind}_i-slider`;
     this.sliders.classList.add(className);
     const pr = new Present(`.${className}`);
-    pr.sliderModify(opt as StateEl);
+    pr.sliderModify(opt as IStateEl);
     this.presents = pr;
     return this;
   }
 
-  data(data: StateEl): this {
+  data(data: IStateEl): this {
     if (this.presents) {
       this.presents.sliderModify(data);
     }

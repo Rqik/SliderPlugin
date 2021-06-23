@@ -1,7 +1,7 @@
-import { Present } from './Presenter';
-import { View } from '../View/View';
 import { EventObserver } from '../../utils/EventObserver';
 import { rotation } from '../../types/constants';
+import { View } from '../View/View';
+import { Present } from './Presenter';
 
 const ObserverMock = EventObserver as jest.MockedClass<typeof EventObserver>;
 beforeEach(() => {

@@ -4,7 +4,7 @@ import {
   IState,
   IUniversalSate,
   rotate,
-  StateEl,
+  IStateEl,
 } from '../../types/interfaces';
 import { Model } from '../Model/Model';
 import { View } from '../View/View';
@@ -27,7 +27,7 @@ class Present {
     return this.model.stateCurrent;
   }
 
-  sliderModify(options: StateEl): void {
+  sliderModify(options: IStateEl): void {
     this.model.editMode(options);
     this.view.editView(this.model.stateCurrent);
     if (this.rotate !== this.model.stateCurrent.rotate) {

@@ -1,6 +1,6 @@
 import { IState } from '../../types/interfaces';
-import { Model } from './Model';
 import { keyChanges, rotation } from '../../types/constants';
+import { Model } from './Model';
 
 const stateHorizontal: IState = {
   selector: 'slider-rqik', // селектор

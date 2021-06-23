@@ -2,7 +2,7 @@ import { EventObserver } from '../../utils/EventObserver';
 import {
   Coords,
   IState,
-  StateEl,
+  IStateEl,
   IUniversalSate,
 } from '../../types/interfaces';
 import { keyChanges, rotation } from '../../types/constants';
@@ -60,7 +60,9 @@ class Model {
         this.defineStep(Number(data[keyChanges.POSITION]));
         break;
       case keyChanges.COORDINATES:
-        this.updateCoordinate(data[keyChanges.COORDINATES]);
+        if (data[keyChanges.COORDINATES] !== undefined) {
+          this.updateCoordinate(data[keyChanges.COORDINATES]);
+        }
         break;
       case keyChanges.ACTIVE:
         this.activeButton(data[keyChanges.ACTIVE]);
@@ -72,7 +74,7 @@ class Model {
     this.observer.broadcast(this.stateCurrent);
   }
 
-  editMode(key: StateEl): void {
+  editMode(key: IStateEl): void {
     this.state = {
       ...this.state,
       ...key,
@@ -81,7 +83,7 @@ class Model {
     this.observer.broadcast(this.stateCurrent);
   }
 
-  private edit(key: StateEl): void {
+  private edit(key: IStateEl): void {
     this.state = {
       ...this.state,
       ...key,

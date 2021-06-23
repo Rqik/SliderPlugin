@@ -12,7 +12,7 @@ interface Coords {
 }
 
 interface Slider {
-  data: (opt: StateEl) => Slider;
+  data: (opt: IStateEl) => Slider;
   getData: () => IState[];
 }
 
@@ -37,11 +37,10 @@ interface IState {
 }
 
 type IUniversalSate = {
-  [keyChanges.ACTIVE]: number;
-  [keyChanges.COORDINATES]: Coords;
-} & StateEl;
+  [k: string]: any;
+};
 
-interface StateEl {
+interface IStateEl {
   [k: string]: options;
 }
 
@@ -54,7 +53,7 @@ export {
   range,
   callBack,
   options,
-  StateEl,
+  IStateEl,
   Slider,
   IUniversalSate,
 };

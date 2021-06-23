@@ -1,7 +1,7 @@
-import { Slider, StateEl } from './types/interfaces';
+import { Slider, IStateEl } from './types/interfaces';
 
 declare global {
   interface JQuery {
-    sliderRqik: (opt?: StateEl) => Slider;
+    sliderRqik: (opt?: IStateEl) => Slider;
   }
 }

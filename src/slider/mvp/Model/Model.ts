@@ -3,7 +3,7 @@ import {
   Coords,
   IState,
   IStateEl,
-  IUniversalSate,
+  UniversalSate,
 } from '../../types/interfaces';
 import { keyChanges, rotation } from '../../types/constants';
 
@@ -46,7 +46,7 @@ class Model {
     return this.state;
   }
 
-  editState(data: IUniversalSate): void {
+  editState(data: UniversalSate): void {
     switch (Object.keys(data)[0]) {
       case keyChanges.SHIFT_LEFT:
         this.edit(data);
@@ -60,12 +60,10 @@ class Model {
         this.defineStep(Number(data[keyChanges.POSITION]));
         break;
       case keyChanges.COORDINATES:
-        if (data[keyChanges.COORDINATES] !== undefined) {
-          this.updateCoordinate(data[keyChanges.COORDINATES]);
-        }
+        this.updateCoordinate(data[keyChanges.COORDINATES] as Coords);
         break;
       case keyChanges.ACTIVE:
-        this.activeButton(data[keyChanges.ACTIVE]);
+        this.activeButton(data[keyChanges.ACTIVE] as number);
         break;
       default:
         this.edit(data);
@@ -104,12 +102,14 @@ class Model {
     this.state.currentValLeft = Model.convertCorrectNumber(
       this.state.currentValLeft,
     );
-    this.state.shiftLeft = ((this.state.currentValLeft - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
-      * 100;
-    this.state.shiftRight = ((this.state.currentValRight - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
-      * 100;
+    this.state.shiftLeft =
+      ((this.state.currentValLeft - this.state.minValue) /
+        (this.state.maxValue - this.state.minValue)) *
+      100;
+    this.state.shiftRight =
+      ((this.state.currentValRight - this.state.minValue) /
+        (this.state.maxValue - this.state.minValue)) *
+      100;
     this.state.shiftRight = Number.isFinite(this.state.shiftRight)
       ? Model.transformRange(this.state.shiftRight)
       : 0;
@@ -135,13 +135,15 @@ class Model {
   }
 
   private activeButton(position: number): void {
-    this.state.isActiveLeft = Math.abs(this.state[keyChanges.SHIFT_LEFT] - this.state.step)
-      <= Math.abs(this.state[keyChanges.SHIFT_RIGHT] - this.state.step);
+    this.state.isActiveLeft =
+      Math.abs(this.state[keyChanges.SHIFT_LEFT] - this.state.step) <=
+      Math.abs(this.state[keyChanges.SHIFT_RIGHT] - this.state.step);
 
     if (
       this.state[keyChanges.SHIFT_LEFT] === this.state[keyChanges.SHIFT_RIGHT]
     ) {
-      this.state.isActiveLeft = this.mathPercent(position) < this.state.shiftRight;
+      this.state.isActiveLeft =
+        this.mathPercent(position) < this.state.shiftRight;
       this.isActiveLeftButton();
     }
   }
@@ -168,9 +170,10 @@ class Model {
     if (difference === 0) {
       return Math.round(num / this.state.stepSize) * this.state.stepSize;
     }
-    this.percent = (this.state.stepSize
-        / Math.abs(this.state.maxValue - this.state.minValue))
-      * 100;
+    this.percent =
+      (this.state.stepSize /
+        Math.abs(this.state.maxValue - this.state.minValue)) *
+      100;
     this.percent = Model.transformRange(this.percent);
     return Math.round(num / this.percent) * this.percent;
   }
@@ -185,9 +188,10 @@ class Model {
   }
 
   private defineLeftVal(): void {
-    const leftValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft)
-        / 100
-      + this.state.minValue;
+    const leftValue =
+      ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft) /
+        100 +
+      this.state.minValue;
 
     this.state.currentValLeft = Number(
       leftValue.toFixed(this.defineDecimalPlacesCount()),
@@ -195,9 +199,10 @@ class Model {
   }
 
   private defineRightVal(): void {
-    const rightValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftRight)
-        / 100
-      + this.state.minValue;
+    const rightValue =
+      ((this.state.maxValue - this.state.minValue) * this.state.shiftRight) /
+        100 +
+      this.state.minValue;
     this.state.currentValRight = Number(
       rightValue.toFixed(this.defineDecimalPlacesCount()),
     );

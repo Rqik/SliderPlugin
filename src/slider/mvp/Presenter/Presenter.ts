@@ -2,7 +2,7 @@ import { boundMethod } from 'autobind-decorator';
 
 import {
   IState,
-  IUniversalSate,
+  UniversalSate,
   rotate,
   IStateEl,
 } from '../../types/interfaces';
@@ -39,7 +39,7 @@ class Present {
   }
 
   @boundMethod
-  private setStateModel(data: IUniversalSate): void {
+  private setStateModel(data: UniversalSate): void {
     this.model.editState(data);
   }
 

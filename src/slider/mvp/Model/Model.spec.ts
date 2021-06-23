@@ -161,10 +161,9 @@ describe('Model test', () => {
     model.editState({ position: '87' });
     expect(defineStep).toHaveBeenCalledTimes(2);
 
-    model.editState({ coordinates: '44' });
-    expect(updateCoordinate).toHaveBeenCalled();
+    expect(updateCoordinate).toHaveBeenCalledTimes(0);
 
-    model.editState({ active: '44' });
+    model.editState({ [keyChanges.ACTIVE]: 44 });
     expect(activeButton).toHaveBeenCalled();
     expect(isActiveLeftButton).toHaveBeenCalled();
 

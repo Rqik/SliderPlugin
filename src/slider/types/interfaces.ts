@@ -36,9 +36,10 @@ interface IState {
   [k: string]: options;
 }
 
-type IUniversalSate = {
-  [k: string]: any;
-};
+type UniversalSate = {
+  [keyChanges.ACTIVE]?: number;
+  [keyChanges.COORDINATES]?: Coords;
+} & IStateEl;
 
 interface IStateEl {
   [k: string]: options;
@@ -55,5 +56,5 @@ export {
   options,
   IStateEl,
   Slider,
-  IUniversalSate,
+  UniversalSate,
 };

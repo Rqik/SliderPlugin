@@ -21,11 +21,16 @@ var __decorate = undefined && undefined.__decorate || function (decorators, targ
 
 
 class InputChecker {
-  constructor(form, sliderDOM, slider, classRotate) {
-    this.form = form;
-    this.sliderDOM = sliderDOM;
+  constructor({
+    $form,
+    $sliderDOM,
+    slider,
+    classRotate
+  }) {
+    this.$form = $form;
+    this.$sliderDOM = $sliderDOM;
     this.slider = slider;
-    this.inputRotate = this.form.find("input[name='rotate']");
+    this.$inputRotate = this.$form.find("input[name='rotate']");
     this.classRotate = classRotate;
   }
 
@@ -35,15 +40,15 @@ class InputChecker {
   }
 
   addEventSlider() {
-    this.sliderDOM.on('click', this.eventChange);
-    this.inputRotate.on('click', this.addClassForm);
+    this.$sliderDOM.on('click', this.eventChange);
+    this.$inputRotate.on('click', this.addClassForm);
   }
 
   addClassForm() {
-    if (this.inputRotate.is(':checked')) {
-      this.sliderDOM.addClass(this.classRotate);
+    if (this.$inputRotate.is(':checked')) {
+      this.$sliderDOM.addClass(this.classRotate);
     } else {
-      this.sliderDOM.removeClass(this.classRotate);
+      this.$sliderDOM.removeClass(this.classRotate);
     }
   }
 
@@ -67,19 +72,21 @@ class InputChecker {
   }
 
   runChange(nameAtr) {
-    const item = this.form.find(`input[name='${nameAtr}']`);
+    const item = this.$form.find(`input[name='${nameAtr}']`);
     const val = item.val() || 0;
-    item.on('input', this.makeEventInputChange(nameAtr));
+    item.on('change', this.makeEventInputChange(nameAtr));
 
     if (val !== '-' || val !== undefined) {
       this.slider.data({
         [nameAtr]: +val
       });
     }
+
+    this.$sliderDOM.click();
   }
 
   makeEventInputChange(nameAtr) {
-    const item = this.form.find(`input[name='${nameAtr}']`);
+    const item = this.$form.find(`input[name='${nameAtr}']`);
     let val = item.val() || 0;
     return () => {
       val = item.val() || 0;
@@ -91,16 +98,18 @@ class InputChecker {
       this.slider.data({
         [nameAtr]: +val
       });
+      const s = this.slider.getData()[0][nameAtr];
+      item.val(Number(s));
     };
   }
 
   inputChange(nameAtr, value) {
-    this.form.find(`input[name='${nameAtr}']`).val(value);
+    this.$form.find(`input[name='${nameAtr}']`).val(value);
   }
 
   checkChange(nameAtr, value) {
     const [active, disable] = value;
-    const item = this.form.find(`input[name='${nameAtr}']`);
+    const item = this.$form.find(`input[name='${nameAtr}']`);
     item.on('click', this.makeEventCheck(nameAtr, active, disable));
 
     if (item.prop('checked')) {
@@ -141,7 +150,7 @@ __decorate([esm/* boundMethod */.MR], InputChecker.prototype, "eventChange", nul
 
 
 
-__webpack_require__(427);
+__webpack_require__(218);
 
 const $plug1 = page_$('.js-plug1');
 const $plug2 = page_$('.js-plug2');
@@ -151,26 +160,38 @@ const $form1 = page_$('#form1');
 const $form2 = page_$('#form2');
 const $form3 = page_$('#form3');
 const $form4 = page_$('#form4');
-const plug1 = $plug1.sliderRqik({
-  maxValue: 1000,
-  range: 'one',
-  showInterval: true
-});
-const plug2 = $plug2.sliderRqik({
-  rotate: 'vertical',
-  range: 'one',
-  minValue: -100
-});
+const plug1 = $plug1.sliderRqik();
+const plug2 = $plug2.sliderRqik();
 const plug3 = $plug3.sliderRqik();
 const plug4 = $plug4.sliderRqik();
-new InputChecker($form1, $plug1, plug1, 'slider_vertical').init();
-new InputChecker($form2, $plug2, plug2, 'slider_vertical').init();
-new InputChecker($form3, $plug3, plug3, 'slider_vertical').init();
-new InputChecker($form4, $plug4, plug4, 'slider_vertical').init();
+new InputChecker({
+  $form: $form1,
+  $sliderDOM: $plug1,
+  slider: plug1,
+  classRotate: 'slider_vertical'
+}).init();
+new InputChecker({
+  $form: $form2,
+  $sliderDOM: $plug2,
+  slider: plug2,
+  classRotate: 'slider_vertical'
+}).init();
+new InputChecker({
+  $form: $form3,
+  $sliderDOM: $plug3,
+  slider: plug3,
+  classRotate: 'slider_vertical'
+}).init();
+new InputChecker({
+  $form: $form4,
+  $sliderDOM: $plug4,
+  slider: plug4,
+  classRotate: 'slider_vertical'
+}).init();
 
 /***/ }),
 
-/***/ 427:
+/***/ 218:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 // ESM COMPAT FLAG
@@ -178,7 +199,239 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ../node_modules/autobind-decorator/lib/esm/index.js
 var esm = __webpack_require__(362);
-;// CONCATENATED MODULE: ./slider/mvp/View/Button/Butoon.ts
+;// CONCATENATED MODULE: ./slider/utils/EventObserver.ts
+class EventObserver {
+  constructor() {
+    this.observers = [];
+  }
+
+  subscribe(fn) {
+    if (!this.observers.some(el => el === fn)) {
+      this.observers.push(fn);
+    }
+  }
+
+  broadcast(data) {
+    this.observers.forEach(subscriber => {
+      if (typeof subscriber === 'function') {
+        subscriber(data);
+      }
+    });
+  }
+
+  unsubscribe(fn) {
+    this.observers = this.observers.filter(subscriber => subscriber !== fn);
+  }
+
+}
+
+
+;// CONCATENATED MODULE: ./slider/mvp/Model/Model.ts
+
+
+class Model {
+  constructor(selector = 'slider-rqik') {
+    this.coords = {
+      x: 0,
+      y: 0,
+      height: 0,
+      width: 0
+    };
+    this.state = {
+      selector: 'slider-range',
+      minValue: 0,
+      maxValue: 1200,
+      range: 'one',
+      rotate: "horizontal",
+      showTooltip: true,
+      showInterval: true,
+      intervalCount: 2,
+      stepSize: 10,
+      currentValRight: 22,
+      currentValLeft: 11,
+      ["shiftLeft"]: 2,
+      ["shiftRight"]: 100,
+      step: 0,
+      isActiveLeft: false
+    };
+    this.percent = 0;
+    this.state.selector = selector;
+    this.observer = new EventObserver();
+  }
+
+  get stateCurrent() {
+    return Object.assign({}, this.state);
+  }
+
+  editState(data) {
+    switch (Object.keys(data)[0]) {
+      case "shiftLeft":
+        this.edit(data);
+        this.defineLeftVal();
+        break;
+
+      case "shiftRight":
+        this.edit(data);
+        this.defineRightVal();
+        break;
+
+      case "position":
+        this.defineStep(Number(data["position"]));
+        break;
+
+      case "coordinates":
+        this.updateCoordinate(data["coordinates"]);
+        break;
+
+      case "active":
+        this.activeButton(data["active"]);
+        break;
+
+      case "interval":
+        this.state.step = this.convertNumberInPercent(Number(data["interval"]));
+        break;
+
+      default:
+        this.edit(data);
+        break;
+    }
+
+    this.observer.broadcast(this.stateCurrent);
+  }
+
+  editMode(key) {
+    this.state = Object.assign(Object.assign({}, this.state), key);
+    this.convertToNumber();
+    this.observer.broadcast(this.stateCurrent);
+  }
+
+  edit(key) {
+    this.state = Object.assign(Object.assign({}, this.state), key);
+    this.observer.broadcast(this.stateCurrent);
+  }
+
+  convertToNumber() {
+    this.state.minValue = Model.convertCorrectNumber(this.state.minValue);
+    this.state.maxValue = Model.convertCorrectNumber(this.state.maxValue);
+    this.state.intervalCount = Model.convertCorrectNumber(this.state.intervalCount);
+    this.state.stepSize = Model.convertCorrectNumber(this.state.stepSize);
+    this.state.currentValRight = Model.convertCorrectNumber(this.state.currentValRight);
+    this.state.currentValLeft = Model.convertCorrectNumber(this.state.currentValLeft);
+    this.state.shiftLeft = this.convertNumberInPercent(this.state.currentValLeft);
+    this.state.shiftRight = this.convertNumberInPercent(this.state.currentValRight);
+    this.state.shiftRight = Number.isFinite(this.state.shiftRight) ? Model.transformRange(this.state.shiftRight) : 0;
+    this.state.shiftLeft = Number.isFinite(this.state.shiftLeft) ? Model.transformRange(this.state.shiftLeft) : 0;
+  }
+
+  updateCoordinate(coords) {
+    this.coords = Object.assign(Object.assign({}, this.coords), coords);
+  }
+
+  defineStep(position) {
+    const percent = this.mathPercent(position);
+
+    if (this.state.stepSize > 0) {
+      this.state.step = Model.transformRange(this.mathStepCount(percent));
+    } else {
+      this.state.step = Model.transformRange(percent);
+    }
+  }
+
+  activeButton(position) {
+    this.state.isActiveLeft = Math.abs(this.state["shiftLeft"] - this.state.step) <= Math.abs(this.state["shiftRight"] - this.state.step);
+
+    if (this.state["shiftLeft"] === this.state["shiftRight"]) {
+      this.state.isActiveLeft = this.mathPercent(position) < this.state.shiftRight;
+      this.checkExtremePoint();
+    }
+  }
+
+  checkExtremePoint() {
+    if (this.state.step <= 0) {
+      this.state.isActiveLeft = false;
+      return;
+    }
+
+    if (this.state.step >= 100) {
+      this.state.isActiveLeft = true;
+    }
+  }
+
+  mathPercent(num) {
+    if (this.state.rotate === "horizontal") {
+      return (num - this.coords.x) / this.coords.width * 100;
+    }
+
+    return (num - this.coords.y) / this.coords.height * 100;
+  }
+
+  mathStepCount(num) {
+    const difference = Math.abs(this.state.maxValue - this.state.minValue);
+
+    if (difference === 0) {
+      return Math.round(num / this.state.stepSize) * this.state.stepSize;
+    }
+
+    this.percent = this.state.stepSize / Math.abs(this.state.maxValue - this.state.minValue) * 100;
+    this.percent = Model.transformRange(this.percent);
+    return Math.round(num / this.percent) * this.percent;
+  }
+
+  defineDecimalPlacesCount() {
+    let decimalPlaces = 12;
+    const str = this.state.stepSize.toString();
+
+    if (str.includes('.')) {
+      decimalPlaces = Number(str.split('.').pop());
+    }
+
+    return decimalPlaces;
+  }
+
+  convertNumberInPercent(value) {
+    return (value - this.state.minValue) / (this.state.maxValue - this.state.minValue) * 100;
+  }
+
+  defineLeftVal() {
+    const leftValue = (this.state.maxValue - this.state.minValue) * this.state.shiftLeft / 100 + this.state.minValue;
+    this.state.currentValLeft = Number(leftValue.toFixed(this.defineDecimalPlacesCount()));
+  }
+
+  defineRightVal() {
+    const rightValue = (this.state.maxValue - this.state.minValue) * this.state.shiftRight / 100 + this.state.minValue;
+    this.state.currentValRight = Number(rightValue.toFixed(this.defineDecimalPlacesCount()));
+  }
+
+  static convertCorrectNumber(num) {
+    const result = Number(num);
+
+    if (Number.isNaN(result)) {
+      return 0;
+    }
+
+    if (!Number.isFinite(result)) {
+      return 0;
+    }
+
+    return result;
+  }
+
+  static transformRange(num) {
+    if (num <= 0) {
+      return 0;
+    }
+
+    if (num >= 100) {
+      return 100;
+    }
+
+    return num;
+  }
+
+}
+
+
+;// CONCATENATED MODULE: ./slider/mvp/View/Button/Button.ts
 class Button {
   constructor() {
     this.button = document.createElement('div');
@@ -186,12 +439,17 @@ class Button {
     this.init();
   }
 
-  init() {
-    this.button.className = "slider-range__button";
-  }
-
   addEvent(type, action) {
     this.button.addEventListener(type, Button.makeEvent(action));
+  }
+
+  width() {
+    this.widthButton = this.button.offsetWidth / 2;
+    return this.widthButton;
+  }
+
+  init() {
+    this.button.className = "slider-range__button";
   }
 
   static makeEvent(action) {
@@ -200,69 +458,15 @@ class Button {
     };
   }
 
-  width() {
-    this.widthButton = this.button.offsetWidth / 2;
-    return this.widthButton;
-  }
-
 }
 
 
-;// CONCATENATED MODULE: ./slider/mvp/View/Interval/Interval.ts
-class Interval {
-  constructor() {
-    this.interval = document.createElement('ul');
-    this.rotate = "horizontal";
-    this.init();
-  }
-
-  init() {
-    this.interval.className = "interval-point";
-
-    if (this.rotate === "vertical") {
-      this.interval.classList.add("interval-point_vertical");
-    }
-  }
-
-  renderIntervals(minValue, maxValue, count) {
-    this.interval.textContent = '';
-
-    if (count <= 0) {
-      return this.interval;
-    }
-
-    const interval = (maxValue - minValue) / count;
-    let sum;
-    const fragment = document.createDocumentFragment();
-    Array(count + 1).fill('').forEach((el, i) => {
-      const li = document.createElement('li');
-      sum = i * interval + minValue;
-      li.className = "interval-point__item";
-      li.innerHTML = `<div class=${"interval-point__item-text"}> ${sum} </div>`;
-      fragment.append(li);
-    });
-    this.interval.append(fragment);
-    return this.interval;
-  }
-
-  edit(rot) {
-    this.rotate = rot;
-    this.init();
-  }
-
-}
-
-
-;// CONCATENATED MODULE: ./slider/mvp/View/Tooltip/Toolitp.ts
+;// CONCATENATED MODULE: ./slider/mvp/View/Tooltip/Tooltip.ts
 class Tooltip {
   constructor(orientation) {
     this.orientation = orientation;
     this.tooltipVal = document.createElement('div');
     this.init();
-  }
-
-  init() {
-    this.tooltipVal.className = "slider-range__current-value";
   }
 
   text(text) {
@@ -312,6 +516,10 @@ class Tooltip {
     return clientRect.bottom;
   }
 
+  init() {
+    this.tooltipVal.className = "slider-range__current-value";
+  }
+
 }
 
 
@@ -322,18 +530,6 @@ class SliderRange {
     this.sliderActiveZone = document.createElement('div');
     this.rotate = "horizontal";
     this.init(rot);
-  }
-
-  init(rot) {
-    this.sliderRange.className = "slider-range";
-    this.sliderActiveZone.className = "slider-range__active-zone";
-
-    if (rot === "vertical") {
-      this.sliderRange.classList.add("slider-range_vertical");
-    }
-
-    this.sliderRange.appendChild(this.sliderActiveZone);
-    return this.sliderRange;
   }
 
   edit(rot) {
@@ -356,31 +552,63 @@ class SliderRange {
     }
   }
 
+  init(rot) {
+    this.sliderRange.className = "slider-range";
+    this.sliderActiveZone.className = "slider-range__active-zone";
+
+    if (rot === "vertical") {
+      this.sliderRange.classList.add("slider-range_vertical");
+    }
+
+    this.sliderRange.appendChild(this.sliderActiveZone);
+    return this.sliderRange;
+  }
+
 }
 
 
-;// CONCATENATED MODULE: ./slider/utils/EventObserver.ts
-class EventObserver {
+;// CONCATENATED MODULE: ./slider/mvp/View/Interval/Interval.ts
+class Interval {
   constructor() {
-    this.observers = [];
+    this.interval = document.createElement('ul');
+    this.items = [document.createElement('li')];
+    this.rotate = "horizontal";
+    this.init();
   }
 
-  subscribe(fn) {
-    if (!this.observers.some(el => el === fn)) {
-      this.observers.push(fn);
+  renderIntervals(minValue, maxValue, count) {
+    this.interval.textContent = '';
+
+    if (count <= 0) {
+      return this.interval;
     }
-  }
 
-  broadcast(data) {
-    this.observers.forEach(subscriber => {
-      if (typeof subscriber === 'function') {
-        subscriber(data);
-      }
+    const interval = (maxValue - minValue) / count;
+    let sum;
+    const fragment = document.createDocumentFragment();
+    this.items = Array(count + 1).fill('').map((el, i) => {
+      const li = document.createElement('li');
+      sum = i * interval + minValue;
+      li.className = "interval-point__item";
+      li.innerHTML = `<div class=${"interval-point__item-text"}> ${sum} </div>`;
+      fragment.append(li);
+      return li;
     });
+    this.interval.append(fragment);
+    return this.interval;
   }
 
-  unsubscribe(fn) {
-    this.observers = this.observers.filter(subscriber => subscriber !== fn);
+  edit(rot) {
+    this.rotate = rot;
+    this.init();
+  }
+
+  init() {
+    this.interval.className = "interval-point";
+
+    if (this.rotate === "vertical") {
+      this.interval.classList.add("interval-point_vertical");
+    }
   }
 
 }
@@ -404,10 +632,8 @@ class View {
     this.slider = document.createElement('div');
     this.buttonLeft = new Button();
     this.buttonRight = new Button();
-    this.interval = new Interval();
     this.buttonWidth = 10;
     this.currentButton = this.buttonRight.button;
-    this.clickHandler = this.onMouseMove.bind(this);
     this.isLeftOn = false;
     this.state = state;
     this.observer = new EventObserver();
@@ -415,13 +641,9 @@ class View {
     this.currentValRight = new Tooltip(this.state.rotate);
     this.currentValGeneral = new Tooltip(this.state.rotate);
     this.slideClass = new SliderRange(this.state.rotate);
+    this.interval = new Interval();
     this.sliderRange = this.slideClass.sliderRange;
     this.startView(this.state.selector);
-  }
-
-  startView(selector) {
-    this.slider = document.querySelector(selector);
-    this.slider.style.position = 'relative';
   }
 
   editView(newState) {
@@ -431,49 +653,6 @@ class View {
     this.currentValLeft.setRotate(this.state.rotate);
     this.currentValRight.setRotate(this.state.rotate);
     this.currentValGeneral.setRotate(this.state.rotate);
-  }
-
-  renderInterval() {
-    this.interval.renderIntervals(this.state.minValue, this.state.maxValue, this.state.intervalCount);
-  }
-
-  addElem() {
-    this.sliderRange.append(this.buttonRight.button);
-    this.slider.append(this.sliderRange);
-  }
-
-  addAction() {
-    this.buttonRight.addEvent('mousedown', this.buttonAction);
-    this.buttonRight.addEvent('dragstart', this.buttonAction);
-    this.buttonRight.addEvent('touchstart', this.buttonAction);
-    this.currentValRight.tooltipVal.addEventListener('mousedown', this.currentButtonAction);
-    this.currentValRight.tooltipVal.addEventListener('touchstart', this.currentButtonAction);
-
-    if (this.state.range === 'two') {
-      this.buttonLeft.addEvent('mousedown', this.buttonAction);
-      this.buttonLeft.addEvent('touchstart', this.buttonAction);
-      this.currentValLeft.tooltipVal.addEventListener('touchstart', this.currentButtonAction);
-      this.currentValLeft.tooltipVal.addEventListener('mousedown', this.currentButtonAction);
-    }
-
-    this.sliderRange.addEventListener('mousedown', this.onClickMove);
-    this.sliderRange.addEventListener('touchstart', this.onClickMove);
-    window.addEventListener('resize', this.resizeSlider);
-  }
-
-  resizeSlider() {
-    this.observer.broadcast({
-      ["widthSlider"]: this.sliderRange.offsetWidth,
-      ["heightSlider"]: this.sliderRange.offsetHeight
-    });
-    this.observer.broadcast({
-      ["coordinates"]: {
-        x: this.slider.getBoundingClientRect().x,
-        y: this.slider.getBoundingClientRect().y,
-        width: this.slider.getBoundingClientRect().width,
-        height: this.slider.getBoundingClientRect().height
-      }
-    });
   }
 
   render() {
@@ -486,6 +665,51 @@ class View {
     this.installMove();
   }
 
+  startView(selector) {
+    this.slider = document.querySelector(selector);
+    this.slider.style.position = 'relative';
+  }
+
+  renderInterval() {
+    this.interval.renderIntervals(this.state.minValue, this.state.maxValue, this.state.intervalCount);
+  }
+
+  addElem() {
+    this.sliderRange.append(this.buttonRight.button);
+    this.slider.append(this.sliderRange);
+  }
+
+  addAction() {
+    this.sliderRange.addEventListener('mousedown', this.onClickMove);
+    this.sliderRange.addEventListener('touchstart', this.onClickMove);
+    this.interval.items.forEach(item => {
+      item.addEventListener('mousedown', this.onClickInterval);
+      item.addEventListener('touchstart', this.onClickInterval);
+    });
+    window.addEventListener('resize', this.resizeSlider);
+  }
+
+  resizeSlider() {
+    const {
+      x,
+      y,
+      width,
+      height
+    } = this.slider.getBoundingClientRect();
+    this.observer.broadcast({
+      ["widthSlider"]: this.sliderRange.offsetWidth,
+      ["heightSlider"]: this.sliderRange.offsetHeight
+    });
+    this.observer.broadcast({
+      ["coordinates"]: {
+        x,
+        y,
+        width,
+        height
+      }
+    });
+  }
+
   static removeStyle(el) {
     const s = el.querySelectorAll('[style]');
     s.forEach(elem => {
@@ -495,13 +719,13 @@ class View {
 
   show() {
     if (this.state.range === 'two') {
-      this.buttonLeftExpose();
+      this.buttonLeftDisplay();
     } else {
       this.buttonLeftRemove();
     }
 
     if (this.state.showInterval) {
-      this.intervalExpose();
+      this.intervalDisplay();
     } else {
       this.interval.interval.remove();
     }
@@ -516,7 +740,7 @@ class View {
     }
   }
 
-  buttonLeftExpose() {
+  buttonLeftDisplay() {
     this.sliderRange.append(this.buttonLeft.button);
 
     if (this.state.show) {
@@ -534,44 +758,35 @@ class View {
     });
   }
 
-  intervalExpose() {
+  intervalDisplay() {
     this.renderInterval();
     this.slider.append(this.interval.interval);
   }
 
-  currentButtonAction(e) {
-    let event;
+  onClickInterval(event) {
+    event.preventDefault();
+    const value = event.target;
+    this.observerPosition(event);
 
-    if (e instanceof MouseEvent) {
-      event = e.currentTarget;
-    } else {
-      event = e.targetTouches[0].target;
+    if (this.state.range === 'two') {
+      this.overridingButtons(this.state.isActiveLeft);
     }
 
-    if (this.currentValLeft.tooltipVal === event) {
-      this.overridingButtons(true);
-    } else {
-      this.overridingButtons(false);
-    }
-
-    if (e instanceof MouseEvent) {
-      document.addEventListener('mousemove', this.clickHandler);
-      document.addEventListener('mouseup', this.removeMouse);
-    } else {
-      document.addEventListener('touchmove', this.clickHandler);
-      document.addEventListener('touchend', this.removeTouch);
-    }
-
-    this.currentButton.ondragstart = () => false;
+    this.observer.broadcast({
+      ["interval"]: value.textContent
+    });
+    this.eventButton(this.state.step);
   }
 
   buttonAction(e) {
+    e.preventDefault();
+
     if (e instanceof MouseEvent) {
-      document.addEventListener('mousemove', this.clickHandler);
+      document.addEventListener('mousemove', this.onMouseMove);
       document.addEventListener('mouseup', this.removeMouse);
       this.currentButton = e.currentTarget;
     } else {
-      document.addEventListener('touchmove', this.clickHandler);
+      document.addEventListener('touchmove', this.onMouseMove);
       document.addEventListener('touchend', this.removeTouch);
       this.currentButton = e.targetTouches[0].target;
     }
@@ -586,12 +801,12 @@ class View {
   }
 
   removeTouch() {
-    document.removeEventListener('touchmove', this.clickHandler);
+    document.removeEventListener('touchmove', this.onMouseMove);
     document.onmouseup = null;
   }
 
   removeMouse() {
-    document.removeEventListener('mousemove', this.clickHandler);
+    document.removeEventListener('mousemove', this.onMouseMove);
     document.onmouseup = null;
   }
 
@@ -751,7 +966,7 @@ class View {
 
 __decorate([esm/* boundMethod */.MR], View.prototype, "resizeSlider", null);
 
-__decorate([esm/* boundMethod */.MR], View.prototype, "currentButtonAction", null);
+__decorate([esm/* boundMethod */.MR], View.prototype, "onClickInterval", null);
 
 __decorate([esm/* boundMethod */.MR], View.prototype, "buttonAction", null);
 
@@ -759,204 +974,9 @@ __decorate([esm/* boundMethod */.MR], View.prototype, "removeTouch", null);
 
 __decorate([esm/* boundMethod */.MR], View.prototype, "removeMouse", null);
 
+__decorate([esm/* boundMethod */.MR], View.prototype, "onMouseMove", null);
+
 __decorate([esm/* boundMethod */.MR], View.prototype, "onClickMove", null);
-
-
-;// CONCATENATED MODULE: ./slider/mvp/Model/Model.ts
-
-
-class Model {
-  constructor(selector = 'slider-rqik') {
-    this.state = {
-      selector: 'slider-range',
-      minValue: 0,
-      maxValue: 1200,
-      range: 'one',
-      rotate: "horizontal",
-      show: true,
-      showInterval: true,
-      intervalCount: 2,
-      stepSize: 10,
-      currentValRight: 22,
-      currentValLeft: 11,
-      ["shiftLeft"]: 2,
-      ["shiftRight"]: 100,
-      step: 0,
-      isActiveLeft: false
-    };
-    this.percent = 0;
-    this.coords = {
-      x: 0,
-      y: 0,
-      height: 0,
-      width: 0
-    };
-    this.state.selector = selector;
-    this.observer = new EventObserver();
-  }
-
-  get stateCurrent() {
-    return this.state;
-  }
-
-  edit(key) {
-    this.state = Object.assign(Object.assign({}, this.state), key);
-    this.observer.broadcast(this.stateCurrent);
-  }
-
-  editState(data) {
-    switch (Object.keys(data)[0]) {
-      case "shiftLeft":
-        this.edit(data);
-        this.defineLeftVal();
-        break;
-
-      case "shiftRight":
-        this.edit(data);
-        this.defineRightVal();
-        break;
-
-      case "position":
-        this.defineStep(+data["position"]);
-        break;
-
-      case "coordinates":
-        this.updateCoordinate(data["coordinates"]);
-        break;
-
-      case "active":
-        this.activeButton(data["active"]);
-        break;
-
-      default:
-        this.edit(data);
-        break;
-    }
-
-    this.observer.broadcast(this.stateCurrent);
-  }
-
-  editMode(key) {
-    this.state = Object.assign(Object.assign({}, this.state), key);
-    this.convertToNumber();
-    this.observer.broadcast(this.stateCurrent);
-  }
-
-  convertToNumber() {
-    this.state.minValue = Model.convertCorrectNumber(this.state.minValue);
-    this.state.maxValue = Model.convertCorrectNumber(this.state.maxValue);
-    this.state.intervalCount = Model.convertCorrectNumber(this.state.intervalCount);
-    this.state.stepSize = Model.convertCorrectNumber(this.state.stepSize);
-    this.state.currentValRight = Model.convertCorrectNumber(this.state.currentValRight);
-    this.state.currentValLeft = Model.convertCorrectNumber(this.state.currentValLeft);
-    this.state.shiftLeft = (this.state.currentValLeft - this.state.minValue) / (this.state.maxValue - this.state.minValue) * 100;
-    this.state.shiftRight = (this.state.currentValRight - this.state.minValue) / (this.state.maxValue - this.state.minValue) * 100;
-    this.state.shiftRight = Number.isFinite(this.state.shiftRight) ? Model.transformRange(this.state.shiftRight) : 0;
-    this.state.shiftLeft = Number.isFinite(this.state.shiftLeft) ? Model.transformRange(this.state.shiftLeft) : 0;
-  }
-
-  updateCoordinate(coords) {
-    this.coords = Object.assign(Object.assign({}, this.coords), coords);
-  }
-
-  defineStep(position) {
-    const percent = this.mathPercent(position);
-
-    if (this.state.stepSize > 0) {
-      this.state.step = Model.transformRange(this.mathStepCount(percent));
-    } else {
-      this.state.step = Model.transformRange(percent);
-    }
-  }
-
-  activeButton(position) {
-    this.state.isActiveLeft = Math.abs(this.state["shiftLeft"] - this.state.step) <= Math.abs(this.state["shiftRight"] - this.state.step);
-
-    if (this.state["shiftLeft"] === this.state["shiftRight"]) {
-      this.state.isActiveLeft = this.mathPercent(position) < this.state.shiftRight;
-      this.isActiveLeftButton();
-    }
-  }
-
-  isActiveLeftButton() {
-    if (this.state.step <= 0) {
-      this.state.isActiveLeft = false;
-      return;
-    }
-
-    if (this.state.step >= 100) {
-      this.state.isActiveLeft = true;
-    }
-  }
-
-  mathPercent(num) {
-    if (this.state.rotate === "horizontal") {
-      return (num - this.coords.x) / this.coords.width * 100;
-    }
-
-    return (num - this.coords.y) / this.coords.height * 100;
-  }
-
-  mathStepCount(num) {
-    const difference = Math.abs(this.state.maxValue - this.state.minValue);
-
-    if (difference === 0) {
-      return Math.round(num / this.state.stepSize) * this.state.stepSize;
-    }
-
-    this.percent = this.state.stepSize / Math.abs(this.state.maxValue - this.state.minValue) * 100;
-    this.percent = Model.transformRange(this.percent);
-    return Math.round(num / this.percent) * this.percent;
-  }
-
-  defineDecimalPlacesCount() {
-    let decimalPlaces = 12;
-    const str = this.state.stepSize.toString();
-
-    if (str.includes('.')) {
-      decimalPlaces = str.split('.').pop().length;
-    }
-
-    return decimalPlaces;
-  }
-
-  defineLeftVal() {
-    const leftValue = (this.state.maxValue - this.state.minValue) * this.state.shiftLeft / 100 + this.state.minValue;
-    this.state.currentValLeft = Number(leftValue.toFixed(this.defineDecimalPlacesCount()));
-  }
-
-  defineRightVal() {
-    const rightValue = (this.state.maxValue - this.state.minValue) * this.state.shiftRight / 100 + this.state.minValue;
-    this.state.currentValRight = Number(rightValue.toFixed(this.defineDecimalPlacesCount()));
-  }
-
-  static convertCorrectNumber(num) {
-    const result = Number(num);
-
-    if (Number.isNaN(result)) {
-      return 0;
-    }
-
-    if (!Number.isFinite(result)) {
-      return 0;
-    }
-
-    return result;
-  }
-
-  static transformRange(num) {
-    if (num <= 0) {
-      return 0;
-    }
-
-    if (num >= 100) {
-      return 100;
-    }
-
-    return num;
-  }
-
-}
 
 
 ;// CONCATENATED MODULE: ./slider/mvp/Presenter/Presenter.ts
@@ -985,6 +1005,19 @@ class Present {
     return this.model.stateCurrent;
   }
 
+  sliderModify(options) {
+    this.model.editMode(options);
+    this.view.editView(this.model.stateCurrent);
+
+    if (this.rotate !== this.model.stateCurrent.rotate) {
+      this.rotate = this.model.stateCurrent.rotate;
+      this.view.observer.unsubscribe(this.setStateModel);
+      this.model.observer.unsubscribe(this.setStateView);
+    }
+
+    this.init();
+  }
+
   setStateModel(data) {
     this.model.editState(data);
   }
@@ -999,19 +1032,6 @@ class Present {
     this.view.render();
   }
 
-  sliderModify(options) {
-    this.model.editMode(options);
-    this.view.editView(this.model.stateCurrent);
-
-    if (this.rotate !== this.model.stateCurrent.rotate) {
-      this.rotate = this.model.stateCurrent.rotate;
-      this.view.observer.unsubscribe(this.setStateModel);
-      this.model.observer.unsubscribe(this.setStateView);
-    }
-
-    this.init();
-  }
-
 }
 
 Presenter_decorate([esm/* boundMethod */.MR], Present.prototype, "setStateModel", null);
@@ -1023,8 +1043,10 @@ Presenter_decorate([esm/* boundMethod */.MR], Present.prototype, "setStateView",
 /* provided dependency */ var jQuery = __webpack_require__(638);
 
 
-(function ($) {
-  $.fn.sliderRqik = function (options) {
+(function IIFE(jQuery) {
+  const $ = jQuery;
+
+  $.fn.sliderRqik = function initSlider(options) {
     const allSlider = [];
     this.each((id, el) => {
       const res = new SliderPlugin(el, id);

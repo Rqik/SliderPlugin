@@ -20,7 +20,7 @@ interface IState {
   selector: string;
   minValue: number;
   maxValue: number;
-  show: boolean;
+  showTooltip: boolean;
   showInterval: boolean;
   range: range;
   rotate: rotate;

@@ -4,7 +4,7 @@ include ../checkbox-list/checkbox-list
 mixin sliderForm(props)
   -
     const {
-      id, minValue = 0, maxValue = 100, intervalCount = 2,
+      id, minValue = -10, maxValue = 197, intervalCount = 2,
       round = 2,
       currentValRight = 50, currentValLeft = 0
     } = props
@@ -14,12 +14,12 @@ mixin sliderForm(props)
     +field({name: "maxValue", text: "Max", value: maxValue})
     +field({
       name: "currentValRight",
-      text: "Тек. значение Btn 1",
+      text: "Тек. значение Btn 1 (правая)",
       value: currentValRight
     })
     +field({
       name: "currentValLeft",
-      text: "Тек. значение Btn 2",
+      text: "Тек. значение Btn 2 (левая)",
       value: currentValLeft
     })
     +field({

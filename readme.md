@@ -155,7 +155,7 @@ $('.plug').sliderRqik({
   maxValue: 100, // максимальное значение
   range: 'two', // 1 или 2 указателя
   rotate: 'horizontal', // ориентация vertical horizontal
-  show: true, // показывать текущее значение над указателем
+  showTooltip: true, // показывать текущее значение над указателем
   showInterval: true, // показать интервал
   intervalCount: 2, // количество интервалов
   stepSize: 1, // шаг движения указателя в числах
@@ -227,7 +227,7 @@ $('.plug').sliderRqik({ rotate: 'vertical' });
 По умолчанию **_true_**
 
 ```javascript
-$('.plug').sliderRqik({ show: false });
+$('.plug').sliderRqik({ showTooltip: false });
 ```
 
 ### showInterval

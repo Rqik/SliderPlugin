@@ -9,10 +9,10 @@ const state: IState = {
   maxValue: 120, // максимальное значение
   range: 'two', // 1 или 2 указателя
   rotate: rotation.HORIZONTAL, // ориентация vertical horizontal
-  show: true, // показывать текущее значение над указателем
+  showTooltip: true, // показывать текущее значение над указателем
   showInterval: true, // показать интервал
   intervalCount: 7, // количество интервалов
-  stepSize: 1, // шаг движения указателя в px
+  stepSize: 1, // шаг движения указателя
   currentValRight: 0, // установка значений в числах
   currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
@@ -28,10 +28,10 @@ const state2: IState = {
   maxValue: 120, // максимальное значение
   range: 'one', // 1 или 2 указателя
   rotate: rotation.VERTICAL, // ориентация vertical horizontal
-  show: false, // показывать текущее значение над указателем
+  showTooltip: false, // показывать текущее значение над указателем
   showInterval: false, // показать интервал
   intervalCount: 7, // количество интервалов
-  stepSize: 20, // шаг движения указателя в px
+  stepSize: 20, // шаг движения указателя
   currentValRight: 0, // установка значений в числах
   currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
@@ -124,29 +124,48 @@ describe('View test', () => {
     });
 
     test('call private method from ts-ignore', () => {
+      let target = document.createElement('div');
+      target.textContent = '20';
       let eventMouse = new MouseEvent('mousedown', {
         bubbles: true,
       });
-      let target = document.createElement('div');
+
+      Object.defineProperty(eventMouse, 'target', {
+        value: '20',
+        enumerable: true,
+        // @ts-ignore
+        textContent: '22',
+      });
+
       let eventTouch = new TouchEvent('touchstart', {
         bubbles: true,
         // @ts-ignore
         targetTouches: [target],
       });
-      let view = new View(state);
 
+      let view = new View(state2);
       // @ts-ignore
-      const currentButtonAction = jest.spyOn(
+      view.currentButton = view.buttonRight.button;
+      // @ts-ignore
+      const buttonAction = jest.spyOn(View.prototype as any, 'buttonAction');
+      // @ts-ignore
+      view.buttonAction(eventMouse);
+      // @ts-ignore
+      view.buttonAction(eventTouch);
+
+      expect(buttonAction).toHaveBeenCalled();
+      expect(buttonAction).toHaveBeenCalledTimes(2);
+
+      const onClickInterval = jest.spyOn(
         View.prototype as any,
-        'currentButtonAction',
+        'onClickInterval',
       );
-      // @ts-ignore
-      view.currentButtonAction(eventMouse);
-      // @ts-ignore
-      view.currentButtonAction(eventTouch);
 
-      expect(currentButtonAction).toHaveBeenCalled();
-      expect(currentButtonAction).toHaveBeenCalledTimes(2);
+      // @ts-ignore
+      view.onClickInterval(eventMouse);
+
+      expect(onClickInterval).toHaveBeenCalled();
+      expect(onClickInterval).toHaveBeenCalledTimes(1);
 
       const responsiveCurrent = jest.spyOn(
         View.prototype as any,
@@ -162,14 +181,14 @@ describe('View test', () => {
       view.responsiveCurrent(true);
       expect(responsiveCurrent).toHaveBeenCalledTimes(2);
 
+      view = new View(state);
+
       const onMouseMove = jest.spyOn(View.prototype as any, 'onMouseMove');
-      const observerPosition = jest.spyOn(
-        View.prototype as any,
-        'observerPosition',
-      );
-      // @ts-ignore
+
+      //@ts-ignore
       view.onMouseMove(eventMouse);
-      expect(onMouseMove).toHaveBeenCalled();
+
+      expect(onMouseMove).toHaveBeenCalledTimes(1);
     });
 
     test('call render', () => {
@@ -180,30 +199,30 @@ describe('View test', () => {
     });
 
     test('drawing interval showInterval : true', () => {
-      const buttonLeftExpose = jest.spyOn(
+      const buttonLeftDisplay = jest.spyOn(
         View.prototype as any,
-        'buttonLeftExpose',
+        'buttonLeftDisplay',
       );
       const buttonLeftRemove = jest.spyOn(
         View.prototype as any,
         'buttonLeftRemove',
       );
-      const intervalExpose = jest.spyOn(
+      const intervalDisplay = jest.spyOn(
         View.prototype as any,
-        'intervalExpose',
+        'intervalDisplay',
       );
       view.editView(state);
       view.render();
-      expect(buttonLeftExpose).toHaveBeenCalled();
-      expect(buttonLeftExpose).toHaveBeenCalledTimes(1);
-      expect(intervalExpose).toHaveBeenCalled();
-      expect(intervalExpose).toHaveBeenCalledTimes(1);
+      expect(buttonLeftDisplay).toHaveBeenCalled();
+      expect(buttonLeftDisplay).toHaveBeenCalledTimes(1);
+      expect(intervalDisplay).toHaveBeenCalled();
+      expect(intervalDisplay).toHaveBeenCalledTimes(1);
       view.editView(state2);
       view.render();
       expect(buttonLeftRemove).toHaveBeenCalled();
       expect(buttonLeftRemove).toHaveBeenCalledTimes(1);
-      expect(buttonLeftExpose).toHaveBeenCalledTimes(1);
-      expect(intervalExpose).toHaveBeenCalledTimes(1);
+      expect(buttonLeftDisplay).toHaveBeenCalledTimes(1);
+      expect(intervalDisplay).toHaveBeenCalledTimes(1);
     });
   });
 });

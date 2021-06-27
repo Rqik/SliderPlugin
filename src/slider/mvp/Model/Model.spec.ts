@@ -8,10 +8,10 @@ const stateHorizontal: IState = {
   maxValue: 120, // максимальное значение
   range: 'two', // 1 или 2 указателя
   rotate: rotation.HORIZONTAL, // ориентация vertical horizontal
-  show: true, // показывать текущее значение над указателем
+  showTooltip: true, // показывать текущее значение над указателем
   showInterval: true, // показать интервал
   intervalCount: 7, // количество интервалов
-  stepSize: 1, // шаг движения указателя в px
+  stepSize: 1, // шаг движения указателя
   currentValRight: 0, // установка значений в числах
   currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
@@ -29,10 +29,10 @@ const stateVertical: IState = {
   maxValue: 120, // максимальное значение
   range: 'one', // 1 или 2 указателя
   rotate: rotation.VERTICAL, // ориентация vertical horizontal
-  show: false, // показывать текущее значение над указателем
+  showTooltip: false, // показывать текущее значение над указателем
   showInterval: false, // показать интервал
   intervalCount: 7, // количество интервалов
-  stepSize: 20, // шаг движения указателя в px
+  stepSize: 20, // шаг движения указателя
   currentValRight: 0, // установка значений в числах
   currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
@@ -40,7 +40,6 @@ const stateVertical: IState = {
   [keyChanges.SHIFT_RIGHT]: 54,
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
-  stepSizePercent: 0, // шаг движения указателя в %
   step: 0,
   isActiveLeft: false,
 };
@@ -51,10 +50,10 @@ const stateHorCorrect: IState = {
   maxValue: 120, // максимальное значение
   range: 'two', // 1 или 2 указателя
   rotate: rotation.HORIZONTAL, // ориентация vertical horizontal
-  show: true, // показывать текущее значение над указателем
+  showTooltip: true, // показывать текущее значение над указателем
   showInterval: true, // показать интервал
   intervalCount: 7, // количество интервалов
-  stepSize: 1, // шаг движения указателя в px
+  stepSize: 1, // шаг движения указателя
   currentValRight: 0, // установка значений в числах
   currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
@@ -71,10 +70,10 @@ const stateVerCorrect: IState = {
   maxValue: 120, // максимальное значение
   range: 'one', // 1 или 2 указателя
   rotate: rotation.VERTICAL, // ориентация vertical horizontal
-  show: false, // показывать текущее значение над указателем
+  showTooltip: false, // показывать текущее значение над указателем
   showInterval: false, // показать интервал
   intervalCount: 7, // количество интервалов
-  stepSize: 20, // шаг движения указателя в px
+  stepSize: 20, // шаг движения указателя
   currentValRight: 0, // установка значений в числах
   currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
@@ -82,7 +81,6 @@ const stateVerCorrect: IState = {
   [keyChanges.SHIFT_RIGHT]: 0,
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
-  stepSizePercent: 0, // шаг движения указателя в %
   step: 0,
   isActiveLeft: false,
 };
@@ -137,9 +135,9 @@ describe('Model test', () => {
       'updateCoordinate',
     );
     const activeButton = jest.spyOn(Model.prototype as any, 'activeButton');
-    const isActiveLeftButton = jest.spyOn(
+    const checkExtremePoint = jest.spyOn(
       Model.prototype as any,
-      'isActiveLeftButton',
+      'checkExtremePoint',
     );
     const mathPercent = jest.spyOn(Model.prototype as any, 'mathPercent');
     model.editState({ shiftLeft: '44' });
@@ -165,13 +163,13 @@ describe('Model test', () => {
 
     model.editState({ [keyChanges.ACTIVE]: 44 });
     expect(activeButton).toHaveBeenCalled();
-    expect(isActiveLeftButton).toHaveBeenCalled();
+    expect(checkExtremePoint).toHaveBeenCalled();
 
     model.editState({ [keyChanges.SHIFT_LEFT]: 24 });
     model.editState({ [keyChanges.SHIFT_RIGHT]: 24 });
     model.editMode({ step: -10 });
     model.editState({ [keyChanges.ACTIVE]: 24 });
-    expect(isActiveLeftButton).toHaveBeenCalledTimes(2);
+    expect(checkExtremePoint).toHaveBeenCalledTimes(2);
     expect(model.stateCurrent.isActiveLeft).toEqual(false);
 
     model.editMode({ step: 210 });

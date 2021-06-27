@@ -8,7 +8,7 @@
   margin: 0;
   padding: 0;
   width: 100%;
-  cursor: pointer;
+  user-select: none;
 
   &__item {
     position: relative;
@@ -19,16 +19,21 @@
     height: 14px;
     font-family: 'Montserrat', sans-serif;
     font-weight: normal;
-    font-size: 10px;
+    font-size: 14px;
     text-align: center;
     background-color: $slider-interval;
+    cursor: pointer;
 
     &-text {
       position: absolute;
       left: 50%;
       top: 50%;
-      color: $main-color;
-      transform: translate(-50%, 50%);
+      color: $slider-interval;
+      transform: translate(-50%, 70%);
+
+      &:hover {
+        color: $main-color;
+      }
     }
   }
 
@@ -53,8 +58,8 @@
         right: -50%;
         top: 50%;
         text-align: center;
-        color: $main-color;
         transform: translate(100%, -50%);
+        user-select: none;
       }
 
       &:last-child {

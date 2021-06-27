@@ -23,7 +23,7 @@ class Model {
     maxValue: 1200, // максимальное значение
     range: 'one', // 1 или 2 указателя
     rotate: rotation.HORIZONTAL, // ориентация vertical || horizontal
-    show: true, // показывать текущее значение над указателем
+    showTooltip: true, // показывать текущее значение над указателем
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
     stepSize: 10, // шаг движения указателя в числах
@@ -31,7 +31,7 @@ class Model {
     currentValLeft: 11, // установка значений в числах
     [keyChanges.SHIFT_LEFT]: 2,
     [keyChanges.SHIFT_RIGHT]: 100,
-    step: 0,
+    step: 0, // значение от 0 до 100
     isActiveLeft: false,
   };
 
@@ -43,7 +43,7 @@ class Model {
   }
 
   get stateCurrent(): IState {
-    return this.state;
+    return { ...this.state };
   }
 
   editState(data: UniversalSate): void {
@@ -64,6 +64,11 @@ class Model {
         break;
       case keyChanges.ACTIVE:
         this.activeButton(data[keyChanges.ACTIVE] as number);
+        break;
+      case keyChanges.INTERVAL:
+        this.state.step = this.convertNumberInPercent(
+          Number(data[keyChanges.INTERVAL]),
+        );
         break;
       default:
         this.edit(data);
@@ -102,14 +107,12 @@ class Model {
     this.state.currentValLeft = Model.convertCorrectNumber(
       this.state.currentValLeft,
     );
-    this.state.shiftLeft =
-      ((this.state.currentValLeft - this.state.minValue) /
-        (this.state.maxValue - this.state.minValue)) *
-      100;
-    this.state.shiftRight =
-      ((this.state.currentValRight - this.state.minValue) /
-        (this.state.maxValue - this.state.minValue)) *
-      100;
+    this.state.shiftLeft = this.convertNumberInPercent(
+      this.state.currentValLeft,
+    );
+    this.state.shiftRight = this.convertNumberInPercent(
+      this.state.currentValRight,
+    );
     this.state.shiftRight = Number.isFinite(this.state.shiftRight)
       ? Model.transformRange(this.state.shiftRight)
       : 0;
@@ -135,20 +138,18 @@ class Model {
   }
 
   private activeButton(position: number): void {
-    this.state.isActiveLeft =
-      Math.abs(this.state[keyChanges.SHIFT_LEFT] - this.state.step) <=
-      Math.abs(this.state[keyChanges.SHIFT_RIGHT] - this.state.step);
+    this.state.isActiveLeft = Math.abs(this.state[keyChanges.SHIFT_LEFT] - this.state.step)
+      <= Math.abs(this.state[keyChanges.SHIFT_RIGHT] - this.state.step);
 
     if (
       this.state[keyChanges.SHIFT_LEFT] === this.state[keyChanges.SHIFT_RIGHT]
     ) {
-      this.state.isActiveLeft =
-        this.mathPercent(position) < this.state.shiftRight;
-      this.isActiveLeftButton();
+      this.state.isActiveLeft = this.mathPercent(position) < this.state.shiftRight;
+      this.checkExtremePoint();
     }
   }
 
-  private isActiveLeftButton(): void {
+  private checkExtremePoint(): void {
     if (this.state.step <= 0) {
       this.state.isActiveLeft = false;
       return;
@@ -170,10 +171,9 @@ class Model {
     if (difference === 0) {
       return Math.round(num / this.state.stepSize) * this.state.stepSize;
     }
-    this.percent =
-      (this.state.stepSize /
-        Math.abs(this.state.maxValue - this.state.minValue)) *
-      100;
+    this.percent = (this.state.stepSize
+        / Math.abs(this.state.maxValue - this.state.minValue))
+      * 100;
     this.percent = Model.transformRange(this.percent);
     return Math.round(num / this.percent) * this.percent;
   }
@@ -187,11 +187,18 @@ class Model {
     return decimalPlaces;
   }
 
+  private convertNumberInPercent(value: number): number {
+    return (
+      ((value - this.state.minValue)
+        / (this.state.maxValue - this.state.minValue))
+      * 100
+    );
+  }
+
   private defineLeftVal(): void {
-    const leftValue =
-      ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft) /
-        100 +
-      this.state.minValue;
+    const leftValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft)
+        / 100
+      + this.state.minValue;
 
     this.state.currentValLeft = Number(
       leftValue.toFixed(this.defineDecimalPlacesCount()),
@@ -199,10 +206,9 @@ class Model {
   }
 
   private defineRightVal(): void {
-    const rightValue =
-      ((this.state.maxValue - this.state.minValue) * this.state.shiftRight) /
-        100 +
-      this.state.minValue;
+    const rightValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftRight)
+        / 100
+      + this.state.minValue;
     this.state.currentValRight = Number(
       rightValue.toFixed(this.defineDecimalPlacesCount()),
     );

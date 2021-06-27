@@ -4,6 +4,8 @@ import { interval as className, rotation } from '../../../types/constants';
 class Interval {
   interval: HTMLUListElement = document.createElement('ul');
 
+  items: HTMLLIElement[] = [document.createElement('li')];
+
   private rotate: rotate = rotation.HORIZONTAL;
 
   constructor() {
@@ -16,21 +18,24 @@ class Interval {
     count: number,
   ): HTMLElement {
     this.interval.textContent = '';
+
     if (count <= 0) {
       return this.interval;
     }
+
     const interval: number = (maxValue - minValue) / count;
     let sum;
     const fragment = document.createDocumentFragment();
 
-    Array(count + 1)
+    this.items = Array(count + 1)
       .fill('')
-      .forEach((el, i) => {
+      .map((el, i) => {
         const li = document.createElement('li');
         sum = i * interval + minValue;
         li.className = className.INTERVAL_ITEM;
         li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`;
         fragment.append(li);
+        return li;
       });
 
     this.interval.append(fragment);

@@ -2,27 +2,28 @@ import { boundMethod } from 'autobind-decorator';
 
 import { Slider } from '../../slider/types/interfaces';
 
+interface IInputChecker {
+  $form: JQuery;
+  $sliderDOM: JQuery;
+  slider: Slider;
+  classRotate: string;
+}
 class InputChecker {
-  private form: JQuery;
+  private $form: JQuery;
 
-  private sliderDOM: JQuery;
+  private $sliderDOM: JQuery;
 
   private slider: Slider;
 
-  private inputRotate: JQuery;
+  private $inputRotate: JQuery;
 
   private readonly classRotate: string;
 
-  constructor(
-    form: JQuery,
-    sliderDOM: JQuery,
-    slider: Slider,
-    classRotate: string,
-  ) {
-    this.form = form;
-    this.sliderDOM = sliderDOM;
+  constructor({ $form, $sliderDOM, slider, classRotate }: IInputChecker) {
+    this.$form = $form;
+    this.$sliderDOM = $sliderDOM;
     this.slider = slider;
-    this.inputRotate = this.form.find("input[name='rotate']");
+    this.$inputRotate = this.$form.find("input[name='rotate']");
     this.classRotate = classRotate;
   }
 
@@ -32,16 +33,16 @@ class InputChecker {
   }
 
   private addEventSlider(): void {
-    this.sliderDOM.on('click', this.eventChange);
-    this.inputRotate.on('click', this.addClassForm);
+    this.$sliderDOM.on('click', this.eventChange);
+    this.$inputRotate.on('click', this.addClassForm);
   }
 
   @boundMethod
   private addClassForm(): void {
-    if (this.inputRotate.is(':checked')) {
-      this.sliderDOM.addClass(this.classRotate);
+    if (this.$inputRotate.is(':checked')) {
+      this.$sliderDOM.addClass(this.classRotate);
     } else {
-      this.sliderDOM.removeClass(this.classRotate);
+      this.$sliderDOM.removeClass(this.classRotate);
     }
   }
 
@@ -69,16 +70,17 @@ class InputChecker {
   }
 
   private runChange(nameAtr: string): void {
-    const item = this.form.find(`input[name='${nameAtr}']`);
+    const item = this.$form.find(`input[name='${nameAtr}']`);
     const val = item.val() || 0;
-    item.on('input', this.makeEventInputChange(nameAtr));
+    item.on('change', this.makeEventInputChange(nameAtr));
     if (val !== '-' || val !== undefined) {
       this.slider.data({ [nameAtr]: +val });
     }
+    this.$sliderDOM.click();
   }
 
   private makeEventInputChange(nameAtr: string): () => void {
-    const item = this.form.find(`input[name='${nameAtr}']`);
+    const item = this.$form.find(`input[name='${nameAtr}']`);
     let val = item.val() || 0;
     return (): void => {
       val = item.val() || 0;
@@ -86,11 +88,13 @@ class InputChecker {
         return;
       }
       this.slider.data({ [nameAtr]: +val });
+      const s = this.slider.getData()[0][nameAtr];
+      item.val(Number(s));
     };
   }
 
   private inputChange(nameAtr: string, value: string | number): void {
-    this.form.find(`input[name='${nameAtr}']`).val(value);
+    this.$form.find(`input[name='${nameAtr}']`).val(value);
   }
 
   private checkChange(
@@ -98,7 +102,7 @@ class InputChecker {
     value: (string | number | boolean)[],
   ): void {
     const [active, disable] = value;
-    const item: JQuery = this.form.find(`input[name='${nameAtr}']`);
+    const item: JQuery = this.$form.find(`input[name='${nameAtr}']`);
 
     item.on('click', this.makeEventCheck(nameAtr, active, disable));
 

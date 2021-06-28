@@ -34,6 +34,7 @@ class InputChecker {
 
   private addEventSlider(): void {
     this.$sliderDOM.on('click', this.eventChange);
+    this.$sliderDOM.on('mouseleave', this.eventChange);
     this.$inputRotate.on('click', this.addClassForm);
   }
 

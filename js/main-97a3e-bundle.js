@@ -40,8 +40,8 @@ class InputChecker {
   }
 
   addEventSlider() {
-    this.$sliderDOM.on('click', this.eventChange);
-    this.$sliderDOM.on('mouseleave', this.eventChange);
+    this.$sliderDOM.on('mousedown', this.handleClick);
+    this.$sliderDOM.on('touchmove', this.handleClick);
     this.$inputRotate.on('click', this.addClassForm);
   }
 
@@ -51,6 +51,23 @@ class InputChecker {
     } else {
       this.$sliderDOM.removeClass(this.classRotate);
     }
+  }
+
+  handleClick() {
+    document.addEventListener('mousemove', this.eventChange);
+    document.addEventListener('mouseup', this.removeMouse);
+    document.addEventListener('touchmove', this.eventChange);
+    document.addEventListener('touchend', this.removeTouch);
+  }
+
+  removeMouse() {
+    document.removeEventListener('mousemove', this.eventChange);
+    document.onmouseup = null;
+  }
+
+  removeTouch() {
+    document.removeEventListener('touchmove', this.eventChange);
+    document.ontouchend = null;
   }
 
   eventChange() {
@@ -141,6 +158,12 @@ class InputChecker {
 }
 
 __decorate([esm/* boundMethod */.MR], InputChecker.prototype, "addClassForm", null);
+
+__decorate([esm/* boundMethod */.MR], InputChecker.prototype, "handleClick", null);
+
+__decorate([esm/* boundMethod */.MR], InputChecker.prototype, "removeMouse", null);
+
+__decorate([esm/* boundMethod */.MR], InputChecker.prototype, "removeTouch", null);
 
 __decorate([esm/* boundMethod */.MR], InputChecker.prototype, "eventChange", null);
 
@@ -324,7 +347,6 @@ class Model {
     this.state.shiftRight = Number.isFinite(this.state.shiftRight) ? Model.transformRange(this.state.shiftRight) : 0;
     this.state.shiftLeft = Number.isFinite(this.state.shiftLeft) ? Model.transformRange(this.state.shiftLeft) : 0;
     this.state["intervalStep"] = this.defineIntervalStep();
-    console.log(this.state["intervalStep"], 3);
   }
 
   updateCoordinate(coords) {
@@ -784,7 +806,10 @@ class View {
   }
 
   onClickInterval(event) {
-    event.preventDefault();
+    if (event.cancelable) {
+      event.preventDefault();
+    }
+
     const value = event.target;
     this.observerPosition(event);
 
@@ -799,7 +824,9 @@ class View {
   }
 
   buttonAction(e) {
-    e.preventDefault();
+    if (e.cancelable) {
+      e.preventDefault();
+    }
 
     if (e instanceof MouseEvent) {
       document.addEventListener('mousemove', this.onMouseMove);
@@ -822,7 +849,7 @@ class View {
 
   removeTouch() {
     document.removeEventListener('touchmove', this.onMouseMove);
-    document.onmouseup = null;
+    document.ontouchend = null;
   }
 
   removeMouse() {

@@ -33,8 +33,8 @@ class InputChecker {
   }
 
   private addEventSlider(): void {
-    this.$sliderDOM.on('click', this.eventChange);
-    this.$sliderDOM.on('mouseleave', this.eventChange);
+    this.$sliderDOM.on('mousedown', this.handleClick);
+    this.$sliderDOM.on('touchmove', this.handleClick);
     this.$inputRotate.on('click', this.addClassForm);
   }
 
@@ -45,6 +45,27 @@ class InputChecker {
     } else {
       this.$sliderDOM.removeClass(this.classRotate);
     }
+  }
+
+  @boundMethod
+  private handleClick(): void {
+    document.addEventListener('mousemove', this.eventChange);
+    document.addEventListener('mouseup', this.removeMouse);
+
+    document.addEventListener('touchmove', this.eventChange);
+    document.addEventListener('touchend', this.removeTouch);
+  }
+
+  @boundMethod
+  private removeMouse(): void {
+    document.removeEventListener('mousemove', this.eventChange);
+    document.onmouseup = null;
+  }
+
+  @boundMethod
+  private removeTouch(): void {
+    document.removeEventListener('touchmove', this.eventChange);
+    document.ontouchend = null;
   }
 
   @boundMethod

@@ -40,10 +40,9 @@ class Interval {
         sum = Math.round((i * intervalStep + minValue) * 10e6) / 10e6;
         li.className = className.INTERVAL_ITEM;
 
-        li.innerHTML =
-          i !== count
-            ? `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`
-            : `<div class=${className.INTERVAL_ITEM_TEXT}> ${maxValue} </div>`;
+        li.innerHTML = i !== count
+          ? `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`
+          : `<div class=${className.INTERVAL_ITEM_TEXT}> ${maxValue} </div>`;
         fragment.append(li);
         return li;
       });

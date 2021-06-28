@@ -166,7 +166,9 @@ class View {
 
   @boundMethod
   private onClickInterval(event: MouseEvent | TouchEvent): void {
-    event.preventDefault();
+    if (event.cancelable) {
+      event.preventDefault();
+    }
     const value = event.target as HTMLElement;
 
     this.observerPosition(event);
@@ -181,7 +183,9 @@ class View {
 
   @boundMethod
   private buttonAction(e: MouseEvent | TouchEvent): void {
-    e.preventDefault();
+    if (e.cancelable) {
+      e.preventDefault();
+    }
     if (e instanceof MouseEvent) {
       document.addEventListener('mousemove', this.onMouseMove);
       document.addEventListener('mouseup', this.removeMouse);
@@ -202,7 +206,7 @@ class View {
   @boundMethod
   private removeTouch(): void {
     document.removeEventListener('touchmove', this.onMouseMove);
-    document.onmouseup = null;
+    document.ontouchend = null;
   }
 
   @boundMethod

@@ -121,6 +121,7 @@ class Model {
       ? Model.transformRange(this.state.shiftLeft)
       : 0;
     this.state[keyChanges.INTERVAL_STEP] = this.defineIntervalStep();
+    console.log(this.state[keyChanges.INTERVAL_STEP], 3);
   }
 
   private updateCoordinate(coords: Coords): void {
@@ -140,13 +141,15 @@ class Model {
   }
 
   private activeButton(position: number): void {
-    this.state.isActiveLeft = Math.abs(this.state[keyChanges.SHIFT_LEFT] - this.state.step)
-      <= Math.abs(this.state[keyChanges.SHIFT_RIGHT] - this.state.step);
+    this.state.isActiveLeft =
+      Math.abs(this.state[keyChanges.SHIFT_LEFT] - this.state.step) <=
+      Math.abs(this.state[keyChanges.SHIFT_RIGHT] - this.state.step);
 
     if (
       this.state[keyChanges.SHIFT_LEFT] === this.state[keyChanges.SHIFT_RIGHT]
     ) {
-      this.state.isActiveLeft = this.mathPercent(position) < this.state.shiftRight;
+      this.state.isActiveLeft =
+        this.mathPercent(position) < this.state.shiftRight;
       this.checkExtremePoint();
     }
   }
@@ -173,16 +176,17 @@ class Model {
     if (difference === 0) {
       return Math.round(num / this.state.stepSize) * this.state.stepSize;
     }
-    this.percent = (this.state.stepSize
-        / Math.abs(this.state.maxValue - this.state.minValue))
-      * 100;
+    this.percent =
+      (this.state.stepSize /
+        Math.abs(this.state.maxValue - this.state.minValue)) *
+      100;
     this.percent = Model.transformRange(this.percent);
     return Math.round(num / this.percent) * this.percent;
   }
 
   private defineDecimalPlacesCount(): number {
     const str: string = this.state.stepSize.toString();
-    let decimalPlaces = str ? 0 : 12;
+    let decimalPlaces = 10;
 
     if (str.includes('.')) {
       decimalPlaces = Number(str.split('.').pop()?.length || 0);
@@ -192,16 +196,17 @@ class Model {
 
   private convertNumberInPercent(value: number): number {
     return (
-      ((value - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
-      * 100
+      ((value - this.state.minValue) /
+        (this.state.maxValue - this.state.minValue)) *
+      100
     );
   }
 
   private defineLeftVal(): void {
-    const leftValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft)
-        / 100
-      + this.state.minValue;
+    const leftValue =
+      ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft) /
+        100 +
+      this.state.minValue;
 
     this.state.currentValLeft = Number(
       leftValue.toFixed(this.defineDecimalPlacesCount()),
@@ -209,16 +214,18 @@ class Model {
   }
 
   private defineRightVal(): void {
-    const rightValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftRight)
-        / 100
-      + this.state.minValue;
+    const rightValue =
+      ((this.state.maxValue - this.state.minValue) * this.state.shiftRight) /
+        100 +
+      this.state.minValue;
     this.state.currentValRight = Number(
       rightValue.toFixed(this.defineDecimalPlacesCount()),
     );
   }
 
   private defineIntervalStep(): number {
-    const step = (this.state.maxValue - this.state.minValue) / this.state.intervalCount;
+    const step =
+      (this.state.maxValue - this.state.minValue) / this.state.intervalCount;
 
     return Number(step.toFixed(this.defineDecimalPlacesCount()));
   }

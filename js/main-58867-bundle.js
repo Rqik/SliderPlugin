@@ -253,7 +253,8 @@ class Model {
       ["shiftLeft"]: 2,
       ["shiftRight"]: 100,
       step: 0,
-      isActiveLeft: false
+      isActiveLeft: false,
+      intervalStep: 0
     };
     this.percent = 0;
     this.state.selector = selector;
@@ -288,8 +289,8 @@ class Model {
         this.activeButton(data["active"]);
         break;
 
-      case "interval":
-        this.state.step = this.convertNumberInPercent(Number(data["interval"]));
+      case "intervalAction":
+        this.state.step = this.convertNumberInPercent(Number(data["intervalAction"]));
         break;
 
       default:
@@ -322,6 +323,7 @@ class Model {
     this.state.shiftRight = this.convertNumberInPercent(this.state.currentValRight);
     this.state.shiftRight = Number.isFinite(this.state.shiftRight) ? Model.transformRange(this.state.shiftRight) : 0;
     this.state.shiftLeft = Number.isFinite(this.state.shiftLeft) ? Model.transformRange(this.state.shiftLeft) : 0;
+    this.state["intervalStep"] = this.defineIntervalStep();
   }
 
   updateCoordinate(coords) {
@@ -379,11 +381,13 @@ class Model {
   }
 
   defineDecimalPlacesCount() {
-    let decimalPlaces = 12;
+    var _a;
+
     const str = this.state.stepSize.toString();
+    let decimalPlaces = str ? 0 : 12;
 
     if (str.includes('.')) {
-      decimalPlaces = Number(str.split('.').pop());
+      decimalPlaces = Number(((_a = str.split('.').pop()) === null || _a === void 0 ? void 0 : _a.length) || 0);
     }
 
     return decimalPlaces;
@@ -401,6 +405,11 @@ class Model {
   defineRightVal() {
     const rightValue = (this.state.maxValue - this.state.minValue) * this.state.shiftRight / 100 + this.state.minValue;
     this.state.currentValRight = Number(rightValue.toFixed(this.defineDecimalPlacesCount()));
+  }
+
+  defineIntervalStep() {
+    const step = (this.state.maxValue - this.state.minValue) / this.state.intervalCount;
+    return Number(step.toFixed(this.defineDecimalPlacesCount()));
   }
 
   static convertCorrectNumber(num) {
@@ -577,21 +586,25 @@ class Interval {
     this.init();
   }
 
-  renderIntervals(minValue, maxValue, count) {
+  renderIntervals({
+    minValue,
+    maxValue,
+    count,
+    intervalStep
+  }) {
     this.interval.textContent = '';
 
     if (count <= 0) {
       return this.interval;
     }
 
-    const interval = (maxValue - minValue) / count;
     let sum;
     const fragment = document.createDocumentFragment();
-    this.items = Array(count + 1).fill('').map((el, i) => {
+    this.items = Array(count + 1).fill('').map((_, i) => {
       const li = document.createElement('li');
-      sum = i * interval + minValue;
+      sum = i * intervalStep + minValue;
       li.className = "interval-point__item";
-      li.innerHTML = `<div class=${"interval-point__item-text"}> ${sum} </div>`;
+      li.innerHTML = i !== count ? `<div class=${"interval-point__item-text"}> ${sum} </div>` : `<div class=${"interval-point__item-text"}> ${maxValue} </div>`;
       fragment.append(li);
       return li;
     });
@@ -672,7 +685,12 @@ class View {
   }
 
   renderInterval() {
-    this.interval.renderIntervals(this.state.minValue, this.state.maxValue, this.state.intervalCount);
+    this.interval.renderIntervals({
+      minValue: this.state.minValue,
+      maxValue: this.state.maxValue,
+      count: this.state.intervalCount,
+      intervalStep: this.state["intervalStep"]
+    });
   }
 
   addElem() {
@@ -774,7 +792,7 @@ class View {
     }
 
     this.observer.broadcast({
-      ["interval"]: value.textContent
+      ["intervalAction"]: value.textContent
     });
     this.eventButton(this.state.step);
   }

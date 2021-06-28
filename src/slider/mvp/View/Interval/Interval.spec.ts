@@ -7,7 +7,12 @@ describe('Interval test', () => {
     inter = new Interval();
   });
   test('renderIntervals', () => {
-    inter.renderIntervals(10, 100, 0);
+    inter.renderIntervals({
+      minValue: 10,
+      maxValue: 100,
+      count: 0,
+      intervalStep: 0,
+    });
     const s = document.createElement('ul');
     s.className = className.INTERVAL;
     expect(inter.interval).toEqual(s);

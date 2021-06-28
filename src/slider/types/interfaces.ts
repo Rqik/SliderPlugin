@@ -32,7 +32,7 @@ interface IState {
   [keyChanges.SHIFT_RIGHT]: number;
   step: number;
   isActiveLeft: boolean;
-
+  [keyChanges.INTERVAL_STEP]: number;
   [k: string]: options;
 }
 

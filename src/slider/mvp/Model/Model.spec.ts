@@ -21,6 +21,7 @@ const stateHorizontal: IState = {
   currentMax: 40, // установка значений в числах
   step: 0,
   isActiveLeft: false,
+  [keyChanges.INTERVAL_STEP]: 0,
 };
 
 const stateVertical: IState = {
@@ -42,6 +43,7 @@ const stateVertical: IState = {
   currentMax: 40, // установка значений в числах
   step: 0,
   isActiveLeft: false,
+  [keyChanges.INTERVAL_STEP]: 0,
 };
 
 const stateHorCorrect: IState = {
@@ -63,6 +65,7 @@ const stateHorCorrect: IState = {
   currentMax: 40, // установка значений в числах
   step: 0,
   isActiveLeft: false,
+  [keyChanges.INTERVAL_STEP]: 16,
 };
 const stateVerCorrect: IState = {
   selector: 'slider-rqik', // селектор
@@ -83,6 +86,7 @@ const stateVerCorrect: IState = {
   currentMax: 40, // установка значений в числах
   step: 0,
   isActiveLeft: false,
+  [keyChanges.INTERVAL_STEP]: 1,
 };
 
 describe('Model test', () => {

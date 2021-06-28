@@ -1,6 +1,6 @@
 import { EventObserver } from '../../utils/EventObserver';
 import { IState } from '../../types/interfaces';
-import { rotation } from '../../types/constants';
+import { keyChanges, rotation } from '../../types/constants';
 import { View } from './View';
 
 const state: IState = {
@@ -16,10 +16,12 @@ const state: IState = {
   currentValRight: 0, // установка значений в числах
   currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
-  shiftLeft: 0,
-  shiftRight: 100,
+
+  [keyChanges.SHIFT_LEFT]: 0,
+  [keyChanges.SHIFT_RIGHT]: 100,
   step: 3,
   isActiveLeft: false,
+  [keyChanges.INTERVAL_STEP]: 0,
 };
 
 const state2: IState = {
@@ -35,10 +37,11 @@ const state2: IState = {
   currentValRight: 0, // установка значений в числах
   currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
-  shiftLeft: 0,
-  shiftRight: 200,
+  [keyChanges.SHIFT_LEFT]: 0,
+  [keyChanges.SHIFT_RIGHT]: 200,
   step: 3,
   isActiveLeft: false,
+  [keyChanges.INTERVAL_STEP]: 0,
 };
 
 jest.mock('../../utils/EventObserver.ts');

@@ -4,7 +4,8 @@ const enum keyChanges {
   POSITION = 'position',
   COORDINATES = 'coordinates',
   ACTIVE = 'active',
-  INTERVAL = 'interval',
+  INTERVAL = 'intervalAction',
+  INTERVAL_STEP = 'intervalStep',
   WIDTH = 'widthSlider',
   HEIGHT = 'heightSlider',
 }

@@ -33,6 +33,7 @@ class Model {
     [keyChanges.SHIFT_RIGHT]: 100,
     step: 0, // значение от 0 до 100
     isActiveLeft: false,
+    intervalStep: 0,
   };
 
   private percent = 0;
@@ -119,6 +120,7 @@ class Model {
     this.state.shiftLeft = Number.isFinite(this.state.shiftLeft)
       ? Model.transformRange(this.state.shiftLeft)
       : 0;
+    this.state[keyChanges.INTERVAL_STEP] = this.defineIntervalStep();
   }
 
   private updateCoordinate(coords: Coords): void {
@@ -179,10 +181,11 @@ class Model {
   }
 
   private defineDecimalPlacesCount(): number {
-    let decimalPlaces = 12;
     const str: string = this.state.stepSize.toString();
+    let decimalPlaces = str ? 0 : 12;
+
     if (str.includes('.')) {
-      decimalPlaces = Number(str.split('.').pop());
+      decimalPlaces = Number(str.split('.').pop()?.length || 0);
     }
     return decimalPlaces;
   }
@@ -212,6 +215,12 @@ class Model {
     this.state.currentValRight = Number(
       rightValue.toFixed(this.defineDecimalPlacesCount()),
     );
+  }
+
+  private defineIntervalStep(): number {
+    const step = (this.state.maxValue - this.state.minValue) / this.state.intervalCount;
+
+    return Number(step.toFixed(this.defineDecimalPlacesCount()));
   }
 
   private static convertCorrectNumber(num: string | number): number {

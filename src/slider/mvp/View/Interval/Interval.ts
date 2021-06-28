@@ -1,6 +1,12 @@
 import { rotate } from '../../../types/interfaces';
 import { interval as className, rotation } from '../../../types/constants';
 
+interface IRenderInterval {
+  minValue: number;
+  maxValue: number;
+  count: number;
+  intervalStep: number;
+}
 class Interval {
   interval: HTMLUListElement = document.createElement('ul');
 
@@ -12,28 +18,31 @@ class Interval {
     this.init();
   }
 
-  renderIntervals(
-    minValue: number,
-    maxValue: number,
-    count: number,
-  ): HTMLElement {
+  renderIntervals({
+    minValue,
+    maxValue,
+    count,
+    intervalStep,
+  }: IRenderInterval): HTMLElement {
     this.interval.textContent = '';
 
     if (count <= 0) {
       return this.interval;
     }
 
-    const interval: number = (maxValue - minValue) / count;
     let sum;
     const fragment = document.createDocumentFragment();
 
     this.items = Array(count + 1)
       .fill('')
-      .map((el, i) => {
+      .map((_, i) => {
         const li = document.createElement('li');
-        sum = i * interval + minValue;
+        sum = i * intervalStep + minValue;
         li.className = className.INTERVAL_ITEM;
-        li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`;
+
+        li.innerHTML = i !== count
+          ? `<div class=${className.INTERVAL_ITEM_TEXT}> ${sum} </div>`
+          : `<div class=${className.INTERVAL_ITEM_TEXT}> ${maxValue} </div>`;
         fragment.append(li);
         return li;
       });

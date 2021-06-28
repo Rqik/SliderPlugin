@@ -74,11 +74,12 @@ class View {
   }
 
   private renderInterval(): void {
-    this.interval.renderIntervals(
-      this.state.minValue,
-      this.state.maxValue,
-      this.state.intervalCount,
-    );
+    this.interval.renderIntervals({
+      minValue: this.state.minValue,
+      maxValue: this.state.maxValue,
+      count: this.state.intervalCount,
+      intervalStep: this.state[keyChanges.INTERVAL_STEP],
+    });
   }
 
   private addElem(): void {

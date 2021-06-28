@@ -324,6 +324,7 @@ class Model {
     this.state.shiftRight = Number.isFinite(this.state.shiftRight) ? Model.transformRange(this.state.shiftRight) : 0;
     this.state.shiftLeft = Number.isFinite(this.state.shiftLeft) ? Model.transformRange(this.state.shiftLeft) : 0;
     this.state["intervalStep"] = this.defineIntervalStep();
+    console.log(this.state["intervalStep"], 3);
   }
 
   updateCoordinate(coords) {
@@ -384,7 +385,7 @@ class Model {
     var _a;
 
     const str = this.state.stepSize.toString();
-    let decimalPlaces = str ? 0 : 12;
+    let decimalPlaces = 10;
 
     if (str.includes('.')) {
       decimalPlaces = Number(((_a = str.split('.').pop()) === null || _a === void 0 ? void 0 : _a.length) || 0);
@@ -602,7 +603,7 @@ class Interval {
     const fragment = document.createDocumentFragment();
     this.items = Array(count + 1).fill('').map((_, i) => {
       const li = document.createElement('li');
-      sum = i * intervalStep + minValue;
+      sum = Math.round((i * intervalStep + minValue) * 10e6) / 10e6;
       li.className = "interval-point__item";
       li.innerHTML = i !== count ? `<div class=${"interval-point__item-text"}> ${sum} </div>` : `<div class=${"interval-point__item-text"}> ${maxValue} </div>`;
       fragment.append(li);

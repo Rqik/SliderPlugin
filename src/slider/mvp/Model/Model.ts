@@ -108,11 +108,11 @@ class Model {
     this.state.currentValLeft = Model.convertCorrectNumber(
       this.state.currentValLeft,
     );
-    this.state.shiftLeft = this.convertNumberInPercent(
-      this.state.currentValLeft,
+    this.state.shiftLeft = this.validStep(
+      this.convertNumberInPercent(this.state.currentValLeft),
     );
-    this.state.shiftRight = this.convertNumberInPercent(
-      this.state.currentValRight,
+    this.state.shiftRight = this.validStep(
+      this.convertNumberInPercent(this.state.currentValRight),
     );
     this.state.shiftRight = Number.isFinite(this.state.shiftRight)
       ? Model.transformRange(this.state.shiftRight)
@@ -132,21 +132,26 @@ class Model {
 
   private defineStep(position: number): void {
     const percent = this.mathPercent(position);
+    this.state.step = this.validStep(percent);
+  }
+
+  private validStep(percent: number): number {
     if (this.state.stepSize > 0) {
-      this.state.step = Model.transformRange(this.mathStepCount(percent));
-    } else {
-      this.state.step = Model.transformRange(percent);
+      return Model.transformRange(this.mathStepCount(percent));
     }
+    return Model.transformRange(percent);
   }
 
   private activeButton(position: number): void {
-    this.state.isActiveLeft = Math.abs(this.state[keyChanges.SHIFT_LEFT] - this.state.step)
-      <= Math.abs(this.state[keyChanges.SHIFT_RIGHT] - this.state.step);
+    this.state.isActiveLeft =
+      Math.abs(this.state[keyChanges.SHIFT_LEFT] - this.state.step) <=
+      Math.abs(this.state[keyChanges.SHIFT_RIGHT] - this.state.step);
 
     if (
       this.state[keyChanges.SHIFT_LEFT] === this.state[keyChanges.SHIFT_RIGHT]
     ) {
-      this.state.isActiveLeft = this.mathPercent(position) < this.state.shiftRight;
+      this.state.isActiveLeft =
+        this.mathPercent(position) < this.state.shiftRight;
       this.checkExtremePoint();
     }
   }
@@ -173,9 +178,10 @@ class Model {
     if (difference === 0) {
       return Math.round(num / this.state.stepSize) * this.state.stepSize;
     }
-    this.percent = (this.state.stepSize
-        / Math.abs(this.state.maxValue - this.state.minValue))
-      * 100;
+    this.percent =
+      (this.state.stepSize /
+        Math.abs(this.state.maxValue - this.state.minValue)) *
+      100;
     this.percent = Model.transformRange(this.percent);
     return Math.round(num / this.percent) * this.percent;
   }
@@ -192,16 +198,17 @@ class Model {
 
   private convertNumberInPercent(value: number): number {
     return (
-      ((value - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
-      * 100
+      ((value - this.state.minValue) /
+        (this.state.maxValue - this.state.minValue)) *
+      100
     );
   }
 
   private defineLeftVal(): void {
-    const leftValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft)
-        / 100
-      + this.state.minValue;
+    const leftValue =
+      ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft) /
+        100 +
+      this.state.minValue;
 
     this.state.currentValLeft = Number(
       leftValue.toFixed(this.defineDecimalPlacesCount()),
@@ -209,16 +216,18 @@ class Model {
   }
 
   private defineRightVal(): void {
-    const rightValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftRight)
-        / 100
-      + this.state.minValue;
+    const rightValue =
+      ((this.state.maxValue - this.state.minValue) * this.state.shiftRight) /
+        100 +
+      this.state.minValue;
     this.state.currentValRight = Number(
       rightValue.toFixed(this.defineDecimalPlacesCount()),
     );
   }
 
   private defineIntervalStep(): number {
-    const step = (this.state.maxValue - this.state.minValue) / this.state.intervalCount;
+    const step =
+      (this.state.maxValue - this.state.minValue) / this.state.intervalCount;
 
     return Number(step.toFixed(this.defineDecimalPlacesCount()));
   }

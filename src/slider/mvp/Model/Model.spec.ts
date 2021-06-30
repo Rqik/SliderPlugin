@@ -59,13 +59,13 @@ const stateHorCorrect: IState = {
   currentValRight: 0, // установка значений в числах
   currentValLeft: 70, // установка значений в числах
   pixelSize: '6',
-  [keyChanges.SHIFT_LEFT]: ((70 - 10) / 110) * 100,
+  [keyChanges.SHIFT_LEFT]: 54.54545454545455,
   [keyChanges.SHIFT_RIGHT]: 0,
   currentMin: 10, // установка значений в числах
   currentMax: 40, // установка значений в числах
   step: 0,
   isActiveLeft: false,
-  [keyChanges.INTERVAL_STEP]: 16,
+  [keyChanges.INTERVAL_STEP]: 15.7142857143,
 };
 const stateVerCorrect: IState = {
   selector: 'slider-rqik', // селектор
@@ -86,7 +86,7 @@ const stateVerCorrect: IState = {
   currentMax: 40, // установка значений в числах
   step: 0,
   isActiveLeft: false,
-  [keyChanges.INTERVAL_STEP]: 1,
+  [keyChanges.INTERVAL_STEP]: 1.1428571429,
 };
 
 describe('Model test', () => {

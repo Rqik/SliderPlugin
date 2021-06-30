@@ -12,6 +12,16 @@ class InputChecker {
 
   private $inputRotate: JQuery;
 
+  private $inputCurrentLeft: JQuery;
+
+  private $inputCurrentRight: JQuery;
+
+  private $inputRange: JQuery;
+
+  private readonly inputsValue: string[];
+
+  private readonly inputCheck: [string, Array<string | boolean>][];
+
   private readonly classRotate: string;
 
   constructor({ $form, $sliderDOM, slider, classRotate }: IInputChecker) {
@@ -19,7 +29,25 @@ class InputChecker {
     this.$sliderDOM = $sliderDOM;
     this.slider = slider;
     this.$inputRotate = this.$form.find("input[name='rotate']");
+    this.$inputRange = this.$form.find("input[name='range']");
+    this.$inputCurrentLeft = this.$form.find("input[name='currentValLeft']");
+    this.$inputCurrentRight = this.$form.find("input[name='currentValRight']");
     this.classRotate = classRotate;
+    this.inputsValue = [
+      'maxValue',
+      'minValue',
+      'currentValRight',
+      'currentValLeft',
+      'round',
+      'intervalCount',
+      'stepSize',
+    ];
+    this.inputCheck = [
+      ['rotate', ['vertical', 'horizontal']],
+      ['showInterval', [true, false]],
+      ['show', [true, false]],
+      ['range', ['two', 'one']],
+    ];
   }
 
   public init(): void {
@@ -31,6 +59,16 @@ class InputChecker {
     this.$sliderDOM.on('mousedown', this.handleClick);
     this.$sliderDOM.on('touchmove', this.handleClick);
     this.$inputRotate.on('click', this.addClassForm);
+    this.$inputRange.on('change', this.disabledInputCurrentLeft);
+  }
+
+  @boundMethod
+  private disabledInputCurrentLeft() {
+    if (!this.$inputRange.prop('checked')) {
+      this.$inputCurrentLeft.prop('disabled', true);
+    } else {
+      this.$inputCurrentLeft.prop('disabled', false);
+    }
   }
 
   @boundMethod
@@ -65,11 +103,8 @@ class InputChecker {
 
   @boundMethod
   private eventChange(): void {
-    this.inputChange('currentValLeft', this.slider.getData()[0].currentValLeft);
-    this.inputChange(
-      'currentValRight',
-      this.slider.getData()[0].currentValRight,
-    );
+    this.$inputCurrentLeft.val(this.slider.getData()[0].currentValLeft);
+    this.$inputCurrentRight.val(this.slider.getData()[0].currentValRight);
   }
 
   private makeEventCheck({
@@ -108,12 +143,8 @@ class InputChecker {
       }
       const isCurrentInput = nameAtr === 'stepSize';
       if (isCurrentInput) {
-        this.$form
-          .find("input[name='currentValRight']")
-          .attr('step', this.slider.getData()[0].stepSize);
-        this.$form
-          .find("input[name='currentValLeft']")
-          .attr('step', this.slider.getData()[0].stepSize);
+        this.$inputCurrentLeft.attr('step', this.slider.getData()[0].stepSize);
+        this.$inputCurrentRight.attr('step', this.slider.getData()[0].stepSize);
       }
 
       this.slider.data({ [nameAtr]: +value });
@@ -124,11 +155,7 @@ class InputChecker {
     };
   }
 
-  private inputChange(nameAtr: string, value: string | number): void {
-    this.$form.find(`input[name='${nameAtr}']`).val(value);
-  }
-
-  private checkChange(
+  private runCheckChange(
     nameAtr: string,
     value: (string | number | boolean)[],
   ): void {
@@ -145,17 +172,8 @@ class InputChecker {
   }
 
   private actionForm(): void {
-    this.runChange('maxValue');
-    this.runChange('minValue');
-    this.runChange('currentValRight');
-    this.runChange('currentValLeft');
-    this.runChange('round');
-    this.runChange('intervalCount');
-    this.runChange('stepSize');
-    this.checkChange('rotate', ['vertical', 'horizontal']);
-    this.checkChange('showInterval', [true, false]);
-    this.checkChange('show', [true, false]);
-    this.checkChange('range', ['two', 'one']);
+    this.inputsValue.forEach((el) => this.runChange(el));
+    this.inputCheck.forEach((el) => this.runCheckChange(...el));
   }
 }
 

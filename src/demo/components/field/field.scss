@@ -1,3 +1,5 @@
+@import '../../../slider/styles/variables.scss';
+
 .field {
   display: flex;
   flex-direction: column;
@@ -14,6 +16,25 @@
     width: 100%;
     font-weight: 600;
     font-size: 18px;
+
+    &:disabled {
+      content: '';
+      background-image:
+        repeating-linear-gradient(
+          30deg,
+          $main-color,
+          $main-color 10px,
+          $input-disable 10px,
+          $input-disable 20px
+        );
+      background-position: center;
+
+      // background-size: 10px 90px;
+
+      // background-repeat: repeat-x;
+      background-color: $background-color;
+      opacity: 0.7;
+    }
   }
 
   &__text {

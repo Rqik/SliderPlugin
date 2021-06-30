@@ -342,8 +342,8 @@ class Model {
     this.state.stepSize = Model.convertCorrectNumber(this.state.stepSize);
     this.state.currentValRight = Model.convertCorrectNumber(this.state.currentValRight);
     this.state.currentValLeft = Model.convertCorrectNumber(this.state.currentValLeft);
-    this.state.shiftLeft = this.convertNumberInPercent(this.state.currentValLeft);
-    this.state.shiftRight = this.convertNumberInPercent(this.state.currentValRight);
+    this.state.shiftLeft = this.validStep(this.convertNumberInPercent(this.state.currentValLeft));
+    this.state.shiftRight = this.validStep(this.convertNumberInPercent(this.state.currentValRight));
     this.state.shiftRight = Number.isFinite(this.state.shiftRight) ? Model.transformRange(this.state.shiftRight) : 0;
     this.state.shiftLeft = Number.isFinite(this.state.shiftLeft) ? Model.transformRange(this.state.shiftLeft) : 0;
     this.state["intervalStep"] = this.defineIntervalStep();
@@ -355,12 +355,15 @@ class Model {
 
   defineStep(position) {
     const percent = this.mathPercent(position);
+    this.state.step = this.validStep(percent);
+  }
 
+  validStep(percent) {
     if (this.state.stepSize > 0) {
-      this.state.step = Model.transformRange(this.mathStepCount(percent));
-    } else {
-      this.state.step = Model.transformRange(percent);
+      return Model.transformRange(this.mathStepCount(percent));
     }
+
+    return Model.transformRange(percent);
   }
 
   activeButton(position) {

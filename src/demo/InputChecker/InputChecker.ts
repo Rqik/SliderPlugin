@@ -1,13 +1,8 @@
 import { boundMethod } from 'autobind-decorator';
 
 import { Slider } from '../../slider/types/interfaces';
+import { IInputChecker, IMakeEventCheck } from './types';
 
-interface IInputChecker {
-  $form: JQuery;
-  $sliderDOM: JQuery;
-  slider: Slider;
-  classRotate: string;
-}
 class InputChecker {
   private $form: JQuery;
 
@@ -77,11 +72,11 @@ class InputChecker {
     );
   }
 
-  private makeEventCheck(
-    nameAtr: string,
-    active: string | number | boolean,
-    disable: string | number | boolean,
-  ): (e: JQueryEventObject) => void {
+  private makeEventCheck({
+    nameAtr,
+    active,
+    disable,
+  }: IMakeEventCheck): (e: JQueryEventObject) => void {
     return (event: JQueryEventObject): void => {
       if ($(event.currentTarget).prop('checked')) {
         this.slider.data({ [nameAtr]: active });
@@ -92,26 +87,40 @@ class InputChecker {
   }
 
   private runChange(nameAtr: string): void {
-    const item = this.$form.find(`input[name='${nameAtr}']`);
-    const val = item.val() || 0;
-    item.on('change', this.makeEventInputChange(nameAtr));
-    if (val !== '-' || val !== undefined) {
-      this.slider.data({ [nameAtr]: +val });
+    const $input = this.$form.find(`input[name='${nameAtr}']`);
+    const value = $input.val() || 0;
+    $input.on('change', this.makeEventInputChange(nameAtr));
+    const isValidVal = value !== '-' || value !== undefined;
+
+    if (isValidVal) {
+      this.slider.data({ [nameAtr]: +value });
     }
-    this.$sliderDOM.click();
   }
 
   private makeEventInputChange(nameAtr: string): () => void {
-    const item = this.$form.find(`input[name='${nameAtr}']`);
-    let val = item.val() || 0;
+    const $input = this.$form.find(`input[name='${nameAtr}']`);
+    let value = $input.val() || 0;
+
     return (): void => {
-      val = item.val() || 0;
-      if (val === '-') {
+      value = $input.val() || 0;
+      if (value === '-') {
         return;
       }
-      this.slider.data({ [nameAtr]: +val });
+      const isCurrentInput = nameAtr === 'stepSize';
+      if (isCurrentInput) {
+        this.$form
+          .find("input[name='currentValRight']")
+          .attr('step', this.slider.getData()[0].stepSize);
+        this.$form
+          .find("input[name='currentValLeft']")
+          .attr('step', this.slider.getData()[0].stepSize);
+      }
+
+      this.slider.data({ [nameAtr]: +value });
       const s = this.slider.getData()[0][nameAtr];
-      item.val(Number(s));
+      $input.attr('value', Number(s));
+      $input.val(Number(s));
+      this.eventChange();
     };
   }
 
@@ -126,7 +135,7 @@ class InputChecker {
     const [active, disable] = value;
     const item: JQuery = this.$form.find(`input[name='${nameAtr}']`);
 
-    item.on('click', this.makeEventCheck(nameAtr, active, disable));
+    item.on('click', this.makeEventCheck({ nameAtr, active, disable }));
 
     if (item.prop('checked')) {
       this.slider.data({ [nameAtr]: active });

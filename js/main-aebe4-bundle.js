@@ -75,7 +75,11 @@ class InputChecker {
     this.inputChange('currentValRight', this.slider.getData()[0].currentValRight);
   }
 
-  makeEventCheck(nameAtr, active, disable) {
+  makeEventCheck({
+    nameAtr,
+    active,
+    disable
+  }) {
     return event => {
       if ($(event.currentTarget).prop('checked')) {
         this.slider.data({
@@ -90,34 +94,42 @@ class InputChecker {
   }
 
   runChange(nameAtr) {
-    const item = this.$form.find(`input[name='${nameAtr}']`);
-    const val = item.val() || 0;
-    item.on('change', this.makeEventInputChange(nameAtr));
+    const $input = this.$form.find(`input[name='${nameAtr}']`);
+    const value = $input.val() || 0;
+    $input.on('change', this.makeEventInputChange(nameAtr));
+    const isValidVal = value !== '-' || value !== undefined;
 
-    if (val !== '-' || val !== undefined) {
+    if (isValidVal) {
       this.slider.data({
-        [nameAtr]: +val
+        [nameAtr]: +value
       });
     }
-
-    this.$sliderDOM.click();
   }
 
   makeEventInputChange(nameAtr) {
-    const item = this.$form.find(`input[name='${nameAtr}']`);
-    let val = item.val() || 0;
+    const $input = this.$form.find(`input[name='${nameAtr}']`);
+    let value = $input.val() || 0;
     return () => {
-      val = item.val() || 0;
+      value = $input.val() || 0;
 
-      if (val === '-') {
+      if (value === '-') {
         return;
       }
 
+      const isCurrentInput = nameAtr === 'stepSize';
+
+      if (isCurrentInput) {
+        this.$form.find("input[name='currentValRight']").attr('step', this.slider.getData()[0].stepSize);
+        this.$form.find("input[name='currentValLeft']").attr('step', this.slider.getData()[0].stepSize);
+      }
+
       this.slider.data({
-        [nameAtr]: +val
+        [nameAtr]: +value
       });
       const s = this.slider.getData()[0][nameAtr];
-      item.val(Number(s));
+      $input.attr('value', Number(s));
+      $input.val(Number(s));
+      this.eventChange();
     };
   }
 
@@ -128,7 +140,11 @@ class InputChecker {
   checkChange(nameAtr, value) {
     const [active, disable] = value;
     const item = this.$form.find(`input[name='${nameAtr}']`);
-    item.on('click', this.makeEventCheck(nameAtr, active, disable));
+    item.on('click', this.makeEventCheck({
+      nameAtr,
+      active,
+      disable
+    }));
 
     if (item.prop('checked')) {
       this.slider.data({
@@ -264,17 +280,17 @@ class Model {
     this.state = {
       selector: 'slider-range',
       minValue: 0,
-      maxValue: 1200,
+      maxValue: 1000,
       range: 'one',
       rotate: "horizontal",
       showTooltip: true,
       showInterval: true,
       intervalCount: 2,
-      stepSize: 10,
-      currentValRight: 22,
-      currentValLeft: 11,
-      ["shiftLeft"]: 2,
-      ["shiftRight"]: 100,
+      stepSize: 1,
+      currentValRight: 50,
+      currentValLeft: 0,
+      ["shiftLeft"]: 0,
+      ["shiftRight"]: 0,
       step: 0,
       isActiveLeft: false,
       intervalStep: 0

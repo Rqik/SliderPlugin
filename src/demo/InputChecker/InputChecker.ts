@@ -124,6 +124,7 @@ class InputChecker {
   private runChange(nameAtr: string): void {
     const $input = this.$form.find(`input[name='${nameAtr}']`);
     const value = $input.val() || 0;
+
     $input.on('change', this.makeEventInputChange(nameAtr));
     const isValidVal = value !== '-' || value !== undefined;
 
@@ -141,13 +142,15 @@ class InputChecker {
       if (value === '-') {
         return;
       }
+
+      this.slider.data({ [nameAtr]: Number(value) });
+
       const isCurrentInput = nameAtr === 'stepSize';
       if (isCurrentInput) {
-        this.$inputCurrentLeft.attr('step', this.slider.getData()[0].stepSize);
-        this.$inputCurrentRight.attr('step', this.slider.getData()[0].stepSize);
+        this.$inputCurrentLeft.attr('step', Number(value));
+        this.$inputCurrentRight.attr('step', Number(value));
       }
 
-      this.slider.data({ [nameAtr]: +value });
       const s = this.slider.getData()[0][nameAtr];
       $input.attr('value', Number(s));
       $input.val(Number(s));

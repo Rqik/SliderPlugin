@@ -143,7 +143,10 @@ describe('Model test', () => {
       Model.prototype as any,
       'checkExtremePoint',
     );
-    const mathPercent = jest.spyOn(Model.prototype as any, 'mathPercent');
+    const mathPositionToPercent = jest.spyOn(
+      Model.prototype as any,
+      'mathPositionToPercent',
+    );
     model.editState({ shiftLeft: '44' });
     expect(defineLeftVal).toHaveBeenCalled();
     expect(edit).toHaveBeenCalled();
@@ -157,7 +160,7 @@ describe('Model test', () => {
 
     model.editState({ position: '44' });
     expect(defineStep).toHaveBeenCalled();
-    expect(mathPercent).toHaveBeenCalled();
+    expect(mathPositionToPercent).toHaveBeenCalled();
 
     model.editState({ stepSize: -1.32 });
     model.editState({ position: '87' });
@@ -171,40 +174,44 @@ describe('Model test', () => {
 
     model.editState({ [keyChanges.SHIFT_LEFT]: 24 });
     model.editState({ [keyChanges.SHIFT_RIGHT]: 24 });
-    model.editMode({ step: -10 });
-    model.editState({ [keyChanges.ACTIVE]: 24 });
+    model.editMode({ step: 10 });
+    model.editState({ [keyChanges.ACTIVE]: 55 });
     expect(checkExtremePoint).toHaveBeenCalledTimes(2);
     expect(model.stateCurrent.isActiveLeft).toEqual(false);
 
-    model.editMode({ step: 210 });
-    model.editState({ [keyChanges.ACTIVE]: 24 });
+    model.editMode({ step: 97 });
+    model.editState({ [keyChanges.ACTIVE]: -10 });
     expect(model.stateCurrent.isActiveLeft).toEqual(true);
   });
 
-  test('call mathStepCount methods', () => {
+  test('call validStep methods', () => {
+    model.editState({ stepSize: 42 });
     const defineStep = jest.spyOn(Model.prototype as any, 'defineStep');
-    const mathStepCount = jest.spyOn(Model.prototype as any, 'mathStepCount');
+    const validStep = jest.spyOn(Model.prototype as any, 'validStep');
     model.editMode({ maxValue: 10, minValue: 10 });
 
     model.editState({ [keyChanges.POSITION]: 5 });
     expect(defineStep).toHaveBeenCalled();
-    expect(mathStepCount).toHaveBeenCalled();
+    expect(validStep).toHaveBeenCalled();
   });
 
-  test('call mathPercent methods', () => {
-    const mathPercent = jest.spyOn(Model.prototype as any, 'mathPercent');
+  test('call mathPositionToPercent methods', () => {
+    const mathPositionToPercent = jest.spyOn(
+      Model.prototype as any,
+      'mathPositionToPercent',
+    );
     model.editState({ position: '44' });
-    expect(mathPercent).toHaveBeenCalled();
-    expect(mathPercent).toHaveBeenCalledTimes(1);
+    expect(mathPositionToPercent).toHaveBeenCalled();
+    expect(mathPositionToPercent).toHaveBeenCalledTimes(1);
     model.editMode({ stepSize: 10 });
     model.editState({ position: '23' });
-    expect(mathPercent).toHaveBeenCalledTimes(2);
+    expect(mathPositionToPercent).toHaveBeenCalledTimes(2);
     model.editState({ position: '23' });
-    expect(mathPercent).toHaveBeenCalledTimes(3);
+    expect(mathPositionToPercent).toHaveBeenCalledTimes(3);
 
     model.editMode({ rotate: 'vertical' });
     model.editState({ position: '73' });
-    expect(mathPercent).toHaveBeenCalledTimes(4);
+    expect(mathPositionToPercent).toHaveBeenCalledTimes(4);
   });
 
   test('return state', () => {

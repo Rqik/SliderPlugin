@@ -31,7 +31,7 @@ class Model {
     currentValLeft: 0, // установка значений в числах
     [keyChanges.SHIFT_LEFT]: 0,
     [keyChanges.SHIFT_RIGHT]: 0,
-    step: 0, // значение от 0 до 100
+    step: 0, // процентные значение от 0 до 100
     isActiveLeft: false,
     intervalStep: 0,
   };
@@ -49,6 +49,9 @@ class Model {
 
   editState(data: UniversalSate): void {
     switch (Object.keys(data)[0]) {
+      case keyChanges.ACTIVE:
+        this.activeButton(data[keyChanges.ACTIVE] as number);
+        break;
       case keyChanges.SHIFT_LEFT:
         this.edit(data);
         this.defineLeftVal();
@@ -62,9 +65,6 @@ class Model {
         break;
       case keyChanges.COORDINATES:
         this.updateCoordinate(data[keyChanges.COORDINATES] as Coords);
-        break;
-      case keyChanges.ACTIVE:
-        this.activeButton(data[keyChanges.ACTIVE] as number);
         break;
       case keyChanges.INTERVAL:
         this.state.step = this.convertNumberInPercent(
@@ -108,6 +108,7 @@ class Model {
     this.state.currentValLeft = Model.convertCorrectNumber(
       this.state.currentValLeft,
     );
+
     this.state.shiftLeft = this.validStep(
       this.convertNumberInPercent(this.state.currentValLeft),
     );
@@ -131,11 +132,14 @@ class Model {
   }
 
   private defineStep(position: number): void {
-    const percent = this.mathPercent(position);
+    const percent = this.mathPositionToPercent(position);
     this.state.step = this.validStep(percent);
   }
 
   private validStep(percent: number): number {
+    if (percent >= 100 || percent <= 0) {
+      return Model.transformRange(percent);
+    }
     if (this.state.stepSize > 0) {
       return Model.transformRange(this.mathStepCount(percent));
     }
@@ -149,38 +153,41 @@ class Model {
     if (
       this.state[keyChanges.SHIFT_LEFT] === this.state[keyChanges.SHIFT_RIGHT]
     ) {
-      this.state.isActiveLeft = this.mathPercent(position) < this.state.shiftRight;
+      this.state.isActiveLeft = this.mathPositionToPercent(position) < this.state.shiftRight;
+
       this.checkExtremePoint();
     }
   }
 
   private checkExtremePoint(): void {
-    if (this.state.step <= 0) {
+    const isRightEdge = this.state.step <= 0 && this.state.shiftRight <= 0;
+    const isLeftEdge = this.state.step >= 100 && this.state.shiftLeft >= 100;
+    if (isRightEdge) {
       this.state.isActiveLeft = false;
-      return;
     }
-    if (this.state.step >= 100) {
+    if (isLeftEdge) {
       this.state.isActiveLeft = true;
     }
   }
 
-  private mathPercent(num: number): number {
+  private mathPositionToPercent(position: number): number {
     if (this.state.rotate === rotation.HORIZONTAL) {
-      return ((num - this.coords.x) / this.coords.width) * 100;
+      return ((position - this.coords.x) / this.coords.width) * 100;
     }
-    return ((num - this.coords.y) / this.coords.height) * 100;
+    return ((position - this.coords.y) / this.coords.height) * 100;
   }
 
-  private mathStepCount(num: number): number {
+  private mathStepCount(percent: number): number {
     const difference = Math.abs(this.state.maxValue - this.state.minValue);
     if (difference === 0) {
-      return Math.round(num / this.state.stepSize) * this.state.stepSize;
+      return Math.round(percent / this.state.stepSize) * this.state.stepSize;
     }
+
     this.percent = (this.state.stepSize
         / Math.abs(this.state.maxValue - this.state.minValue))
       * 100;
     this.percent = Model.transformRange(this.percent);
-    return Math.round(num / this.percent) * this.percent;
+    return Math.round(percent / this.percent) * this.percent;
   }
 
   private defineDecimalPlacesCount(): number {

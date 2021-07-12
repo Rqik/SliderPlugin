@@ -5,16 +5,16 @@ import { View } from './View';
 
 const state: IState = {
   selector: 'slider-rqik', // селектор
-  minValue: 0, // минимальное значение
-  maxValue: 120, // максимальное значение
+  min: 0, // минимальное значение
+  max: 120, // максимальное значение
   range: 'two', // 1 или 2 указателя
   rotate: rotation.HORIZONTAL, // ориентация vertical horizontal
   showTooltip: true, // показывать текущее значение над указателем
   showInterval: true, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 1, // шаг движения указателя
-  currentValRight: 0, // установка значений в числах
-  currentValLeft: 70, // установка значений в числах
+  maxValue: 0, // установка значений в числах
+  minValue: 70, // установка значений в числах
   pixelSize: '6',
 
   [keyChanges.SHIFT_LEFT]: 0,
@@ -26,16 +26,16 @@ const state: IState = {
 
 const state2: IState = {
   selector: 'slider-rqik', // селектор
-  minValue: 0, // минимальное значение
-  maxValue: 120, // максимальное значение
+  min: 0, // минимальное значение
+  max: 120, // максимальное значение
   range: 'one', // 1 или 2 указателя
   rotate: rotation.VERTICAL, // ориентация vertical horizontal
   showTooltip: false, // показывать текущее значение над указателем
   showInterval: false, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 20, // шаг движения указателя
-  currentValRight: 0, // установка значений в числах
-  currentValLeft: 70, // установка значений в числах
+  maxValue: 0, // установка значений в числах
+  minValue: 70, // установка значений в числах
   pixelSize: '6',
   [keyChanges.SHIFT_LEFT]: 0,
   [keyChanges.SHIFT_RIGHT]: 200,
@@ -93,7 +93,7 @@ describe('View test', () => {
     test('slider style property check', () => {
       const startView = jest.spyOn(View.prototype as any, 'startView');
       let view = new View(state);
-      view.editView(state2);
+      view.setState(state2);
       expect(startView).toHaveBeenCalled();
       expect(startView).toHaveBeenCalledTimes(1);
     });
@@ -179,7 +179,7 @@ describe('View test', () => {
       view.responsiveCurrent(true);
       expect(responsiveCurrent).toHaveBeenCalled();
       // @ts-ignore
-      view.state.currentValLeft = view.state.currentValRight;
+      view.state.minValue = view.state.maxValue;
       // @ts-ignore
       view.responsiveCurrent(true);
       expect(responsiveCurrent).toHaveBeenCalledTimes(2);
@@ -214,13 +214,13 @@ describe('View test', () => {
         View.prototype as any,
         'intervalDisplay',
       );
-      view.editView(state);
+      view.setState(state);
       view.render();
       expect(buttonLeftDisplay).toHaveBeenCalled();
       expect(buttonLeftDisplay).toHaveBeenCalledTimes(1);
       expect(intervalDisplay).toHaveBeenCalled();
       expect(intervalDisplay).toHaveBeenCalledTimes(1);
-      view.editView(state2);
+      view.setState(state2);
       view.render();
       expect(buttonLeftRemove).toHaveBeenCalled();
       expect(buttonLeftRemove).toHaveBeenCalledTimes(1);

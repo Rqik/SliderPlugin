@@ -4,23 +4,23 @@ include ../checkbox-list/checkbox-list
 mixin sliderForm(props)
   -
     const {
-      id, minValue = 0, maxValue = 100, intervalCount = 2,
+      id, min = 0, max = 100, intervalCount = 2,
       round = 2,
-      currentValRight = 50, currentValLeft = 0
+      maxValue = 50, minValue = 0
     } = props
     const sliderForm = require("@/demo/components/slider-form/slider-form.json")
   form.slider-form(id=id, )
-    +field({name: "minValue", text: "Min", value: minValue})
-    +field({name: "maxValue", text: "Max", value: maxValue})
+    +field({name: "min", text: "Min", value: min})
+    +field({name: "max", text: "Max", value: max})
     +field({
-      name: "currentValRight",
+      name: "maxValue",
       text: "Тек. значение Btn 1 (правая)",
-      value: currentValRight
+      value: maxValue
     })
     +field({
-      name: "currentValLeft",
+      name: "minValue",
       text: "Тек. значение Btn 2 (левая)",
-      value: currentValLeft
+      value: minValue
     })
     +field({
       name: "intervalCount",

@@ -1,6 +1,7 @@
 import { InputChecker } from '../InputChecker/InputChecker';
 import '../styles/main.scss';
 import './page.scss';
+import { rules } from '@typescript-eslint/eslint-plugin';
 
 require('../../slider/Slider.ts');
 
@@ -46,3 +47,18 @@ new InputChecker({
   slider: plug4,
   classRotate: 'slider_vertical',
 }).init();
+
+class Test {
+  pos = 2
+
+  constructor() {
+    this.init();
+  }
+
+  init() {
+    return this.pos += 2;
+  }
+}
+
+const t = new Test().pos;
+console.log(t);

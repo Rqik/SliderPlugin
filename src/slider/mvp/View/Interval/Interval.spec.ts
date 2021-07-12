@@ -8,9 +8,10 @@ describe('Interval test', () => {
   });
   test('renderIntervals', () => {
     inter.renderIntervals({
-      minValue: 10,
-      maxValue: 100,
+      min: 10,
+      max: 100,
       count: 0,
+      stepSize:0,
       intervalStep: 0,
     });
     const s = document.createElement('ul');

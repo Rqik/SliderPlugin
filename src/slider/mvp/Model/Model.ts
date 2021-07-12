@@ -1,6 +1,6 @@
 import { EventObserver } from '../../utils/EventObserver';
 import {
-  Coords,
+  ICoords,
   IState,
   IStateEl,
   UniversalSate,
@@ -10,7 +10,7 @@ import { keyChanges, rotation } from '../../types/constants';
 class Model {
   public observer: EventObserver;
 
-  public coords: Coords = {
+  public coords: ICoords = {
     x: 0,
     y: 0,
     height: 0,
@@ -19,22 +19,44 @@ class Model {
 
   private state: IState = {
     selector: 'slider-range', // селектор
-    minValue: 0, // минимальное значение
-    maxValue: 1000, // максимальное значение
+    min: 0, // минимальное значение
+    max: 1000, // максимальное значение
     range: 'one', // 1 или 2 указателя
     rotate: rotation.HORIZONTAL, // ориентация vertical || horizontal
     showTooltip: true, // показывать текущее значение над указателем
     showInterval: true, // показать интервал
     intervalCount: 2, // количество интервалов
     stepSize: 1, // шаг движения указателя в числах
-    currentValRight: 50, // установка значений в числах
-    currentValLeft: 0, // установка значений в числах
+    maxValue: 50, // установка значений в числах
+    minValue: 0, // установка значений в числах
     [keyChanges.SHIFT_LEFT]: 0,
     [keyChanges.SHIFT_RIGHT]: 0,
     step: 0, // процентные значение от 0 до 100
     isActiveLeft: false,
     intervalStep: 0,
   };
+
+  private stateKey = [
+    'selector',
+    'min',
+    'max',
+    'range',
+    'rotate',
+    'showTooltip',
+    'showInterval',
+    'stepSize',
+    'maxValue',
+    'minValue',
+    'shiftLeft',
+    'shiftRight',
+    'step',
+    'isActiveLeft',
+    'intervalStep',
+    'widthSlider',
+    'heightSlider',
+    'round',
+    'show',
+  ];
 
   private percent = 0;
 
@@ -43,77 +65,89 @@ class Model {
     this.observer = new EventObserver();
   }
 
-  get stateCurrent(): IState {
+  get getState(): IState {
     return { ...this.state };
   }
 
-  editState(data: UniversalSate): void {
+  setState(data: UniversalSate): void {
+    const stateOld = this.getState;
     switch (Object.keys(data)[0]) {
       case keyChanges.ACTIVE:
         this.activeButton(data[keyChanges.ACTIVE] as number);
         break;
       case keyChanges.SHIFT_LEFT:
-        this.edit(data);
+        this.setStateValid(data);
         this.defineLeftVal();
         break;
       case keyChanges.SHIFT_RIGHT:
-        this.edit(data);
+        this.setStateValid(data);
         this.defineRightVal();
         break;
       case keyChanges.POSITION:
         this.defineStep(Number(data[keyChanges.POSITION]));
         break;
       case keyChanges.COORDINATES:
-        this.updateCoordinate(data[keyChanges.COORDINATES] as Coords);
+        this.updateCoordinate(data[keyChanges.COORDINATES] as ICoords);
         break;
       case keyChanges.INTERVAL:
-        this.state.step = this.convertNumberInPercent(
+        this.state.step = Model.convertCorrectNumber(this.convertNumberInPercent(
           Number(data[keyChanges.INTERVAL]),
-        );
+        ));
+        this.setStateValid(data);
+        this.defineLeftVal();
+        this.defineRightVal();
         break;
       default:
-        this.edit(data);
+        this.setStateValid(data, true);
         break;
     }
-    this.observer.broadcast(this.stateCurrent);
+    this.notify(stateOld, Object.keys(data)[0]);
   }
 
-  editMode(key: IStateEl): void {
+  setStateValid(key: IStateEl, validate = false): void {
+    const stateOld = this.getState;
     this.state = {
       ...this.state,
       ...key,
     };
-    this.convertToNumber();
-    this.observer.broadcast(this.stateCurrent);
+    if (validate) {
+      this.convertToNumber();
+    }
+    Object.keys(key).forEach((el) => {
+      this.notify(stateOld, el);
+    });
   }
 
-  private edit(key: IStateEl): void {
-    this.state = {
-      ...this.state,
-      ...key,
-    };
-    this.observer.broadcast(this.stateCurrent);
+  private notify(state: IState, key: string): void {
+    if (key === keyChanges.POSITION) {
+      this.observer.broadcast({ [keyChanges.POSITION]: this.getState.step });
+      return;
+    }
+    if (key === keyChanges.COORDINATES) {
+      this.observer.broadcast({ [keyChanges.COORDINATES]: this.coords });
+      return;
+    }
+    this.stateKey.forEach((element) => {
+      if (state[element] !== this.getState[element]) {
+        this.observer.broadcast({ [element]: this.getState[element] });
+      }
+    });
   }
 
   private convertToNumber(): void {
-    this.state.minValue = Model.convertCorrectNumber(this.state.minValue);
-    this.state.maxValue = Model.convertCorrectNumber(this.state.maxValue);
-    this.state.intervalCount = Model.convertCorrectNumber(
-      this.state.intervalCount,
-    );
+    this.state.min = Model.convertCorrectNumber(this.state.min);
+    this.state.max = Model.convertCorrectNumber(this.state.max);
+
     this.state.stepSize = Model.convertCorrectNumber(this.state.stepSize);
-    this.state.currentValRight = Model.convertCorrectNumber(
-      this.state.currentValRight,
-    );
-    this.state.currentValLeft = Model.convertCorrectNumber(
-      this.state.currentValLeft,
-    );
+    this.state.stepSize = this.state.stepSize < 0 ? 0 : this.state.stepSize;
+    this.state.maxValue = Model.convertCorrectNumber(this.state.maxValue);
+    this.state.minValue = Model.convertCorrectNumber(this.state.minValue);
 
     this.state.shiftLeft = this.validStep(
-      this.convertNumberInPercent(this.state.currentValLeft),
+      this.convertNumberInPercent(this.state.minValue),
     );
     this.state.shiftRight = this.validStep(
-      this.convertNumberInPercent(this.state.currentValRight),
+      this.convertNumberInPercent(this.state.maxValue),
     );
     this.state.shiftRight = Number.isFinite(this.state.shiftRight)
       ? Model.transformRange(this.state.shiftRight)
@@ -124,7 +158,7 @@ class Model {
     this.state[keyChanges.INTERVAL_STEP] = this.defineIntervalStep();
   }
 
-  private updateCoordinate(coords: Coords): void {
+  private updateCoordinate(coords: ICoords): void {
     this.coords = {
       ...this.coords,
       ...coords,
@@ -178,14 +212,12 @@ class Model {
   }
 
   private mathStepCount(percent: number): number {
-    const difference = Math.abs(this.state.maxValue - this.state.minValue);
+    const difference = Math.abs(this.state.max - this.state.min);
     if (difference === 0) {
       return Math.round(percent / this.state.stepSize) * this.state.stepSize;
     }
 
-    this.percent = (this.state.stepSize
-        / Math.abs(this.state.maxValue - this.state.minValue))
-      * 100;
+    this.percent = (this.state.stepSize / Math.abs(this.state.max - this.state.min)) * 100;
     this.percent = Model.transformRange(this.percent);
     return Math.round(percent / this.percent) * this.percent;
   }
@@ -201,34 +233,28 @@ class Model {
   }
 
   private convertNumberInPercent(value: number): number {
-    return (
-      ((value - this.state.minValue)
-        / (this.state.maxValue - this.state.minValue))
-      * 100
-    );
+    return ((value - this.state.min) / (this.state.max - this.state.min)) * 100;
   }
 
   private defineLeftVal(): void {
-    const leftValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftLeft)
-        / 100
-      + this.state.minValue;
+    const leftValue = ((this.state.max - this.state.min) * this.state.shiftLeft) / 100
+      + this.state.min;
 
-    this.state.currentValLeft = Number(
+    this.state.minValue = Number(
       leftValue.toFixed(this.defineDecimalPlacesCount()),
     );
   }
 
   private defineRightVal(): void {
-    const rightValue = ((this.state.maxValue - this.state.minValue) * this.state.shiftRight)
-        / 100
-      + this.state.minValue;
-    this.state.currentValRight = Number(
+    const rightValue = ((this.state.max - this.state.min) * this.state.shiftRight) / 100
+      + this.state.min;
+    this.state.maxValue = Number(
       rightValue.toFixed(this.defineDecimalPlacesCount()),
     );
   }
 
   private defineIntervalStep(): number {
-    const step = (this.state.maxValue - this.state.minValue) / this.state.intervalCount;
+    const step = (this.state.max - this.state.min) / this.state.intervalCount;
 
     return Number(step.toFixed(this.defineDecimalPlacesCount()));
   }

@@ -1,35 +1,35 @@
-import { IState, Slider, IStateEl } from './types/interfaces';
+import { IState, ISlider, IStateEl } from './types/interfaces';
 import { Present } from './mvp/Presenter/Presenter';
 
 declare global {
   interface JQuery {
-    sliderRqik: (opt?: IStateEl) => Slider;
+    sliderRqik: (opt?: IStateEl) => ISlider;
   }
 }
 
 (function IIFE(jQuery) {
   const $ = jQuery;
   $.fn.sliderRqik = function initSlider(options?: IStateEl) {
-    const allSlider: SliderPlugin[] = [];
+    const sliders: SliderPlugin[] = [];
 
     this.each((id: number, el: HTMLElement) => {
       const res = new SliderPlugin(el, id);
       if (options) {
         res.data(options);
       }
-      allSlider.push(res);
+      sliders.push(res);
     });
 
-    const slider: Slider = {
+    const slider: ISlider = {
       data(opt) {
-        allSlider.forEach((el: SliderPlugin) => {
+        sliders.forEach((el: SliderPlugin) => {
           el.data(opt);
         });
         return slider;
       },
       getData(): Array<IState> {
         const stateArr: Array<IState> = [];
-        allSlider.forEach((el: SliderPlugin) => {
+        sliders.forEach((el: SliderPlugin) => {
           const r = el.getData();
           if (r) {
             stateArr.push(r);
@@ -79,7 +79,7 @@ class SliderPlugin {
 
   getData(): IState | false {
     if (this.presents) {
-      return this.presents.state();
+      return this.presents.getState();
     }
     return false;
   }

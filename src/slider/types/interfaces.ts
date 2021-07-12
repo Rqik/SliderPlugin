@@ -1,60 +1,61 @@
 import { keyChanges, rotation } from './constants';
 
-type rotate = rotation.HORIZONTAL | rotation.VERTICAL;
-type range = 'one' | 'two';
-type callBack = (args?: any) => void;
+type Rotate = rotation.HORIZONTAL | rotation.VERTICAL;
+type Range = 'one' | 'two';
+type CallBack = (args?: any) => void;
 
-interface Coords {
+interface ICoords {
   x: number;
   y: number;
   width: number;
   height: number;
 }
 
-interface Slider {
-  data: (opt: IStateEl) => Slider;
+interface ISlider {
+  data: (opt: IStateEl) => ISlider;
   getData: () => IState[];
 }
 
 interface IState {
   selector: string;
-  minValue: number;
-  maxValue: number;
+  min: number;
+  max: number;
   showTooltip: boolean;
   showInterval: boolean;
-  range: range;
-  rotate: rotate;
+  range: Range;
+  rotate: Rotate;
   intervalCount: number;
   stepSize: number;
-  currentValRight: number;
-  currentValLeft: number;
+  maxValue: number;
+  minValue: number;
   [keyChanges.SHIFT_LEFT]: number;
   [keyChanges.SHIFT_RIGHT]: number;
   step: number;
   isActiveLeft: boolean;
   [keyChanges.INTERVAL_STEP]: number;
-  [k: string]: options;
+
+  [k: string]: Options;
+}
+
+interface IStateEl {
+  [k: string]: Options;
 }
 
 type UniversalSate = {
   [keyChanges.ACTIVE]?: number;
-  [keyChanges.COORDINATES]?: Coords;
-} & IStateEl;
+  [keyChanges.COORDINATES]?: ICoords;
+} & IStateEl | IState;
 
-interface IStateEl {
-  [k: string]: options;
-}
-
-type options = number | string | boolean;
+type Options = number | string | boolean;
 
 export {
-  Coords,
+  ICoords,
   IState,
-  rotate,
-  range,
-  callBack,
-  options,
+  Rotate,
+  Range,
+  CallBack,
+  Options,
   IStateEl,
-  Slider,
+  ISlider,
   UniversalSate,
 };

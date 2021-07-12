@@ -1,6 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
 
-import { Slider } from '../../slider/types/interfaces';
+import { ISlider } from '../../slider/types/interfaces';
 import { IInputChecker, IMakeEventCheck } from './types';
 
 class InputChecker {
@@ -8,7 +8,7 @@ class InputChecker {
 
   private $sliderDOM: JQuery;
 
-  private slider: Slider;
+  private slider: ISlider;
 
   private $inputRotate: JQuery;
 
@@ -30,14 +30,16 @@ class InputChecker {
     this.slider = slider;
     this.$inputRotate = this.$form.find("input[name='rotate']");
     this.$inputRange = this.$form.find("input[name='range']");
-    this.$inputCurrentLeft = this.$form.find("input[name='currentValLeft']");
-    this.$inputCurrentRight = this.$form.find("input[name='currentValRight']");
+    this.$inputCurrentLeft = this.$form.find("input[name='minValue']");
+    this.$inputCurrentRight = this.$form.find(
+      "input[name='maxValue']",
+    );
     this.classRotate = classRotate;
     this.inputsValue = [
+      'max',
+      'min',
       'maxValue',
       'minValue',
-      'currentValRight',
-      'currentValLeft',
       'round',
       'intervalCount',
       'stepSize',
@@ -103,8 +105,8 @@ class InputChecker {
 
   @boundMethod
   private eventChange(): void {
-    this.$inputCurrentLeft.val(this.slider.getData()[0].currentValLeft);
-    this.$inputCurrentRight.val(this.slider.getData()[0].currentValRight);
+    this.$inputCurrentLeft.val(this.slider.getData()[0].minValue);
+    this.$inputCurrentRight.val(this.slider.getData()[0].maxValue);
   }
 
   private makeEventCheck({

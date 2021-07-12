@@ -1,13 +1,17 @@
 const enum keyChanges {
+  MAX='max',
+  MIN='max',
   SHIFT_LEFT = 'shiftLeft',
   SHIFT_RIGHT = 'shiftRight',
   POSITION = 'position',
   COORDINATES = 'coordinates',
-  ACTIVE = 'active',
+  ACTIVE = 'isActiveLeft',
   INTERVAL = 'intervalAction',
   INTERVAL_STEP = 'intervalStep',
   WIDTH = 'widthSlider',
   HEIGHT = 'heightSlider',
+  MIN_VALUE = 'maxValue',
+  MAX_VALUE = 'minValue'
 }
 
 const enum rotation {

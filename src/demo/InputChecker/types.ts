@@ -1,9 +1,9 @@
-import { Slider } from '../../slider/types/interfaces';
+import { ISlider } from '../../slider/types/interfaces';
 
 interface IInputChecker {
   $form: JQuery;
   $sliderDOM: JQuery;
-  slider: Slider;
+  slider: ISlider;
   classRotate: string;
 }
 interface IMakeEventCheck {

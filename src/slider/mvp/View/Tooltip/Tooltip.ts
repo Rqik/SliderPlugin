@@ -1,15 +1,15 @@
-import { rotate } from '../../../types/interfaces';
+import { Rotate } from '../../../types/interfaces';
 import { rotation, tooltipValue as className } from '../../../types/constants';
 
 class Tooltip {
-  tooltipVal: HTMLElement = document.createElement('div');
+  element: HTMLElement = document.createElement('div');
 
-  constructor(private orientation: rotate) {
+  constructor(private orientation: Rotate) {
     this.init();
   }
 
   text(text: string | number): void {
-    this.tooltipVal.textContent = `${text}`;
+    this.element.textContent = `${text}`;
   }
 
   position(position: number): void {
@@ -21,32 +21,33 @@ class Tooltip {
   }
 
   positionHorizontal(shiftX: string | number): void {
-    this.tooltipVal.style.top = `-${this.tooltipVal.offsetHeight + 10}px`;
-    this.tooltipVal.style.left = `calc(${shiftX}% - ${
-      this.tooltipVal.offsetWidth / 2
+    this.element.style.top = `-${this.element.offsetHeight + 10}px`;
+    this.element.style.left = `calc(${shiftX}% - ${
+      this.element.offsetWidth / 2
     }px)`;
   }
 
   positionVertical(shiftX: string | number): void {
-    this.tooltipVal.style.top = `calc(${shiftX}% -
-    ${this.tooltipVal.offsetHeight / 2}px)`;
-    this.tooltipVal.style.left = `-${this.tooltipVal.offsetWidth + 15}px`;
+    this.element.style.top = `calc(${shiftX}% -
+    ${this.element.offsetHeight / 2}px)`;
+    this.element.style.left = `-${this.element.offsetWidth + 15}px`;
   }
 
-  setRotate(orientation: rotate): void {
+  setRotate(orientation: Rotate): void {
     this.orientation = orientation;
   }
 
   rectLeft(): number {
-    const clientRect = this.tooltipVal.getBoundingClientRect();
+    const clientRect = this.element.getBoundingClientRect();
     if (this.orientation === rotation.HORIZONTAL) {
       return clientRect.left;
     }
+
     return clientRect.top;
   }
 
   rectRight(): number {
-    const clientRect = this.tooltipVal.getBoundingClientRect();
+    const clientRect = this.element.getBoundingClientRect();
     if (this.orientation === rotation.HORIZONTAL) {
       return clientRect.right;
     }
@@ -54,7 +55,7 @@ class Tooltip {
   }
 
   private init(): void {
-    this.tooltipVal.className = className.TOOLTIP;
+    this.element.className = className.TOOLTIP;
   }
 }
 

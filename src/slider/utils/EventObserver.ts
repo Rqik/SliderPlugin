@@ -1,16 +1,20 @@
-import { callBack } from '../types/interfaces';
+import { CallBack } from '../types/interfaces';
 
 class EventObserver {
-  observers: callBack[];
+  observers: CallBack[];
 
   constructor() {
     this.observers = [];
   }
 
-  subscribe(fn: callBack): void {
+  subscribe(fn: CallBack): void {
     if (!this.observers.some((el) => el === fn)) {
       this.observers.push(fn);
     }
+  }
+
+  unsubscribe(fn: CallBack): void {
+    this.observers = this.observers.filter((subscriber) => subscriber !== fn);
   }
 
   broadcast(data: unknown): void {
@@ -19,10 +23,6 @@ class EventObserver {
         subscriber(data);
       }
     });
-  }
-
-  unsubscribe(fn: callBack): void {
-    this.observers = this.observers.filter((subscriber) => subscriber !== fn);
   }
 }
 

@@ -1,4 +1,4 @@
-import { rotate } from '../../../types/interfaces';
+import { Rotate } from '../../../types/interfaces';
 import { rotation, slider as className } from '../../../types/constants';
 
 class SliderRange {
@@ -6,18 +6,18 @@ class SliderRange {
 
   sliderActiveZone: HTMLElement = document.createElement('div');
 
-  private rotate: rotate = rotation.HORIZONTAL;
+  private rotate: Rotate = rotation.HORIZONTAL;
 
-  constructor(rot: rotate) {
+  constructor(rot: Rotate) {
     this.init(rot);
   }
 
-  edit(rot: rotate): void {
+  edit(rot: Rotate): void {
+    this.rotate = rot;
+
     if (rot === rotation.VERTICAL) {
-      this.rotate = rot;
       this.sliderRange.classList.add(className.SLIDER_VERTICAL);
-    } else if (rot === rotation.HORIZONTAL) {
-      this.rotate = rot;
+    } else {
       this.sliderRange.classList.remove(className.SLIDER_VERTICAL);
     }
   }
@@ -32,14 +32,11 @@ class SliderRange {
     }
   }
 
-  private init(rot: rotate): HTMLElement {
+  private init(rot: Rotate):void {
     this.sliderRange.className = className.SLIDER;
     this.sliderActiveZone.className = className.SLIDER_ACTIVE_ZONE;
-    if (rot === rotation.VERTICAL) {
-      this.sliderRange.classList.add(className.SLIDER_VERTICAL);
-    }
+    this.edit(rot);
     this.sliderRange.appendChild(this.sliderActiveZone);
-    return this.sliderRange;
   }
 }
 

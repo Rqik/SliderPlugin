@@ -4,16 +4,16 @@ import { Model } from './Model';
 
 const stateHorizontal: IState = {
   selector: 'slider-rqik', // селектор
-  minValue: 10, // минимальное значение
-  maxValue: 120, // максимальное значение
+  min: 10, // минимальное значение
+  max: 120, // максимальное значение
   range: 'two', // 1 или 2 указателя
   rotate: rotation.HORIZONTAL, // ориентация vertical horizontal
   showTooltip: true, // показывать текущее значение над указателем
   showInterval: true, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 1, // шаг движения указателя
-  currentValRight: 0, // установка значений в числах
-  currentValLeft: 70, // установка значений в числах
+  maxValue: 0, // установка значений в числах
+  minValue: 70, // установка значений в числах
   pixelSize: '6',
   [keyChanges.SHIFT_LEFT]: -22,
   [keyChanges.SHIFT_RIGHT]: 43,
@@ -26,16 +26,16 @@ const stateHorizontal: IState = {
 
 const stateVertical: IState = {
   selector: 'slider-rqik', // селектор
-  minValue: 112, // минимальное значение
-  maxValue: 120, // максимальное значение
+  min: 112, // минимальное значение
+  max: 120, // максимальное значение
   range: 'one', // 1 или 2 указателя
   rotate: rotation.VERTICAL, // ориентация vertical horizontal
   showTooltip: false, // показывать текущее значение над указателем
   showInterval: false, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 20, // шаг движения указателя
-  currentValRight: 0, // установка значений в числах
-  currentValLeft: 70, // установка значений в числах
+  maxValue: 0, // установка значений в числах
+  minValue: 70, // установка значений в числах
   pixelSize: '6',
   [keyChanges.SHIFT_LEFT]: 0,
   [keyChanges.SHIFT_RIGHT]: 54,
@@ -48,16 +48,16 @@ const stateVertical: IState = {
 
 const stateHorCorrect: IState = {
   selector: 'slider-rqik', // селектор
-  minValue: 10, // минимальное значение
-  maxValue: 120, // максимальное значение
+  min: 10, // минимальное значение
+  max: 120, // максимальное значение
   range: 'two', // 1 или 2 указателя
   rotate: rotation.HORIZONTAL, // ориентация vertical horizontal
   showTooltip: true, // показывать текущее значение над указателем
   showInterval: true, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 1, // шаг движения указателя
-  currentValRight: 0, // установка значений в числах
-  currentValLeft: 70, // установка значений в числах
+  maxValue: 0, // установка значений в числах
+  minValue: 70, // установка значений в числах
   pixelSize: '6',
   [keyChanges.SHIFT_LEFT]: 54.54545454545455,
   [keyChanges.SHIFT_RIGHT]: 0,
@@ -69,16 +69,16 @@ const stateHorCorrect: IState = {
 };
 const stateVerCorrect: IState = {
   selector: 'slider-rqik', // селектор
-  minValue: 112, // минимальное значение
-  maxValue: 120, // максимальное значение
+  min: 112, // минимальное значение
+  max: 120, // максимальное значение
   range: 'one', // 1 или 2 указателя
   rotate: rotation.VERTICAL, // ориентация vertical horizontal
   showTooltip: false, // показывать текущее значение над указателем
   showInterval: false, // показать интервал
   intervalCount: 7, // количество интервалов
   stepSize: 20, // шаг движения указателя
-  currentValRight: 0, // установка значений в числах
-  currentValLeft: 70, // установка значений в числах
+  maxValue: 0, // установка значений в числах
+  minValue: 70, // установка значений в числах
   pixelSize: '6',
   [keyChanges.SHIFT_LEFT]: 0,
   [keyChanges.SHIFT_RIGHT]: 0,
@@ -98,35 +98,35 @@ describe('Model test', () => {
     jest.clearAllMocks();
   });
   test('editMode', () => {
-    model.editMode(stateHorizontal);
-    expect(model.stateCurrent).toEqual(stateHorCorrect);
+    model.setStateValid(stateHorizontal);
+    expect(model.getState).toEqual(stateHorCorrect);
 
-    model.editMode(stateVertical);
-    expect(model.stateCurrent).toEqual(stateVerCorrect);
+    model.setStateValid(stateVertical);
+    expect(model.getState).toEqual(stateVerCorrect);
   });
   test('editMode', () => {
-    model.editMode({
-      minValue: '232',
-      maxValue: '322',
+    model.setStateValid({
+      min: '232',
+      max: '322',
       intervalCount: '5',
-      currentValRight: '190',
-      currentValLeft: '290',
+      maxValue: '190',
+      minValue: '290',
     });
 
-    expect(model.stateCurrent.minValue).not.toEqual('232');
-    expect(model.stateCurrent.minValue).toEqual(232);
+    expect(model.getState.min).not.toEqual('232');
+    expect(model.getState.min).toEqual(232);
 
-    expect(model.stateCurrent.maxValue).not.toEqual('322');
-    expect(model.stateCurrent.maxValue).toEqual(322);
+    expect(model.getState.max).not.toEqual('322');
+    expect(model.getState.max).toEqual(322);
 
-    expect(model.stateCurrent.intervalCount).not.toEqual('5');
-    expect(model.stateCurrent.intervalCount).toEqual(5);
+    expect(model.getState.intervalCount).not.toEqual('5');
+    expect(model.getState.intervalCount).toEqual(5);
 
-    expect(model.stateCurrent.currentValRight).not.toEqual('190');
-    expect(model.stateCurrent.currentValRight).toEqual(190);
+    expect(model.getState.maxValue).not.toEqual('190');
+    expect(model.getState.maxValue).toEqual(190);
 
-    expect(model.stateCurrent.currentValLeft).not.toEqual('290');
-    expect(model.stateCurrent.currentValLeft).toEqual(290);
+    expect(model.getState.minValue).not.toEqual('290');
+    expect(model.getState.minValue).toEqual(290);
   });
 
   test('editState', () => {
@@ -147,50 +147,50 @@ describe('Model test', () => {
       Model.prototype as any,
       'mathPositionToPercent',
     );
-    model.editState({ shiftLeft: '44' });
+    model.setState({ shiftLeft: '44' });
     expect(defineLeftVal).toHaveBeenCalled();
     expect(edit).toHaveBeenCalled();
 
-    model.editState({ shiftRight: '44' });
+    model.setState({ shiftRight: '44' });
     expect(edit).toHaveBeenCalledTimes(2);
     expect(defineRightVal).toHaveBeenCalled();
 
-    model.editState({ notCorrect: '44' });
+    model.setState({ notCorrect: '44' });
     expect(edit).toHaveBeenCalledTimes(3);
 
-    model.editState({ position: '44' });
+    model.setState({ position: '44' });
     expect(defineStep).toHaveBeenCalled();
     expect(mathPositionToPercent).toHaveBeenCalled();
 
-    model.editState({ stepSize: -1.32 });
-    model.editState({ position: '87' });
+    model.setState({ stepSize: -1.32 });
+    model.setState({ position: '87' });
     expect(defineStep).toHaveBeenCalledTimes(2);
 
     expect(updateCoordinate).toHaveBeenCalledTimes(0);
 
-    model.editState({ [keyChanges.ACTIVE]: 44 });
+    model.setState({ [keyChanges.ACTIVE]: 44 });
     expect(activeButton).toHaveBeenCalled();
     expect(checkExtremePoint).toHaveBeenCalled();
 
-    model.editState({ [keyChanges.SHIFT_LEFT]: 24 });
-    model.editState({ [keyChanges.SHIFT_RIGHT]: 24 });
-    model.editMode({ step: 10 });
-    model.editState({ [keyChanges.ACTIVE]: 55 });
+    model.setState({ [keyChanges.SHIFT_LEFT]: 24 });
+    model.setState({ [keyChanges.SHIFT_RIGHT]: 24 });
+    model.setStateValid({ step: 10 });
+    model.setState({ [keyChanges.ACTIVE]: 55 });
     expect(checkExtremePoint).toHaveBeenCalledTimes(2);
-    expect(model.stateCurrent.isActiveLeft).toEqual(false);
+    expect(model.getState.isActiveLeft).toEqual(false);
 
-    model.editMode({ step: 97 });
-    model.editState({ [keyChanges.ACTIVE]: -10 });
-    expect(model.stateCurrent.isActiveLeft).toEqual(true);
+    model.setStateValid({ step: 97 });
+    model.setState({ [keyChanges.ACTIVE]: -10 });
+    expect(model.getState.isActiveLeft).toEqual(true);
   });
 
   test('call validStep methods', () => {
-    model.editState({ stepSize: 42 });
+    model.setState({ stepSize: 42 });
     const defineStep = jest.spyOn(Model.prototype as any, 'defineStep');
     const validStep = jest.spyOn(Model.prototype as any, 'validStep');
-    model.editMode({ maxValue: 10, minValue: 10 });
+    model.setStateValid({ max: 10, min: 10 });
 
-    model.editState({ [keyChanges.POSITION]: 5 });
+    model.setState({ [keyChanges.POSITION]: 5 });
     expect(defineStep).toHaveBeenCalled();
     expect(validStep).toHaveBeenCalled();
   });
@@ -200,24 +200,24 @@ describe('Model test', () => {
       Model.prototype as any,
       'mathPositionToPercent',
     );
-    model.editState({ position: '44' });
+    model.setState({ position: '44' });
     expect(mathPositionToPercent).toHaveBeenCalled();
     expect(mathPositionToPercent).toHaveBeenCalledTimes(1);
-    model.editMode({ stepSize: 10 });
-    model.editState({ position: '23' });
+    model.setStateValid({ stepSize: 10 });
+    model.setState({ position: '23' });
     expect(mathPositionToPercent).toHaveBeenCalledTimes(2);
-    model.editState({ position: '23' });
+    model.setState({ position: '23' });
     expect(mathPositionToPercent).toHaveBeenCalledTimes(3);
 
-    model.editMode({ rotate: 'vertical' });
-    model.editState({ position: '73' });
+    model.setStateValid({ rotate: 'vertical' });
+    model.setState({ position: '73' });
     expect(mathPositionToPercent).toHaveBeenCalledTimes(4);
   });
 
   test('return state', () => {
-    model.editState(stateHorizontal);
+    model.setState(stateHorizontal);
 
-    expect(model.stateCurrent).toEqual(stateHorizontal);
-    expect(model.stateCurrent).not.toEqual(stateVertical);
+    expect(model.getState).toEqual(stateHorizontal);
+    expect(model.getState).not.toEqual(stateVertical);
   });
 });

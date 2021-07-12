@@ -1,7 +1,7 @@
 import { boundMethod } from 'autobind-decorator';
 
-import { IState } from '../../types/interfaces';
-import { keyChanges, rotation } from '../../types/constants';
+import { ICoords, IState } from '../../types/interfaces';
+import { keyChanges, rotation, tooltipValue } from '../../types/constants';
 import { EventObserver as Observer } from '../../utils/EventObserver';
 import { Button, Interval, SliderRange, Tooltip } from './SubView';
 
@@ -12,11 +12,11 @@ class View {
 
   private buttonRight: Button = new Button();
 
-  private currentValGeneral: Tooltip;
+  private tooltipGeneral: Tooltip;
 
-  private currentValLeft: Tooltip;
+  private tooltipLeft: Tooltip;
 
-  private currentValRight: Tooltip;
+  private tooltipRight: Tooltip;
 
   private interval: Interval;
 
@@ -24,7 +24,10 @@ class View {
 
   private buttonWidth = 10;
 
-  private currentButton: HTMLElement = this.buttonRight.button; // абстрактный тумблер
+  private tooltipEventPosition = 0;
+
+  // абстрактный тумблер
+  private currentButton: HTMLElement = this.buttonRight.button;
 
   private isLeftOn = false;
 
@@ -32,30 +35,37 @@ class View {
 
   private state: IState;
 
-  private slideClass: SliderRange;
+  private sliderClass: SliderRange;
+
+  private coords: ICoords = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  };
 
   constructor(state: IState) {
     this.state = state;
     this.observer = new Observer();
-    this.currentValLeft = new Tooltip(this.state.rotate);
-    this.currentValRight = new Tooltip(this.state.rotate);
-    this.currentValGeneral = new Tooltip(this.state.rotate);
-    this.slideClass = new SliderRange(this.state.rotate);
+    this.tooltipLeft = new Tooltip(this.state.rotate);
+    this.tooltipRight = new Tooltip(this.state.rotate);
+    this.tooltipGeneral = new Tooltip(this.state.rotate);
+    this.sliderClass = new SliderRange(this.state.rotate);
     this.interval = new Interval();
-    this.sliderRange = this.slideClass.sliderRange;
-    this.startView(this.state.selector);
+    this.sliderRange = this.sliderClass.sliderRange;
+    this.init(this.state.selector);
   }
 
-  editView(newState: IState): void {
+  setState(newState: IState): void {
     this.state = {
       ...this.state,
       ...newState,
     };
-    this.slideClass.edit(this.state.rotate);
+    this.sliderClass.edit(this.state.rotate);
     this.interval.edit(this.state.rotate);
-    this.currentValLeft.setRotate(this.state.rotate);
-    this.currentValRight.setRotate(this.state.rotate);
-    this.currentValGeneral.setRotate(this.state.rotate);
+    this.tooltipLeft.setRotate(this.state.rotate);
+    this.tooltipRight.setRotate(this.state.rotate);
+    this.tooltipGeneral.setRotate(this.state.rotate);
   }
 
   render(): void {
@@ -68,16 +78,17 @@ class View {
     this.installMove();
   }
 
-  private startView(selector: string): void {
+  private init(selector: string): void {
     this.slider = <HTMLElement>document.querySelector(selector);
     this.slider.style.position = 'relative';
   }
 
   private renderInterval(): void {
     this.interval.renderIntervals({
-      minValue: this.state.minValue,
-      maxValue: this.state.maxValue,
+      min: this.state.min,
+      max: this.state.max,
       count: this.state.intervalCount,
+      stepSize: this.state.stepSize,
       intervalStep: this.state[keyChanges.INTERVAL_STEP],
     });
   }
@@ -90,6 +101,20 @@ class View {
   private addAction(): void {
     this.sliderRange.addEventListener('mousedown', this.onClickMove);
     this.sliderRange.addEventListener('touchstart', this.onClickMove);
+    this.tooltipLeft.element.addEventListener('mousedown', this.handlerTooltip);
+    this.tooltipRight.element.addEventListener(
+      'mousedown',
+      this.handlerTooltip,
+    );
+    this.tooltipLeft.element.addEventListener(
+      'touchstart',
+      this.handlerTooltip,
+    );
+    this.tooltipRight.element.addEventListener(
+      'touchstart',
+      this.handlerTooltip,
+    );
+
     this.interval.items.forEach((item) => {
       item.addEventListener('mousedown', this.onClickInterval);
       item.addEventListener('touchstart', this.onClickInterval);
@@ -101,19 +126,27 @@ class View {
   @boundMethod
   private resizeSlider(): void {
     const { x, y, width, height } = this.slider.getBoundingClientRect();
+    const isChanged = width !== this.coords.width
+      || height !== this.coords.height
+      || x !== this.coords.x
+      || y !== this.coords.y;
 
-    this.observer.broadcast({
-      [keyChanges.WIDTH]: this.sliderRange.offsetWidth,
-      [keyChanges.HEIGHT]: this.sliderRange.offsetHeight,
-    });
-    this.observer.broadcast({
-      [keyChanges.COORDINATES]: {
-        x,
-        y,
-        width,
-        height,
-      },
-    });
+    if (isChanged) {
+      this.coords = { x, y, width, height };
+      this.observer.broadcast({
+        [keyChanges.WIDTH]: this.sliderRange.offsetWidth,
+        [keyChanges.HEIGHT]: this.sliderRange.offsetHeight,
+      });
+
+      this.observer.broadcast({
+        [keyChanges.COORDINATES]: {
+          x,
+          y,
+          width,
+          height,
+        },
+      });
+    }
   }
 
   private static removeStyle(el: HTMLElement): void {
@@ -135,28 +168,31 @@ class View {
       this.interval.interval.remove();
     }
     if (this.state.show) {
-      this.currentValRight.tooltipVal.style.opacity = '1';
-      this.sliderRange.append(this.currentValRight.tooltipVal);
+      this.tooltipRight.element.style.opacity = '1';
+      this.slider.append(this.tooltipRight.element);
     } else {
-      this.currentValGeneral.tooltipVal.remove();
-      this.currentValLeft.tooltipVal.remove();
-      this.currentValRight.tooltipVal.remove();
+      this.tooltipGeneral.element.remove();
+      this.tooltipLeft.element.remove();
+      this.tooltipRight.element.remove();
+      this.tooltipEventPosition = 0;
     }
   }
 
   private buttonLeftDisplay(): void {
     this.sliderRange.append(this.buttonLeft.button);
     if (this.state.show) {
-      this.currentValLeft.tooltipVal.style.opacity = '1';
-      this.sliderRange.append(this.currentValLeft.tooltipVal);
+      this.tooltipLeft.element.style.opacity = '1';
+      this.slider.append(this.tooltipLeft.element);
     }
   }
 
   private buttonLeftRemove(): void {
-    this.currentValGeneral.tooltipVal.remove();
+    this.tooltipGeneral.element.remove();
     this.buttonLeft.button.remove();
-    this.currentValLeft.tooltipVal.remove();
-    this.observer.broadcast({ [keyChanges.SHIFT_LEFT]: 0 });
+    this.tooltipLeft.element.remove();
+    this.observer.broadcast({
+      [keyChanges.SHIFT_LEFT]: 0,
+    });
   }
 
   private intervalDisplay(): void {
@@ -166,6 +202,7 @@ class View {
 
   @boundMethod
   private onClickInterval(event: MouseEvent | TouchEvent): void {
+    this.resizeSlider();
     if (event.cancelable) {
       event.preventDefault();
     }
@@ -176,30 +213,70 @@ class View {
       this.overridingButtons(this.state.isActiveLeft);
     }
 
-    this.observer.broadcast({ [keyChanges.INTERVAL]: value.textContent });
+    this.observer.broadcast({
+      [keyChanges.INTERVAL]: value.textContent,
+    });
 
     this.eventButton(this.state.step);
   }
 
   @boundMethod
-  private buttonAction(e: MouseEvent | TouchEvent): void {
-    if (e.cancelable) {
-      e.preventDefault();
+  private buttonAction(event: MouseEvent | TouchEvent): void {
+    if (event.cancelable) {
+      event.preventDefault();
     }
-    if (e instanceof MouseEvent) {
+    if (event instanceof MouseEvent) {
       document.addEventListener('mousemove', this.onMouseMove);
       document.addEventListener('mouseup', this.removeMouse);
-      this.currentButton = <HTMLElement>e.currentTarget;
+      this.currentButton = <HTMLElement>event.currentTarget;
     } else {
       document.addEventListener('touchmove', this.onMouseMove);
       document.addEventListener('touchend', this.removeTouch);
-      this.currentButton = <HTMLElement>e.targetTouches[0].target;
+      this.currentButton = <HTMLElement>event.targetTouches[0].target;
     }
     if (this.state.range === 'one') {
       this.currentButton = this.buttonRight.button;
     }
 
     this.isLeftOn = this.currentButton === this.buttonLeft.button;
+    this.currentButton.ondragstart = () => false;
+  }
+
+  @boundMethod
+  private handlerTooltip(event: MouseEvent | TouchEvent): void {
+    let target;
+
+    this.resizeSlider();
+
+    if (event.cancelable) {
+      event.preventDefault();
+    }
+
+    if (event instanceof MouseEvent) {
+      target = <HTMLElement>event.currentTarget;
+    } else {
+      target = <HTMLElement>event.targetTouches[0].target;
+    }
+    const { cordClient } = this.getCordClientAndEvent(event);
+
+    if (target.classList.contains(tooltipValue.TOOLTIP)) {
+      this.tooltipEventPosition = cordClient
+        - target.getBoundingClientRect().left
+        - target.offsetWidth / 2;
+    }
+
+    if (this.tooltipLeft.element === target) {
+      this.overridingButtons(true);
+    } else {
+      this.overridingButtons(false);
+    }
+    if (event instanceof MouseEvent) {
+      document.addEventListener('mousemove', this.onMouseMove);
+      document.addEventListener('mouseup', this.removeMouse);
+    } else {
+      document.addEventListener('touchmove', this.onMouseMove);
+      document.addEventListener('touchend', this.removeTouch);
+    }
     this.currentButton.ondragstart = () => false;
   }
 
@@ -236,36 +313,56 @@ class View {
     this.eventButton(this.state.step);
   }
 
-  private observerPosition(e: MouseEvent | TouchEvent) {
-    let event;
-    let cordClient;
-    if (e instanceof MouseEvent) {
-      event = e;
-    } else {
-      [event] = e.touches;
+  private observerPosition(evt: MouseEvent | TouchEvent) {
+    const { cordClient, event } = this.getCordClientAndEvent(evt);
+
+    const { target } = event;
+    const isNotTooltip = target !== this.tooltipRight.element
+      && target !== this.tooltipLeft.element;
+    if (isNotTooltip) {
+      this.tooltipEventPosition = 0;
     }
 
-    if (this.state.rotate === rotation.HORIZONTAL) {
-      cordClient = event.clientX;
-    } else if (this.state.rotate === rotation.VERTICAL) {
-      cordClient = event.clientY;
-    }
-
-    this.observer.broadcast({ [keyChanges.POSITION]: cordClient });
+    this.observer.broadcast({
+      [keyChanges.POSITION]: cordClient - this.tooltipEventPosition,
+    });
 
     if (this.state.range === 'two') {
-      this.observer.broadcast({ [keyChanges.ACTIVE]: cordClient });
+      this.observer.broadcast({
+        [keyChanges.ACTIVE]: cordClient - this.tooltipEventPosition,
+      });
     }
+  }
+
+  private getCordClientAndEvent(evt: MouseEvent | TouchEvent) {
+    let event;
+    let cordClient = 0;
+
+    if (evt instanceof MouseEvent) {
+      event = evt;
+    } else {
+      [event] = evt.touches;
+    }
+    if (this.state.rotate === rotation.HORIZONTAL) {
+      cordClient = event.clientX;
+    }
+    if (this.state.rotate === rotation.VERTICAL) {
+      cordClient = event.clientY;
+    }
+    return { event, cordClient };
   }
 
   @boundMethod
   private onClickMove(event: MouseEvent | TouchEvent): void {
+    this.resizeSlider();
+    if (event.cancelable) {
+      event.preventDefault();
+    }
     this.buttonAction(event);
     this.observerPosition(event);
     if (this.state.range === 'two') {
       this.overridingButtons(this.state.isActiveLeft);
     }
-    this.resizeSlider();
     this.eventButton(this.state.step);
   }
 
@@ -286,12 +383,16 @@ class View {
       pos = this.state[keyChanges.SHIFT_RIGHT] < pos
         ? this.state[keyChanges.SHIFT_RIGHT]
         : pos;
-      this.observer.broadcast({ [keyChanges.SHIFT_LEFT]: pos });
+      this.observer.broadcast({
+        [keyChanges.SHIFT_LEFT]: pos,
+      });
     } else {
       pos = this.state[keyChanges.SHIFT_LEFT] > pos
         ? this.state[keyChanges.SHIFT_LEFT]
         : pos;
-      this.observer.broadcast({ [keyChanges.SHIFT_RIGHT]: pos });
+      this.observer.broadcast({
+        [keyChanges.SHIFT_RIGHT]: pos,
+      });
     }
 
     this.moveButton(pos);
@@ -310,7 +411,7 @@ class View {
       this.currentValueText();
       this.showCurrentValue();
       if (this.state.range === 'two') {
-        const oneCurrent = this.currentValLeft.rectRight() > this.currentValRight.rectLeft();
+        const oneCurrent = this.tooltipLeft.rectRight() > this.tooltipRight.rectLeft();
         this.responsiveCurrent(oneCurrent);
       }
     }
@@ -320,51 +421,51 @@ class View {
 
   private currentValueText(): void {
     if (this.isLeftOn) {
-      this.currentValLeft.text(this.state.currentValLeft);
+      this.tooltipLeft.text(this.state.minValue);
     } else {
-      this.currentValRight.text(this.state.currentValRight);
+      this.tooltipRight.text(this.state.maxValue);
     }
   }
 
   private responsiveCurrent(oneCurrent: boolean): void {
     if (oneCurrent) {
-      this.sliderRange.append(this.currentValGeneral.tooltipVal);
-      this.currentValLeft.tooltipVal.style.opacity = '0';
-      this.currentValRight.tooltipVal.style.opacity = '0';
-      this.currentValGeneral.tooltipVal.style.opacity = '1';
-      this.currentValGeneral.tooltipVal.style.display = 'block';
+      this.sliderRange.append(this.tooltipGeneral.element);
+      this.tooltipLeft.element.style.opacity = '0';
+      this.tooltipRight.element.style.opacity = '0';
+      this.tooltipGeneral.element.style.opacity = '1';
+      this.tooltipGeneral.element.style.display = 'block';
 
-      if (this.state.currentValLeft === this.state.currentValRight) {
-        this.currentValGeneral.text(`${this.state.currentValLeft}`);
+      if (this.state.minValue === this.state.maxValue) {
+        this.tooltipGeneral.text(`${this.state.minValue}`);
       } else {
-        this.currentValGeneral.text(
-          `${this.state.currentValLeft} — ${+this.state.currentValRight}`,
+        this.tooltipGeneral.text(
+          `${this.state.minValue} — ${+this.state.maxValue}`,
         );
       }
-      this.currentValGeneral.position(
+      this.tooltipGeneral.position(
         (this.state.shiftRight + this.state.shiftLeft) / 2,
       );
     } else {
-      this.currentValGeneral.tooltipVal.style.opacity = '0';
-      this.currentValGeneral.tooltipVal.style.display = 'none';
-      this.currentValLeft.tooltipVal.style.opacity = '1';
-      this.currentValRight.tooltipVal.style.opacity = '1';
+      this.tooltipGeneral.element.style.opacity = '0';
+      this.tooltipGeneral.element.style.display = 'none';
+      this.tooltipLeft.element.style.opacity = '1';
+      this.tooltipRight.element.style.opacity = '1';
     }
   }
 
   private showCurrentValue(): void {
     if (this.isLeftOn) {
-      this.currentValLeft.position(this.state.shiftLeft);
+      this.tooltipLeft.position(this.state.shiftLeft);
     } else {
-      this.currentValRight.position(this.state.shiftRight);
+      this.tooltipRight.position(this.state.shiftRight);
     }
   }
 
   private activeZoneAction(): void {
     if (this.state.shiftLeft > this.state.shiftRight) {
-      this.slideClass.activeZone(this.state.shiftRight, this.state.shiftLeft);
+      this.sliderClass.activeZone(this.state.shiftRight, this.state.shiftLeft);
     } else {
-      this.slideClass.activeZone(this.state.shiftLeft, this.state.shiftRight);
+      this.sliderClass.activeZone(this.state.shiftLeft, this.state.shiftRight);
     }
   }
 }

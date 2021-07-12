@@ -1,9 +1,7 @@
 .interval-point {
   position: absolute;
   top: 9px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  display: block;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -12,17 +10,26 @@
 
   &__item {
     position: relative;
-    left: 0;
     top: -2px;
     z-index: 1;
-    width: 1px;
+    display: inline-block;
     height: 14px;
     font-family: 'Montserrat', sans-serif;
     font-weight: normal;
     font-size: 14px;
     text-align: center;
-    background-color: $slider-interval;
+    transform: translateX(-50%);
     cursor: pointer;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 1px;
+      height: 14px;
+      background-color: $slider-interval;
+    }
 
     &-text {
       position: absolute;
@@ -49,16 +56,24 @@
       position: relative;
       top: 0;
       display: inline-block;
-      width: 10px;
-      height: 1px;
       background-color: $slider-interval;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        width: 10px;
+        height: 1px;
+        background-color: $slider-interval;
+      }
 
       &-text {
         position: absolute;
-        right: -50%;
-        top: 50%;
+        left: 14px;
+        top: 0;
         text-align: center;
-        transform: translate(100%, -50%);
+        transform: translateY(-50%);
         user-select: none;
       }
 

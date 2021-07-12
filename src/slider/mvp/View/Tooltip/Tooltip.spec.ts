@@ -11,8 +11,8 @@ describe('Current Val tool tip test', () => {
   test('text content', () => {
     curVal.text('100');
 
-    expect(curVal.tooltipVal.textContent).toEqual('100');
-    expect(curVal.tooltipVal.textContent).not.toEqual(100);
+    expect(curVal.element.textContent).toEqual('100');
+    expect(curVal.element.textContent).not.toEqual(100);
   });
 
   test('position rotation', () => {

@@ -20,7 +20,6 @@ class Present {
     this.model = new Model(selector);
     this.view = new View(this.model.getState);
     this.rotate = this.model.getState.rotate;
-    this.subscribe(this.linter);
     this.init();
   }
 
@@ -54,11 +53,6 @@ class Present {
   @boundMethod
   private setStateModel(data: UniversalSate): void {
     this.model.setState(data);
-  }
-
-  @boundMethod
-  linter(data: IState) {
-    // console.log(data);
   }
 
   @boundMethod

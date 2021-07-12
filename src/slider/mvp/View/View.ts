@@ -1,7 +1,7 @@
 import { boundMethod } from 'autobind-decorator';
 
 import { ICoords, IState } from '../../types/interfaces';
-import { keyChanges, rotation, tooltipValue } from '../../types/constants';
+import { keyChanges, rotation } from '../../types/constants';
 import { EventObserver as Observer } from '../../utils/EventObserver';
 import { Button, Interval, SliderRange, Tooltip } from './SubView';
 
@@ -74,7 +74,7 @@ class View {
     this.addElem();
     this.addAction();
     this.buttonWidth = this.buttonRight.width();
-    this.resizeSlider();
+    this.notifyCoords(true);
     this.installMove();
   }
 
@@ -130,8 +130,12 @@ class View {
       || height !== this.coords.height
       || x !== this.coords.x
       || y !== this.coords.y;
+    this.notifyCoords(isChanged);
+  }
 
-    if (isChanged) {
+  private notifyCoords(isNotify: boolean) {
+    const { x, y, width, height } = this.slider.getBoundingClientRect();
+    if (isNotify) {
       this.coords = { x, y, width, height };
       this.observer.broadcast({
         [keyChanges.WIDTH]: this.sliderRange.offsetWidth,
@@ -245,6 +249,9 @@ class View {
   @boundMethod
   private handlerTooltip(event: MouseEvent | TouchEvent): void {
     let target;
+    const { cordClient } = this.getCordClientAndEvent(event);
+
+    // const isVertiv
 
     this.resizeSlider();
 
@@ -257,12 +264,15 @@ class View {
     } else {
       target = <HTMLElement>event.targetTouches[0].target;
     }
-    const { cordClient } = this.getCordClientAndEvent(event);
 
-    if (target.classList.contains(tooltipValue.TOOLTIP)) {
+    if (this.state.rotate === rotation.HORIZONTAL) {
       this.tooltipEventPosition = cordClient
         - target.getBoundingClientRect().left
         - target.offsetWidth / 2;
+    } else {
+      this.tooltipEventPosition = cordClient
+        - target.getBoundingClientRect().top
+        - target.offsetHeight / 2;
     }
 
     if (this.tooltipLeft.element === target) {

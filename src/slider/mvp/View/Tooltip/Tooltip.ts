@@ -21,7 +21,7 @@ class Tooltip {
   }
 
   positionHorizontal(shiftX: string | number): void {
-    this.element.style.top = `-${this.element.offsetHeight + 10}px`;
+    this.element.style.top = `-${this.element.getBoundingClientRect().height + 10}px`;
     this.element.style.left = `calc(${shiftX}% - ${
       this.element.offsetWidth / 2
     }px)`;
@@ -30,7 +30,7 @@ class Tooltip {
   positionVertical(shiftX: string | number): void {
     this.element.style.top = `calc(${shiftX}% -
     ${this.element.offsetHeight / 2}px)`;
-    this.element.style.left = `-${this.element.offsetWidth + 15}px`;
+    this.element.style.left = `-${this.element.getBoundingClientRect().width + 15}px`;
   }
 
   setRotate(orientation: Rotate): void {
@@ -42,7 +42,6 @@ class Tooltip {
     if (this.orientation === rotation.HORIZONTAL) {
       return clientRect.left;
     }
-
     return clientRect.top;
   }
 

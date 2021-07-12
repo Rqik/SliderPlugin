@@ -37,7 +37,7 @@ class Present {
     this.model.observer.unsubscribe(callBack);
   }
 
-  sliderModify(options: IStateEl): void {
+  setState(options: IStateEl): void {
     this.model.setStateValid(options, true);
     this.view.setState(this.model.getState);
     this.rotate = this.model.getState.rotate;

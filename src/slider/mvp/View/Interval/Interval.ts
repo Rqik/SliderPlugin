@@ -8,7 +8,6 @@ interface IRenderInterval {
   min: number;
   max: number;
   count: number;
-  stepSize: number
   intervalStep: number;
 }
 
@@ -27,71 +26,59 @@ class Interval {
     min,
     max,
     count,
-    stepSize,
     intervalStep,
   }: IRenderInterval): HTMLElement {
     this.interval.textContent = '';
-
+    let maxVal = max;
+    let minVal = min;
+    if (min > max) {
+      [maxVal, minVal] = [minVal, maxVal];
+    }
     if (count <= 0) {
       return this.interval;
     }
     const rangeSize = Math.abs(max - min);
-
     let step;
     const fragment = document.createDocumentFragment();
-    const maxCountStep = Math.round(rangeSize / stepSize);
-    let countStep: number;
-    let decimal: number | string = String(stepSize).split('.')[1] || 1;
-    decimal = String(decimal).length;
-    if (maxCountStep <= count) {
-      countStep = maxCountStep + 1;
 
-      // eslint-disable-next-line no-param-reassign
-      intervalStep = stepSize;
-    } else {
-      countStep = count;
-    }
-    this.items = Array(countStep + 1)
+    const intervalSteps: Set<number> = new Set();
+    Array(count + 1)
       .fill('')
-      .map((_, i) => {
-        const li = document.createElement('li');
+      .forEach((_, i) => {
+        step = Math.round((i * intervalStep + min) * 10 ** 5) / 10 ** 5;
 
-        step = Math.floor((i * intervalStep + min) * 10e6) / 10e6;
-        li.className = className.INTERVAL_ITEM;
-
-        if (stepSize) {
-          step = Math.round(step / stepSize) * stepSize;
-          step = Math.round(step * 10 ** Number(decimal)) / 10 ** Number(decimal);
-        }
-        if (step > max) {
+        if (step > maxVal) {
           step -= min;
         }
-        if (step > max) {
+        if (step > maxVal) {
           step = max;
         }
-        if (step < min) {
+        if (step < minVal) {
           step = min;
         }
         if (i === 0) {
           step = min;
         }
-        if (i === countStep) {
+        if (i === count) {
           step = max;
         }
-
-        const percent = Math.abs((step - min) / rangeSize) * 100;
-
-        if (this.rotate === rotation.HORIZONTAL) {
-          li.style.left = `${percent}%`;
-        } else {
-          li.style.top = `${percent}%`;
-        }
-
-        li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${step} </div>`;
-        fragment.append(li);
-        return li;
+        intervalSteps.add(step);
       });
+    intervalSteps.forEach((size) => {
+      const li = document.createElement('li');
 
+      li.className = className.INTERVAL_ITEM;
+
+      li.innerHTML = `<div class=${className.INTERVAL_ITEM_TEXT}> ${size} </div>`;
+      const percent = Math.abs((size - min) / rangeSize) * 100;
+      if (this.rotate === rotation.HORIZONTAL) {
+        li.style.left = `${percent}%`;
+      } else {
+        li.style.top = `${percent}%`;
+      }
+      fragment.append(li);
+      this.items.push(li);
+    });
     this.interval.append(fragment);
     return this.interval;
   }

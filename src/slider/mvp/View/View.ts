@@ -88,7 +88,6 @@ class View {
       min: this.state.min,
       max: this.state.max,
       count: this.state.intervalCount,
-      stepSize: this.state.stepSize,
       intervalStep: this.state[keyChanges.INTERVAL_STEP],
     });
   }

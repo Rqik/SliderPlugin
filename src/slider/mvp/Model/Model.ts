@@ -90,9 +90,9 @@ class Model {
         this.updateCoordinate(data[keyChanges.COORDINATES] as ICoords);
         break;
       case keyChanges.INTERVAL:
-        this.state.step = Model.convertCorrectNumber(this.convertNumberInPercent(
-          Number(data[keyChanges.INTERVAL]),
-        ));
+        this.state.step = Model.convertCorrectNumber(
+          this.convertNumberInPercent(Number(data[keyChanges.INTERVAL])),
+        );
         this.setStateValid(data);
         this.defineLeftVal();
         this.defineRightVal();
@@ -111,7 +111,7 @@ class Model {
       ...key,
     };
     if (validate) {
-      this.convertToNumber();
+      this.convertToValidNumber();
     }
     Object.keys(key).forEach((el) => {
       this.notify(stateOld, el);
@@ -134,7 +134,7 @@ class Model {
     });
   }
 
-  private convertToNumber(): void {
+  private convertToValidNumber(): void {
     this.state.min = Model.convertCorrectNumber(this.state.min);
     this.state.max = Model.convertCorrectNumber(this.state.max);
 
@@ -155,6 +155,7 @@ class Model {
     this.state.shiftLeft = Number.isFinite(this.state.shiftLeft)
       ? Model.transformRange(this.state.shiftLeft)
       : 0;
+    this.state.intervalCount = this.state.intervalCount < 0 ? 0 : this.state.intervalCount;
     this.state[keyChanges.INTERVAL_STEP] = this.defineIntervalStep();
   }
 
@@ -222,14 +223,8 @@ class Model {
     return Math.round(percent / this.percent) * this.percent;
   }
 
-  private defineDecimalPlacesCount(): number {
-    const str: string = this.state.stepSize.toString();
-    let decimalPlaces = 10;
-
-    if (str.includes('.')) {
-      decimalPlaces = Number(str.split('.').pop()?.length || 0);
-    }
-    return decimalPlaces;
+  private roundNumber(value: number): number {
+    return Math.round(value * 10 ** 8) / 10 ** 8;
   }
 
   private convertNumberInPercent(value: number): number {
@@ -237,26 +232,29 @@ class Model {
   }
 
   private defineLeftVal(): void {
-    const leftValue = ((this.state.max - this.state.min) * this.state.shiftLeft) / 100
-      + this.state.min;
-
-    this.state.minValue = Number(
-      leftValue.toFixed(this.defineDecimalPlacesCount()),
+    this.state.minValue = this.roundNumber(
+      ((this.state.max - this.state.min) * this.state.shiftLeft) / 100
+        + this.state.min,
     );
   }
 
   private defineRightVal(): void {
-    const rightValue = ((this.state.max - this.state.min) * this.state.shiftRight) / 100
-      + this.state.min;
-    this.state.maxValue = Number(
-      rightValue.toFixed(this.defineDecimalPlacesCount()),
-    );
+    this.state.maxValue = this.roundNumber((
+      (this.state.max - this.state.min) * this.state.shiftRight) / 100
+      + this.state.min);
   }
 
   private defineIntervalStep(): number {
-    const step = (this.state.max - this.state.min) / this.state.intervalCount;
+    let step = (this.state.max - this.state.min) / this.state.intervalCount;
+    if (Math.abs(step) < this.state.stepSize) {
+      return Math.sign(step) * this.state.stepSize;
+    }
+    if (this.state.stepSize) {
+      step = Math.round(step / this.state.stepSize) * this.state.stepSize;
 
-    return Number(step.toFixed(this.defineDecimalPlacesCount()));
+      step = Math.round(step * 10 ** 8) / 10 ** 8;
+    }
+    return step;
   }
 
   private static convertCorrectNumber(num: string | number): number {

@@ -65,14 +65,14 @@ class SliderPlugin {
     const className = `${selector.replace(/\W+/gi, '')}-${ind}_i-slider`;
     this.sliders.classList.add(className);
     const pr = new Present(`.${className}`);
-    pr.sliderModify(opt as IStateEl);
+    pr.setState(opt as IStateEl);
     this.presents = pr;
     return this;
   }
 
   data(data: IStateEl): this {
     if (this.presents) {
-      this.presents.sliderModify(data);
+      this.presents.setState(data);
     }
     return this;
   }

@@ -11,7 +11,6 @@ describe('Interval test', () => {
       min: 10,
       max: 100,
       count: 0,
-      stepSize:0,
       intervalStep: 0,
     });
     const s = document.createElement('ul');

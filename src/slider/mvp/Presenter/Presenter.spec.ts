@@ -37,11 +37,11 @@ describe('Presenter test', () => {
 
     expect(init).toHaveBeenCalled();
     expect(render).toHaveBeenCalled();
-    present.model.getState.rotate = rotation.HORIZONTAL;
-    present.sliderModify({ rotate: rotation.HORIZONTAL });
+    // present.model.getState.rotate = rotation.HORIZONTAL;
+    present.setState({ rotate: rotation.HORIZONTAL });
 
-    present.model.getState.rotate = rotation.VERTICAL;
-    present.sliderModify({ rotate: rotation.VERTICAL });
+    // present.model.getState.rotate = rotation.VERTICAL;
+    present.setState({ rotate: rotation.VERTICAL });
 
     expect(init).toHaveBeenCalled();
     expect(init).toHaveBeenCalledTimes(3);

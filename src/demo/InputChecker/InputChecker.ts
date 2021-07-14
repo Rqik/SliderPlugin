@@ -1,14 +1,12 @@
 import { boundMethod } from 'autobind-decorator';
 
-import { ISlider } from '../../slider/types/interfaces';
+import { IPState } from '../../slider/types/interfaces';
 import { IInputChecker, IMakeEventCheck } from './types';
 
 class InputChecker {
   private $form: JQuery;
 
-  private $sliderDOM: JQuery;
-
-  private slider: ISlider;
+  private $slider: JQuery;
 
   private $inputRotate: JQuery;
 
@@ -18,24 +16,21 @@ class InputChecker {
 
   private $inputRange: JQuery;
 
-  private readonly inputsValue: string[];
+  private readonly inputNames: string[];
 
   private readonly inputCheck: [string, Array<string | boolean>][];
 
   private readonly classRotate: string;
 
-  constructor({ $form, $sliderDOM, slider, classRotate }: IInputChecker) {
+  constructor({ $form, $sliderDOM, classRotate }: IInputChecker) {
     this.$form = $form;
-    this.$sliderDOM = $sliderDOM;
-    this.slider = slider;
+    this.$slider = $sliderDOM;
     this.$inputRotate = this.$form.find("input[name='rotate']");
     this.$inputRange = this.$form.find("input[name='range']");
     this.$inputCurrentLeft = this.$form.find("input[name='minValue']");
-    this.$inputCurrentRight = this.$form.find(
-      "input[name='maxValue']",
-    );
+    this.$inputCurrentRight = this.$form.find("input[name='maxValue']");
     this.classRotate = classRotate;
-    this.inputsValue = [
+    this.inputNames = [
       'max',
       'min',
       'maxValue',
@@ -58,55 +53,37 @@ class InputChecker {
   }
 
   private addEventSlider(): void {
-    this.$sliderDOM.on('mousedown', this.handleClick);
-    this.$sliderDOM.on('touchmove', this.handleClick);
+    this.$slider.sliderRqik('subscribe', this.onChange);
     this.$inputRotate.on('click', this.addClassForm);
     this.$inputRange.on('change', this.disabledInputCurrentLeft);
   }
 
   @boundMethod
   private disabledInputCurrentLeft() {
-    if (!this.$inputRange.prop('checked')) {
-      this.$inputCurrentLeft.prop('disabled', true);
-    } else {
+    if (this.$inputRange.prop('checked')) {
       this.$inputCurrentLeft.prop('disabled', false);
+    } else {
+      this.$inputCurrentLeft.prop('disabled', true);
     }
   }
 
   @boundMethod
   private addClassForm(): void {
     if (this.$inputRotate.is(':checked')) {
-      this.$sliderDOM.addClass(this.classRotate);
+      this.$slider.addClass(this.classRotate);
     } else {
-      this.$sliderDOM.removeClass(this.classRotate);
+      this.$slider.removeClass(this.classRotate);
     }
   }
 
   @boundMethod
-  private handleClick(): void {
-    document.addEventListener('mousemove', this.eventChange);
-    document.addEventListener('mouseup', this.removeMouse);
-
-    document.addEventListener('touchmove', this.eventChange);
-    document.addEventListener('touchend', this.removeTouch);
-  }
-
-  @boundMethod
-  private removeMouse(): void {
-    document.removeEventListener('mousemove', this.eventChange);
-    document.onmouseup = null;
-  }
-
-  @boundMethod
-  private removeTouch(): void {
-    document.removeEventListener('touchmove', this.eventChange);
-    document.ontouchend = null;
-  }
-
-  @boundMethod
-  private eventChange(): void {
-    this.$inputCurrentLeft.val(this.slider.getData()[0].minValue);
-    this.$inputCurrentRight.val(this.slider.getData()[0].maxValue);
+  private onChange(data: IPState): void {
+    if (data.minValue) {
+      this.$inputCurrentLeft.val(Number(data.minValue));
+    }
+    if (data.maxValue) {
+      this.$inputCurrentRight.val(Number(data.maxValue));
+    }
   }
 
   private makeEventCheck({
@@ -116,13 +93,14 @@ class InputChecker {
   }: IMakeEventCheck): (e: JQueryEventObject) => void {
     return (event: JQueryEventObject): void => {
       if ($(event.currentTarget).prop('checked')) {
-        this.slider.data({ [nameAtr]: active });
+        this.$slider.sliderRqik({ [nameAtr]: active });
       } else {
-        this.slider.data({ [nameAtr]: disable });
+        this.$slider.sliderRqik({ [nameAtr]: disable });
       }
     };
   }
 
+  @boundMethod
   private runChange(nameAtr: string): void {
     const $input = this.$form.find(`input[name='${nameAtr}']`);
     const value = $input.val() || 0;
@@ -131,21 +109,21 @@ class InputChecker {
     const isValidVal = value !== '-' || value !== undefined;
 
     if (isValidVal) {
-      this.slider.data({ [nameAtr]: +value });
+      this.$slider.sliderRqik({ [nameAtr]: +value });
     }
   }
 
+  @boundMethod
   private makeEventInputChange(nameAtr: string): () => void {
     const $input = this.$form.find(`input[name='${nameAtr}']`);
     let value = $input.val() || 0;
-
+    const { $slider } = this;
     return (): void => {
       value = $input.val() || 0;
       if (value === '-') {
         return;
       }
-
-      this.slider.data({ [nameAtr]: Number(value) });
+      $slider.sliderRqik({ [nameAtr]: Number(value) });
 
       const isCurrentInput = nameAtr === 'stepSize';
       if (isCurrentInput) {
@@ -153,13 +131,14 @@ class InputChecker {
         this.$inputCurrentRight.attr('step', Number(value));
       }
 
-      const s = this.slider.getData()[0][nameAtr];
+      const s = $slider.sliderRqik('settings')[nameAtr];
+
       $input.attr('value', Number(s));
       $input.val(Number(s));
-      this.eventChange();
     };
   }
 
+  @boundMethod
   private runCheckChange(
     nameAtr: string,
     value: (string | number | boolean)[],
@@ -170,14 +149,14 @@ class InputChecker {
     item.on('click', this.makeEventCheck({ nameAtr, active, disable }));
 
     if (item.prop('checked')) {
-      this.slider.data({ [nameAtr]: active });
+      this.$slider.sliderRqik({ [nameAtr]: active });
     } else {
-      this.slider.data({ [nameAtr]: disable });
+      this.$slider.sliderRqik({ [nameAtr]: disable });
     }
   }
 
   private actionForm(): void {
-    this.inputsValue.forEach((el) => this.runChange(el));
+    this.inputNames.forEach((el) => this.runChange(el));
     this.inputCheck.forEach((el) => this.runCheckChange(...el));
   }
 }

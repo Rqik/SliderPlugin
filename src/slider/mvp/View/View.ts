@@ -250,8 +250,6 @@ class View {
     let target;
     const { cordClient } = this.getCordClientAndEvent(event);
 
-    // const isVertiv
-
     this.resizeSlider();
 
     if (event.cancelable) {

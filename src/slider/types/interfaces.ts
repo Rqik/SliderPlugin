@@ -15,7 +15,6 @@ interface ISlider {
   data: (opt: IStateEl) => ISlider;
   getData: () => IState[];
 }
-
 interface IState {
   selector: string;
   min: number;
@@ -47,8 +46,9 @@ type UniversalSate = {
 } & IStateEl | IState;
 
 type Options = number | string | boolean;
-
+type IPState = Partial<IState>
 export {
+  IPState,
   ICoords,
   IState,
   Rotate,

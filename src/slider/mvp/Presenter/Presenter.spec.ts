@@ -44,7 +44,7 @@ describe('Presenter test', () => {
     present.setState({ rotate: rotation.VERTICAL });
 
     expect(init).toHaveBeenCalled();
-    expect(init).toHaveBeenCalledTimes(3);
+    expect(init).toHaveBeenCalledTimes(1);
   });
   test('unsubscribe ', () => {
     const kek = jest.fn((el) => el * 2);

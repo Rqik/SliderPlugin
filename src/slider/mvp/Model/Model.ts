@@ -104,21 +104,22 @@ class Model {
     this.notify(stateOld, Object.keys(data)[0]);
   }
 
-  setStateValid(key: IStateEl, validate = false): void {
+  setStateValid(state: IStateEl, validate = false): void {
     const stateOld = this.getState;
     this.state = {
       ...this.state,
-      ...key,
+      ...state,
     };
     if (validate) {
       this.convertToValidNumber();
     }
-    Object.keys(key).forEach((el) => {
+    Object.keys(state).forEach((el) => {
       this.notify(stateOld, el);
     });
   }
 
   private notify(state: IState, key: string): void {
+    const newProps: IStateEl = {};
     if (key === keyChanges.POSITION) {
       this.observer.broadcast({ [keyChanges.POSITION]: this.getState.step });
       return;
@@ -129,9 +130,12 @@ class Model {
     }
     this.stateKey.forEach((element) => {
       if (state[element] !== this.getState[element]) {
-        this.observer.broadcast({ [element]: this.getState[element] });
+        newProps[element] = this.getState[element];
       }
     });
+    if (Object.keys(newProps).length !== 0) {
+      this.observer.broadcast({ ...newProps });
+    }
   }
 
   private convertToValidNumber(): void {
@@ -139,7 +143,7 @@ class Model {
     this.state.max = Model.convertCorrectNumber(this.state.max);
 
     this.state.stepSize = Model.convertCorrectNumber(this.state.stepSize);
-    this.state.stepSize = this.state.stepSize < 0 ? 0 : this.state.stepSize;
+    this.state.stepSize = this.state.stepSize <= 0 ? 0 : this.state.stepSize;
     this.state.maxValue = Model.convertCorrectNumber(this.state.maxValue);
     this.state.minValue = Model.convertCorrectNumber(this.state.minValue);
 
@@ -155,7 +159,9 @@ class Model {
     this.state.shiftLeft = Number.isFinite(this.state.shiftLeft)
       ? Model.transformRange(this.state.shiftLeft)
       : 0;
-    this.state.intervalCount = this.state.intervalCount < 0 ? 0 : this.state.intervalCount;
+    this.state.intervalCount = this.state.intervalCount < 0
+      ? 0
+      : Model.convertCorrectNumber(this.state.intervalCount);
     this.state[keyChanges.INTERVAL_STEP] = this.defineIntervalStep();
   }
 
@@ -223,7 +229,7 @@ class Model {
     return Math.round(percent / this.percent) * this.percent;
   }
 
-  private roundNumber(value: number): number {
+  private static roundNumber(value: number): number {
     return Math.round(value * 10 ** 8) / 10 ** 8;
   }
 
@@ -232,16 +238,17 @@ class Model {
   }
 
   private defineLeftVal(): void {
-    this.state.minValue = this.roundNumber(
+    this.state.minValue = Model.roundNumber(
       ((this.state.max - this.state.min) * this.state.shiftLeft) / 100
         + this.state.min,
     );
   }
 
   private defineRightVal(): void {
-    this.state.maxValue = this.roundNumber((
-      (this.state.max - this.state.min) * this.state.shiftRight) / 100
-      + this.state.min);
+    this.state.maxValue = Model.roundNumber(
+      ((this.state.max - this.state.min) * this.state.shiftRight) / 100
+        + this.state.min,
+    );
   }
 
   private defineIntervalStep(): number {

@@ -1,6 +1,4 @@
 const enum keyChanges {
-  MAX='max',
-  MIN='max',
   SHIFT_LEFT = 'shiftLeft',
   SHIFT_RIGHT = 'shiftRight',
   POSITION = 'position',
@@ -10,8 +8,12 @@ const enum keyChanges {
   INTERVAL_STEP = 'intervalStep',
   WIDTH = 'widthSlider',
   HEIGHT = 'heightSlider',
-  MIN_VALUE = 'maxValue',
-  MAX_VALUE = 'minValue'
+}
+
+const enum methodTypes {
+  SUBSCRIBE = 'subscribe',
+  UNSUBSCRIBE = 'unsubscribe',
+  SETTINGS = 'settings',
 }
 
 const enum rotation {
@@ -40,4 +42,4 @@ const enum slider {
   SLIDER_ACTIVE_ZONE = 'slider-range__active-zone',
 }
 
-export { keyChanges, interval, tooltipValue, button, slider, rotation };
+export { methodTypes, keyChanges, interval, tooltipValue, button, slider, rotation };

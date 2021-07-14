@@ -91,20 +91,21 @@ describe('View test', () => {
     });
 
     test('slider style property check', () => {
-      const startView = jest.spyOn(View.prototype as any, 'startView');
+      const init = jest.spyOn(View.prototype as any, 'init');
       let view = new View(state);
       view.setState(state2);
-      expect(startView).toHaveBeenCalled();
-      expect(startView).toHaveBeenCalledTimes(1);
+      expect(init).toHaveBeenCalled();
+      expect(init).toHaveBeenCalledTimes(1);
     });
 
     test('render calls function ', () => {
       const show = jest.spyOn(View.prototype as any, 'show');
       const addElem = jest.spyOn(View.prototype as any, 'addElem');
       const addAction = jest.spyOn(View.prototype as any, 'addAction');
-      const resizeSlider = jest.spyOn(View.prototype as any, 'resizeSlider');
+      const notifyCoords = jest.spyOn(View.prototype as any, 'notifyCoords');
       const installMove = jest.spyOn(View.prototype as any, 'installMove');
       const initMove = jest.spyOn(View.prototype as any, 'initMove');
+
       view.render();
 
       expect(show).toHaveBeenCalled();
@@ -116,8 +117,8 @@ describe('View test', () => {
       expect(addAction).toHaveBeenCalled();
       expect(addAction).toHaveBeenCalledTimes(1);
 
-      expect(resizeSlider).toHaveBeenCalled();
-      expect(resizeSlider).toHaveBeenCalledTimes(1);
+      expect(notifyCoords).toHaveBeenCalled();
+      expect(notifyCoords).toHaveBeenCalledTimes(1);
 
       expect(installMove).toHaveBeenCalled();
       expect(installMove).toHaveBeenCalledTimes(1);

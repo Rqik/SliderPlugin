@@ -3,7 +3,6 @@ import { boundMethod } from 'autobind-decorator';
 import {
   IState,
   UniversalSate,
-  Rotate,
   IStateEl, CallBack,
 } from '../../types/interfaces';
 import { Model } from '../Model/Model';
@@ -14,17 +13,20 @@ class Present {
 
   private view: View;
 
-  private rotate: Rotate;
-
   constructor(selector: string) {
     this.model = new Model(selector);
     this.view = new View(this.model.getState);
-    this.rotate = this.model.getState.rotate;
     this.init();
   }
 
   getState(): IState {
     return this.model.getState;
+  }
+
+  setState(options: IStateEl): void {
+    this.model.setStateValid(options, true);
+    this.view.setState(this.model.getState);
+    this.view.render();
   }
 
   @boundMethod
@@ -35,13 +37,6 @@ class Present {
   @boundMethod
   unsubscribe(callBack: CallBack):void {
     this.model.observer.unsubscribe(callBack);
-  }
-
-  setState(options: IStateEl): void {
-    this.model.setStateValid(options, true);
-    this.view.setState(this.model.getState);
-    this.rotate = this.model.getState.rotate;
-    this.view.render();
   }
 
   private init(): void {

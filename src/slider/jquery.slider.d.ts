@@ -1,7 +1,10 @@
-import { ISlider, IStateEl } from './types/interfaces';
+import { CallBack, IPState, IState } from './types/interfaces';
 
 declare global {
   interface JQuery {
-    sliderRqik: (opt?: IStateEl) => ISlider;
+    sliderRqik (
+      method?: IPState | string,
+      options?: IPState | CallBack,
+    ) :JQuery| JQuery<HTMLElement>| IState | IState[] | any
   }
 }

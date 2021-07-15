@@ -15,7 +15,7 @@ import { callPresent, makeMethodPresent } from './utils/helper';
   $.fn.sliderRqik = function initialPlugin(
     method?: IPState | string,
     options?: IPState | CallBack,
-  ) : JQuery | JQuery<HTMLElement> | IState | IState[]| any {
+  ): JQuery | JQuery<HTMLElement> | IState | IState[] | any {
     const $this = $(this);
 
     if (!$this.first().data('sliderRqik')) {

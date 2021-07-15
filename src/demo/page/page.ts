@@ -33,3 +33,10 @@ new InputChecker({
   $sliderDOM: $plug4,
   classRotate: 'slider_vertical',
 }).init();
+
+const db = (ds) => {
+  console.log(ds);
+};
+
+console.log($plug1.sliderRqik('subscribe', db));
+$plug1.sliderRqik({ max: 999 });

@@ -1,15 +1,15 @@
-import { Present } from '../mvp/Presenter/Presenter';
+import { Presenter } from '../mvp/Presenter/Presenter';
 import { CallBack, IPState, IState, IStateEl } from '../types/interfaces';
 import { methodTypes } from '../types/constants';
 
-function callPresent(element: HTMLElement, ind: number): Present {
+function callPresent(element: HTMLElement, ind: number): Presenter {
   const slider = element;
   const selector = slider.className;
   const className = `${selector.replace(/\W+/gi, '_')}-${ind}_rqik`;
 
   slider.classList.add(className);
 
-  const present = new Present(`.${className}`);
+  const present = new Presenter(`.${className}`);
   present.setState({ ...slider.dataset } as IStateEl);
 
   return present;

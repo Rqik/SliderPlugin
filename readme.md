@@ -69,7 +69,7 @@ npm install
 
 ### `npm run start`
 
-Запускает _development_ сборку поднимает локальный сервер с результатом cборки.
+Запускает _development_ сборку поднимает локальный сервер с результатом сборки.
 Не сохраняет результат в файловой системе. Запускает ваш браузер по умолчанию
 (если он не запущен), создает вкладку с адресом лок. сервера и переходит к ней.
 
@@ -119,7 +119,7 @@ npm install
 
 **Model** -отвечает за текущее состояние слайдера, хранит в себе стартовые значения. Имеет методы для изменения текущего состояния и его возврата.
 
-**View** - отвечает за визуальную отрисовку самого слайдера. Включает в себя отдельные компоненты **subView** и **Observer**. _**subView**_ - хранит в себе компоненты кнопок, подсказок, интервалов и активной зоны. **_Observer_** - добавляет **View** возможность передачи изменения состояния для подписчиков _subscriber_ без необходимости кто это будет. Он передает значение для всех subscriber через broadcast метод.
+**View** - отвечает за визуальное отображение самого слайдера. Включает в себя отдельные компоненты **subView** и **Observer**. _**subView**_ - хранит в себе компоненты кнопок, подсказок, интервалов и активной зоны. **_Observer_** - добавляет **View** возможность передачи изменения состояния для подписчиков _subscriber_ без необходимости кто это будет. Он передает значение для всех subscriber через broadcast метод.
 
 **Presenter** - отвечает за инициализацию **View** и **Model**. Решает вопрос с передачей данных между компонентами. Подписывается на изменения во View и вызывает соответствующие методы в Model. Принимает в себя значения для инициализации которые передает в Model. Служит посредником. Вызывает методы перерисовки в View и изменения состояния.
 
@@ -131,10 +131,10 @@ npm install
 ## Способ подключения
 
 Слайдер автоматически проинициализируется на элементах с классом
-**_.js-slider-rqik_** , при этом опции можно передать через **_data_** атрибуты.
+**_.slider-rqik_** , при этом опции можно передать через **_data_** атрибуты.
 
 ```html
-<div class="js-slider-rqik" data-min-value="-999"></div>
+<div class="slider-rqik" data-min-value="99"></div>
 ```
 
 ## _Ручная инициализация_
@@ -158,9 +158,9 @@ $('.plug').sliderRqik({
   showTooltip: true, // показывать текущее значение над указателем
   showInterval: true, // показать интервал
   intervalCount: 2, // количество интервалов
-  stepSize: 1, // шаг движения указателя в числах
-  tooltipRightValue: 50, // установка значений в числах
-  tooltipLeftValue: 0, // установка значений в числах
+  stepSize: 1, // шаг движения указателя
+  maxValue: 50, // установка значения
+  minValue: 0, // установка значения
   shiftLeft: 0,
   shiftRight: 0,
 });
@@ -189,8 +189,8 @@ $('.plug').sliderRqik({
 
 ```javascript
 $('.plug').sliderRqik({
-  tooltipRightValue: 10, // правая кнопка
-  tooltipLeftValue: 0, // левая кнопка
+  maxValue: 10, // правая кнопка
+  mштValue: 0, // левая кнопка
 });
 ```
 
@@ -233,7 +233,7 @@ $('.plug').sliderRqik({ showTooltip: false });
 
 ---
 
-Отвечает за отображание или скрытие интервалов
+Отвечает за отображение или скрытие интервалов
 Имеет два состояния **_true | false_**
 По умолчанию **_true_**
 
@@ -245,7 +245,7 @@ $('.plug').sliderRqik({ showInterval: false });
 
 ---
 
-Отвечает за отображание или скрытие интервалов
+Отвечает за отображение или скрытие интервалов
 Принимает числовой параметр от 0 и выше
 По умолчанию **_2_**
 
@@ -274,16 +274,24 @@ $('.plug').sliderRqik({ stepSize: 10 });
 
 ## Установка значений для уже созданных слайдеров
 
-Метод **_data_** принимает в себя объект с новыми параметрами для слайдера
+Вызов метода без параметров **_sliderRqik_** возвращает экземпляр jquery элемента
+Значения можно установить через передачу через ключевое слово _settings_ и вторым аргумент передать объект с нужными параметрами
 
 ```javascript
-let slider = $('.plug').sliderRqik();
-slider.data({ max: 99999 });
+let $slider = $('.plug').sliderRqik();
+$slider.sliderRqik('settings', { max: 99999 }); // установит максимальное значение 99999
+```
+
+Доступна возможность передачи объекта без ключевого слова
+
+```javascript
+let $slider = $('.plug').sliderRqik();
+$slider.sliderRqik({ max: 99999 }); // установит максимальное значение 99999
 ```
 
 ## Получения текущих значений
 
-Метод **_getData_** вернет массив с объектами в которых записаны текущие значения
+По ключу **_settings_** можно получить текущее состояние слайдера
 
 ```javascript
 // index.html
@@ -291,10 +299,44 @@ slider.data({ max: 99999 });
 <div class="plug"></div>
 
 // index.MVP
-let slider = $(".plug").sliderRqik();
-let res = slider.getdata()
+let sliderProps = $(".plug").sliderRqik('settings');
 
-// res = [{...},{...}]
+// sliderProps теперь хранит состояние обоих элементов
+// sliderProps = [{},{}]
+```
+
+если экземпляр объекта один вернет объект состояния
+
+## Подписка на изменения
+
+По ключу **_subscribe_** можно подписаться на события изменения.
+После изменения состояния будут передаваться измененные свойства
+
+```javascript
+// index.html
+<div class="plug"></div>
+
+// index.MVP
+const fn = (data) = {
+ console.log(data)
+}
+
+let $slider = $(".plug").sliderRqik('subscribe' , fn);
+$slider.sliderRqik({max:999})
+
+// в консоли будет  {max:999 } пересчитанные позиции кнопок и размера интервала
+```
+
+## Отписка от изменений
+
+По ключу **_unsubscribe_** можно отписаться от событий
+
+```javascript
+const fn = (data) = {
+ console.log(data)
+}
+
+let $slider = $(".plug").sliderRqik('unsubscribe' , fn);
 ```
 
 ## <a name="structure"></a> 🗂️ Структура проекта
@@ -310,6 +352,6 @@ let res = slider.getdata()
 - **/slider** - **mvp** компоненты архитектуры проекта - **styles** базовые стили для слайдера - **types** типизированные константы и интерфейсы - **utils** вспомогательные компоненты
   **/dist** - хранит результат сборки проекта.
 
-## <a name="diagram"></a> 🖇 [Диаграмма](https://viewer.diagrams.net/?highlight=0000ff&edit=_blank&layers=1&nav=1#R7Z1bb%2BI4FMc%2FDdLuQ0fkRsJjuXQuS2eq0p3t7MvKEBc8DTFyzG0%2B%2FdjEIYADNSUm7cpVpWLnJMT%2B%2Fc%2FJie2kNac9WX4kYDq%2BxSGManY9XNacTs22rboTsD%2B8ZpXWeK6oGBEUCqO8oo9%2BwWxPUTtDIUx2DCnGEUXT3cohjmM4pDt1gBC82DV7wtHut07BCEoV%2FSGI5Np%2FUEjHaW1g%2B3n9J4hG4%2BybrUYz3TIBmbFoSTIGIV5sVTndmtMmGNP002TZhhHvvKxfPt3UO%2B1r5%2Bu8efPjr%2F8Gj8vwG71KD3Zzyi6bJhAY01cfeta7%2F5rg3vUX8Pxwh0adngWR2KU%2BB9FM9NcdgQn7GkhEo%2Bkq68lkgSYRiFmp9YRj2hdbLFYGERrF7PMw3dNpzSGhiEG4FhsonrLa4RhFYQ%2Bs8Iw3I6Fg%2BJyVWmNM0C92WBCJY7LNhAo92Y0diz7fk1XXWS07XWZzl%2FWNtVd1C5Y7hj2QUFExxFEEpgkabJoxAWSE4hamFE%2BEkWLXC0S82XC5JTyB4iPEE0jJipmIrYHoeeFVVlOUF7lGrYaoG%2B%2Fo0xa%2BIfxitDl0zp59EPhPkEJTksIkDQZ7MmANpGs8BD%2FDNo4w492JcaoLFEV7VZk0IvhEDwojmYIhike9tU3HzWvuRct5FWb7PkVrDxyjMIQxh4opoCAlyHFNMYrpume8FvtlHdiuf%2FBqHjvxNitbeZn9cnNC2zhmbQFozRcyeSwgl0gB%2BaMe9DJ5gZppWYl0Zlc6aEsCPUdwUePf51i55g3y0pB7dsXIbQm5xDhCa3Yp4%2BxKab0K8IShimBO9IED71xZEnVHpu4UEI7AAEZ3OEEUYX58ktruka8Krh%2BowQ1OZosHP3lGZNfXHSAuwhFLpwhP0wTBRBwvScJEVIVJuA35qDKcrbYJJRnHL00bgb5Yz4pCHyfEAVeKA9%2FXod9kehfL9JympagJV1em50kqYAQolGRgvL%2FQed5PpmfLpL8NEkjmBXd3BvZ5sC%2BZ4z32%2FMGU3H%2Fufln406T11Pzx0LtqSKxbMxbeYkO6ZNKqCZ820rJXt2eEt%2FL7usbwLpe3VXcrjuO%2BBLy%2Fvg0wqMtG7SgOw2nzbUsekf3MM21WNrTLpu1VnaDJ12wJshmXeS3dQDEjO31gRg2uI1%2BnWRtN2NaAWnX2RN%2BdliOxhiGihaMrhvaZt9VW1WHbkmnfFs6VmYG0EgfSnMbuSJrlO2o62ISH8oUgD6iaoTQFn9840JscS3vutu4B%2Bdt%2FXEwe%2Fm3cdEcouilI1cxQmi7Ylc%2BXWnLqZhLz0vDqmzFVc%2BVsCc1%2B1BajaMafywaucRpUkbi85oWn59QsetFIfbNUrbq7Mjk949j7JkXTwtu54MRI8TnLSRrnvbVaxuAuD3ej6mkRK5Bw92cDs6LlwitafEtx9G0TIMofapUd38yaKDp%2BoIz%2FrSxrcQr8fj0feg%2FikYn0pQOv%2FHbckSfAzYoHncQvucSl%2BJTlp1HMaiY9rKtf3pI9YGdG27TwVV3Tois5s%2BXkrDtnrTw4fm6S9RKTdW9v1sy1VbN1T9esmS1fzjMtJJIYTHwvdqb3k67bcrpuwntpeFWTc2233vLFO5kNkiFBA5OYl067oRi8HV2x25FnUgYEg3DIL3cGd8m4Vde1acNty%2Fdhs9j4tzbglmp2ps%2FBZeIHHjYwabq%2BMXVPNUnX9joQV76uf3q47X3F%2FG0%2Bxu%2BP%2Bv3Gh95Pku7KS1oPvwnI4D4Td%2BUj6q6cxpl7stLwXnCBWzFdu4Aua26dHX6Mwz%2Foagr%2FrDnXrIZ%2FNP5dtgAuueCt8DHCusQUhiOYpWisS8Z4hGMQdfNa1tGzOISh6ObcpofX3sqd9SekdCVyMDCjmGdhdJJnaNuRwj45W0rwjAzhMV2LixTLBEfwGDHRfN7mo7gIjABF822jYhhi1zuuvTxpc3aTts2bArMjpOcpdsqJXhMCVltmQtEHv2b%2FuQexOvlGzdyu14%2BaB9Yxc%2FYhPd1ci5v%2Be7085YvNBeTJNEhWj2L%2FdeEHL7BYIYqd5fbGzkqUtMs6ey3mS6r2ylb1WSHGfU8MSybmKxLLVqqUHIjODCCe454SQHzfq2mPCH4Vanq9Ko69l%2BNlVfhvQhXe%2FpBDcFQVe%2BZB3dKviuB%2FoIqGoiqyJS8Vq2Ivp3HFU%2FSHVLFnHtiND82tn0C%2FRrJnO961SLIltC%2FHjsabUIl0SWkcTzL37RviLduHZXWeve%2Fu2GtSXiVprPZ0tKkasJyq8tHCZ7ya7ysMHHvI%2BMWut0vPIM57vK6S4YY3ci9gq6Z95UN7Veh290KlK96CdCi0yvZnhVZWzP9lQmqe%2F%2BMJp%2Fsb)
+## <a name="diagram"></a> 🖇 [Диаграмма](https://viewer.diagrams.net/?highlight=0000ff&edit=_blank&layers=1&nav=1&title=diagram.png#R7Z1dc5s4FIZ%2FjS%2B7AwgDvow%2FkrbrtNkk26Z7syMbxVaDkUfIX%2F31K4wINsI2sZFxtupkppF8AEvPe46OhCAN0Jksbyicjm%2BJj4KGZfjLBug2LMu0PcD%2Fi2tWSY3rmUnFiGJfGGUVD%2FgXEpWGqJ1hH0VbhoyQgOHpduWQhCEasq06SClZbJs9k2D7qlM4QlLFwxAGcu137LNxUutZblb%2FEeHROL2y6bSSTyYwNRYticbQJ4uNKtBrgA4lhCW%2FTZYdFMSdl%2FbLx2uj27kCX%2Bat6x9%2F%2Fjt4Wvpf2YfkZNdvOeS1CRSF7OhTz%2Fr3XyLSv%2FoMXx7v8KjbNxEWhxhzGMxEf91RFPHLICoazVZpT0YLPAlgyEvtZxKyB%2FGJycswwKOQ%2Fz5MjgTtOaIMcwhX4gNGprx2OMaB34crMoubETE4fElL7TGh%2BBc%2FLQzEOfnHlAk9Wc6WxUN8JK82eC3%2FutzmLu0bM1d1C5dbhn0YMVExJEEApxEevDZjAukIh23CGJkIo5JdLxDFzUbLDeEJFDeITBCjK24iPvVEzwuvsgyhx0WmUdMRNuNNfXqe8A3hF6PXU2fs%2BS8C%2Fxuk0JKkMEmCQU4GvIFsjYeSF9QhAeG8uyFJdIGDIFeVSiNAz2ynMKIpHOJw1F%2FbdO2s5l60PK4i%2FNjnYO2BY%2Bz7KIyhEgYZTAjGuKYEh2zdM802%2F%2BEd2DH%2BaDaa%2FIt3eNnMyvwnNqesQ0LeFojXfBGXxwLFEikgv9eDDpNPUTvlSKd2lYM2JdBzjBaN%2BHrAzDSvkVeGvGnVjNySkEuMA7xmlzBOR0rzKMATjipAGdHHGHj3gylRBzJ1UEA4gAMU3JEIM0zi89PENke%2BLriuVw5uBXH7%2B8eXDv3VunVv7JtldzKxOsNVwRA%2BQnxwhgz95n4sISxLfydqT13oJoOfcfZrGWuxi4Rrm2MkzhZFfiSq%2FMjfdOe9MQBsNE3o6reVRvVRwDTLxnj7zdrgRSGPN4QFOeRHs0E0pHig40LVccEEZ8zpCmnLOd0s1LyV8XbqTuhsife3dQ6vp%2Bxnm7LbRsnEz7ItRSpoyjFe532HndsuTf5SpuyWTPrrIEJ0XrBMp2GfBvuck%2FWnvjuY0vtPvc8Ldxq1n1s%2FHvsfHIl1e8bDW6hJV0y67MxdGWnZqx%2BTWyN6MU4dddOwa47mroT9IcC%2BDuXVowZGzR5uyqtzn%2BJ8m5c17appN%2BtO0%2BSRW4Ksl9mPpeuVzMtU3R8F8mjN26jDtgLUrTOG7eL5FpBYR%2FqmiqLJtVl32DZl2reFWx%2F0clqFy2nA2V5PK%2B31pvP2WyglhSAvq%2BoFtRI%2B%2F%2BpAF7mi9tJr30P6t%2Fu0mDz%2B41z3Rji4LkjV9IKaKti1b38x5dRNJ%2BaV4T3jBphCV07vvOsdMGeArXALTEna8q3uLDXXq6bKwJff4KJsUlaQnQny32C8gKqhVw4dnPEWSfF39iToD7OB3uxw5s0OrlX2%2BQSgbP1NTtn1UnpJx%2FdK47%2BUHQ%2BgwO%2FXN8nuYTjSkb5y4LXP0YB8V7Qzo3E7v61rNPGKiZ9z90PxV5afONMbXdSwrn%2FPQ%2FoQrV6CUcK37EYHVcmZJSdnvTlv5c5FVZ2sV5isN3O3UmxQNltvGqoEIQ%2FnqRYiSQw6vhc70%2FtJ1y05XdfhvTK8ZZNzZVNvefDWDxcpo%2B2UHMuBqtgN5CX2ASXQH8bDncZdMe6y2x6U4bbkeZh%2BeFAhcNOqmziQie%2FYga7TdHVr6mVloG6%2Fky2P65%2F%2FmiFxZu30hx3o%2FWTotrzJcfervjTuE3HXvpxuyzmcnpBVhrfud%2F4Ubk9nvE9%2F97WVY971kOC%2FiB1Pxa5sybR1dq7Ktc%2B6z6nQueVtTno6ptC%2Fz7rHqfAhUUOCivwRSudavE%2FGZERCGPSyWt7Ts9BHvujnzKZP1iNvPPD%2B5EPCSkym4IyReDrFJtlUa3PUt9487YnIjA7Rnm5PE04%2BpRuhfXxE8%2BM273VQigLI8Bxt0S%2BCIQ69i8WXzb5AbvZl5WbXyfcUB2VEryiFqw0zIemdl8ndiml5myc7ZG0ZRk5NyeUzbb32x%2FFykxPBM8iNa4qunsTx68KPuMCdXxS7y80PuytRUi5Ts6RKm1Wr9KSQYb8nhhUTc0sSS%2BN6xYHlxIDQbJpviQhuy1IfEdw61HS8Kva9S%2BWwKtyLUEUzpwrxhqddqsiZe6anXhXe%2F0AVTklVpHvRalZFLkexPWuvKnLmnuX80dr4dwaNpE%2FjvGuRpC9pORw7nItQiTSkuO5emeTtHbGksVtWp9m7zpa9IuXVksYqT0dbZQMWqCsfLXwqr%2FW%2BwsC%2BR8IPdr1VeQZx2gORtSwfXMhcwCqb9lUP7ajQbedCpe2CvaFVtj8ptPJi9veKEvPsrz6B3n8%3D)
 
-![диаграмма](src/demo/assets/img/diagramm.jpg)
+![диаграмма](src/demo/assets/img/diagram.png)

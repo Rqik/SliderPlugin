@@ -8,7 +8,7 @@ import {
 import { Model } from '../Model/Model';
 import { View } from '../View/View';
 
-class Present {
+class Presenter {
   model: Model;
 
   private view: View;
@@ -56,4 +56,4 @@ class Present {
   }
 }
 
-export { Present };
+export { Presenter };

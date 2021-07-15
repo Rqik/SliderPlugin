@@ -1,7 +1,7 @@
 import { EventObserver } from '../../utils/EventObserver';
 import { rotation } from '../../types/constants';
 import { View } from '../View/View';
-import { Present } from './Presenter';
+import { Presenter } from './Presenter';
 import {defaultState} from "../Model/default-state";
 import {CallBack} from "../../types/interfaces";
 
@@ -25,17 +25,17 @@ afterEach(() => {
 });
 
 describe('Presenter test', () => {
-  let present: Present;
+  let present: Presenter;
   const selector = 'slider-rqik';
   beforeEach(() => {
-    present = new Present(selector);
+    present = new Presenter(selector);
   });
 
   test('test function init', () => {
-    const init = jest.spyOn(Present.prototype as any, 'init');
+    const init = jest.spyOn(Presenter.prototype as any, 'init');
     const render = jest.spyOn(View.prototype as any, 'render');
 
-    const testPresent = new Present(selector);
+    const testPresent = new Presenter(selector);
 
     expect(init).toHaveBeenCalled();
     expect(render).toHaveBeenCalled();

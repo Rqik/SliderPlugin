@@ -170,7 +170,7 @@ class View {
     } else {
       this.interval.interval.remove();
     }
-    if (this.state.show) {
+    if (this.state.showTooltip) {
       this.tooltipRight.element.style.opacity = '1';
       this.slider.append(this.tooltipRight.element);
     } else {
@@ -183,7 +183,7 @@ class View {
 
   private buttonLeftDisplay(): void {
     this.sliderRange.append(this.buttonLeft.button);
-    if (this.state.show) {
+    if (this.state.showTooltip) {
       this.tooltipLeft.element.style.opacity = '1';
       this.slider.append(this.tooltipLeft.element);
     }
@@ -261,7 +261,6 @@ class View {
     } else {
       target = <HTMLElement>event.targetTouches[0].target;
     }
-
     if (this.state.rotate === rotation.HORIZONTAL) {
       this.tooltipEventPosition = cordClient
         - target.getBoundingClientRect().left
@@ -414,7 +413,7 @@ class View {
       this.currentButton.style.top = `calc(${position}% - ${this.buttonWidth}px)`;
     }
 
-    if (this.state.show) {
+    if (this.state.showTooltip) {
       this.currentValueText();
       this.showCurrentValue();
       if (this.state.range === 'two') {

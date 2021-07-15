@@ -6,6 +6,7 @@ import {
   UniversalSate,
 } from '../../types/interfaces';
 import { keyChanges, rotation } from '../../types/constants';
+import { defaultState } from './default-state';
 
 class Model {
   public observer: EventObserver;
@@ -17,26 +18,9 @@ class Model {
     width: 0,
   };
 
-  private state: IState = {
-    selector: 'slider-range', // селектор
-    min: 0, // минимальное значение
-    max: 1000, // максимальное значение
-    range: 'one', // 1 или 2 указателя
-    rotate: rotation.HORIZONTAL, // ориентация vertical || horizontal
-    showTooltip: true, // показывать текущее значение над указателем
-    showInterval: true, // показать интервал
-    intervalCount: 2, // количество интервалов
-    stepSize: 1, // шаг движения указателя в числах
-    maxValue: 50, // установка значений в числах
-    minValue: 0, // установка значений в числах
-    [keyChanges.SHIFT_LEFT]: 0,
-    [keyChanges.SHIFT_RIGHT]: 0,
-    step: 0, // процентные значение от 0 до 100
-    isActiveLeft: false,
-    intervalStep: 0,
-  };
+  private state: IState = defaultState;
 
-  private stateKey = [
+  private stateKey= [
     'selector',
     'min',
     'max',
@@ -55,7 +39,6 @@ class Model {
     'widthSlider',
     'heightSlider',
     'round',
-    'show',
   ];
 
   private percent = 0;
@@ -106,6 +89,7 @@ class Model {
 
   setStateValid(state: IStateEl, validate = false): void {
     const stateOld = this.getState;
+
     this.state = {
       ...this.state,
       ...state,
@@ -146,7 +130,6 @@ class Model {
     this.state.stepSize = this.state.stepSize <= 0 ? 0 : this.state.stepSize;
     this.state.maxValue = Model.convertCorrectNumber(this.state.maxValue);
     this.state.minValue = Model.convertCorrectNumber(this.state.minValue);
-
     this.state.shiftLeft = this.validStep(
       this.convertNumberInPercent(this.state.minValue),
     );

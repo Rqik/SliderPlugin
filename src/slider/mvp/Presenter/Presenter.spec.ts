@@ -2,6 +2,8 @@ import { EventObserver } from '../../utils/EventObserver';
 import { rotation } from '../../types/constants';
 import { View } from '../View/View';
 import { Present } from './Presenter';
+import {defaultState} from "../Model/default-state";
+import {CallBack} from "../../types/interfaces";
 
 const ObserverMock = EventObserver as jest.MockedClass<typeof EventObserver>;
 beforeEach(() => {
@@ -24,12 +26,12 @@ afterEach(() => {
 
 describe('Presenter test', () => {
   let present: Present;
-  const selector = 'test_selector';
+  const selector = 'slider-rqik';
   beforeEach(() => {
     present = new Present(selector);
   });
 
-  test('test function start', () => {
+  test('test function init', () => {
     const init = jest.spyOn(Present.prototype as any, 'init');
     const render = jest.spyOn(View.prototype as any, 'render');
 
@@ -46,6 +48,19 @@ describe('Presenter test', () => {
     expect(init).toHaveBeenCalled();
     expect(init).toHaveBeenCalledTimes(1);
   });
+  test('getState method' , ()=>{
+    let state = present.getState()
+    expect(state).toEqual(defaultState)
+  })
+  test('subscribe method', ()=>{
+    const fn:CallBack = (data)=>{
+
+    }
+    present.subscribe(fn)
+    expect(present.model.observer.observers.length).toEqual(2)
+    present.unsubscribe(fn)
+    expect(present.model.observer.observers.length).toEqual(1)
+  })
   test('unsubscribe ', () => {
     const kek = jest.fn((el) => el * 2);
 

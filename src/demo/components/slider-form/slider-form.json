@@ -6,7 +6,7 @@
       "checked": true
     },
     {
-      "name": "show",
+      "name": "showTooltip",
       "text": "Показать текущее значение над ползунком",
       "checked": true
     },

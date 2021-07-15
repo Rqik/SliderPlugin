@@ -42,7 +42,7 @@ class InputChecker {
     this.inputCheck = [
       ['rotate', ['vertical', 'horizontal']],
       ['showInterval', [true, false]],
-      ['show', [true, false]],
+      ['showTooltip', [true, false]],
       ['range', ['two', 'one']],
     ];
   }

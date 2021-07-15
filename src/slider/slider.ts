@@ -43,7 +43,7 @@ import { callPresent, makeMethodPresent } from './utils/helper';
   };
 
   $(() => {
-    const defaultSelector = '.js-slider-rqik';
+    const defaultSelector = '.slider-rqik';
     $(defaultSelector).sliderRqik();
   });
 }(jQuery));

@@ -1,7 +1,7 @@
-import { EventObserver } from '../../utils/EventObserver';
-import { IState } from '../../types/interfaces';
-import { keyChanges, rotation } from '../../types/constants';
-import { View } from './View';
+import {EventObserver} from '../../utils/EventObserver';
+import {IState} from '../../types/interfaces';
+import {keyChanges, rotation} from '../../types/constants';
+import {View} from './View';
 
 const state: IState = {
   selector: 'slider-rqik', // селектор
@@ -107,7 +107,6 @@ describe('View test', () => {
       const initMove = jest.spyOn(View.prototype as any, 'initMove');
 
       view.render();
-
       expect(show).toHaveBeenCalled();
       expect(show).toHaveBeenCalledTimes(1);
 
@@ -160,6 +159,7 @@ describe('View test', () => {
       expect(buttonAction).toHaveBeenCalled();
       expect(buttonAction).toHaveBeenCalledTimes(2);
 
+
       const onClickInterval = jest.spyOn(
         View.prototype as any,
         'onClickInterval',
@@ -193,6 +193,23 @@ describe('View test', () => {
       view.onMouseMove(eventMouse);
 
       expect(onMouseMove).toHaveBeenCalledTimes(1);
+      // @ts-ignore
+      view.onClickInterval(eventMouse);
+
+      expect(onClickInterval).toHaveBeenCalledTimes(2);
+
+      const removeTouch = jest.spyOn(View.prototype as any, 'removeTouch');
+      const removeMouse = jest.spyOn(View.prototype as any, 'removeMouse');
+
+      // @ts-ignore
+      view.removeTouch();
+      expect(removeTouch).toHaveBeenCalled();
+
+      // @ts-ignore
+      view.removeMouse();
+      expect(removeMouse).toHaveBeenCalled();
+
+
     });
 
     test('call render', () => {

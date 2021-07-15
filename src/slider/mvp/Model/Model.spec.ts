@@ -14,10 +14,8 @@ const stateHorizontal: IState = {
   stepSize: 1, // шаг движения указателя
   maxValue: 0, // установка значений в числах
   minValue: 70, // установка значений в числах
-  pixelSize: '6',
   [keyChanges.SHIFT_LEFT]: -22,
   [keyChanges.SHIFT_RIGHT]: 43,
-
   step: 0,
   isActiveLeft: false,
   [keyChanges.INTERVAL_STEP]: 0,
@@ -35,7 +33,6 @@ const stateVertical: IState = {
   stepSize: 20, // шаг движения указателя
   maxValue: 0, // установка значений в числах
   minValue: 70, // установка значений в числах
-  pixelSize: '6',
   [keyChanges.SHIFT_LEFT]: 0,
   [keyChanges.SHIFT_RIGHT]: 54,
   step: 0,
@@ -55,12 +52,13 @@ const stateHorCorrect: IState = {
   stepSize: 1, // шаг движения указателя
   maxValue: 0, // установка значений в числах
   minValue: 70, // установка значений в числах
-  pixelSize: '6',
   [keyChanges.SHIFT_LEFT]: 54.54545454545455,
   [keyChanges.SHIFT_RIGHT]: 0,
   step: 0,
   isActiveLeft: false,
   [keyChanges.INTERVAL_STEP]: 16,
+  widthSlider: 0,
+  heightSlider: 0,
 };
 const stateVerCorrect: IState = {
   selector: 'slider-rqik', // селектор
@@ -74,12 +72,13 @@ const stateVerCorrect: IState = {
   stepSize: 20, // шаг движения указателя
   maxValue: 0, // установка значений в числах
   minValue: 70, // установка значений в числах
-  pixelSize: '6',
   [keyChanges.SHIFT_LEFT]: 0,
   [keyChanges.SHIFT_RIGHT]: 0,
   step: 0,
   isActiveLeft: false,
   [keyChanges.INTERVAL_STEP]: 20,
+  widthSlider: 0,
+  heightSlider: 0,
 };
 
 describe('Model test', () => {
@@ -164,6 +163,7 @@ describe('Model test', () => {
     expect(activeButton).toHaveBeenCalled();
     expect(checkExtremePoint).toHaveBeenCalled();
 
+    model.setState({[keyChanges.INTERVAL]:20})
     model.setState({ [keyChanges.SHIFT_LEFT]: 24 });
     model.setState({ [keyChanges.SHIFT_RIGHT]: 24 });
     model.setStateValid({ step: 10 });
@@ -178,6 +178,8 @@ describe('Model test', () => {
 
   test('call validStep methods', () => {
     model.setState({ stepSize: 42 });
+    model.setState({ stepSize: -42 });
+
     const defineStep = jest.spyOn(Model.prototype as any, 'defineStep');
     const validStep = jest.spyOn(Model.prototype as any, 'validStep');
     model.setStateValid({ max: 10, min: 10 });
@@ -185,6 +187,8 @@ describe('Model test', () => {
     model.setState({ [keyChanges.POSITION]: 5 });
     expect(defineStep).toHaveBeenCalled();
     expect(validStep).toHaveBeenCalled();
+
+
   });
 
   test('call mathPositionToPercent methods', () => {

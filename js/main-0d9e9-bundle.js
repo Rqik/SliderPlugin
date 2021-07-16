@@ -283,7 +283,7 @@ class Model {
       width: 0
     };
     this.state = defaultState;
-    this.stateKey = ['selector', 'min', 'max', 'range', 'rotate', 'showTooltip', 'showInterval', 'stepSize', 'maxValue', 'minValue', 'shiftLeft', 'shiftRight', 'step', 'isActiveLeft', 'intervalStep', 'widthSlider', 'heightSlider', 'round'];
+    this.stateKey = ['selector', 'min', 'max', 'range', 'rotate', 'showTooltip', 'showInterval', 'stepSize', 'maxValue', 'minValue', 'shiftLeft', 'shiftRight', 'step', 'isActiveLeft', 'intervalStep', 'widthSlider', 'heightSlider'];
     this.percent = 0;
     this.state.selector = selector;
     this.observer = new EventObserver();
@@ -298,7 +298,10 @@ class Model {
 
     switch (Object.keys(data)[0]) {
       case "isActiveLeft":
-        this.activeButton(data["isActiveLeft"]);
+        if ('isActiveLeft' in data) {
+          this.activeButton(data["isActiveLeft"]);
+        }
+
         break;
 
       case "shiftLeft":
@@ -312,15 +315,24 @@ class Model {
         break;
 
       case "position":
-        this.defineStep(Number(data["position"]));
+        if ('position' in data) {
+          this.defineStep(Number(data["position"]));
+        }
+
         break;
 
       case "coordinates":
-        this.updateCoordinate(data["coordinates"]);
+        if ('coordinates' in data) {
+          this.updateCoordinate(data["coordinates"]);
+        }
+
         break;
 
       case "intervalAction":
-        this.state.step = Model.convertCorrectNumber(this.convertNumberInPercent(Number(data["intervalAction"])));
+        if ('interval' in data) {
+          this.state.step = Model.convertCorrectNumber(this.convertNumberInPercent(Number(data["intervalAction"])));
+        }
+
         this.setStateValid(data);
         this.defineLeftVal();
         this.defineRightVal();
@@ -936,7 +948,7 @@ class View {
     }
 
     this.observer.broadcast({
-      ["intervalAction"]: value.textContent
+      ["intervalAction"]: Number(value.textContent)
     });
     this.eventButton(this.state.step);
   }
@@ -1357,7 +1369,10 @@ function makeMethodPresent(slider, method, options) {
   const $ = jQuery;
 
   function init(index, element) {
-    if (!$(element).length) throw new ReferenceError('Connection to non-existent element');
+    if (!$(element).length) {
+      throw new ReferenceError('Connection to non-existent element');
+    }
+
     const dataFromAttributes = $(element).data();
     const present = callPresent(element, index);
     present.setState(dataFromAttributes);

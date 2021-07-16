@@ -1,5 +1,6 @@
-import { StateProps, CallBack, IPState } from './types/interfaces';
+import { StateProps, CallBack, PStateProps } from './types/interfaces';
 import { callPresent, makeMethodPresent } from './utils/helper';
+import './styles/slider.scss';
 
 (function IIFE(jQuery) {
   const $ = jQuery;
@@ -15,8 +16,8 @@ import { callPresent, makeMethodPresent } from './utils/helper';
   }
 
   $.fn.sliderRqik = function initialPlugin(
-    method?: IPState | string,
-    options?: IPState | CallBack,
+    method?: PStateProps | string,
+    options?: PStateProps | CallBack,
   ): JQuery | JQuery<HTMLElement> | StateProps | StateProps[] | any {
     const $this = $(this);
 
@@ -25,21 +26,22 @@ import { callPresent, makeMethodPresent } from './utils/helper';
     }
 
     if (typeof method === 'undefined') {
-      return $(this);
+      return $(this) as JQuery;
     }
 
     if (typeof method === 'object') {
       $this.each((_, element) => {
         $(element).data('sliderRqik').setState(method);
       });
-      return $(this);
+      return $(this) as JQuery;
     }
+
     if (typeof method !== 'string') {
       throw new TypeError('sliderRqik method name should be a string');
     }
     const states = makeMethodPresent($this, method, options);
     if (states) {
-      return states;
+      return states as Partial<StateProps> | StateProps[];
     }
     return $(this);
   };

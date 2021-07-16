@@ -59,12 +59,12 @@ type UniversalState =
   | ActiveButton
   | PositionProps
   | IntervalProps
-  | IPState;
+  | PStateProps;
 
 type Options = number | string | boolean;
-type IPState = Partial<StateProps>
+type PStateProps = Partial<StateProps>
 export {
-  IPState,
+  PStateProps,
   CoordsType,
   StateProps,
   Rotate,

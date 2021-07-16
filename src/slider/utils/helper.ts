@@ -1,5 +1,5 @@
 import { Presenter } from '../mvp/Presenter/Presenter';
-import { CallBack, IPState, StateProps } from '../types/interfaces';
+import { CallBack, PStateProps, StateProps } from '../types/interfaces';
 import { methodTypes } from '../types/constants';
 
 function callPresent(element: HTMLElement, ind: number): Presenter {
@@ -14,21 +14,23 @@ function callPresent(element: HTMLElement, ind: number): Presenter {
 
   return present;
 }
-
+function checkTypeOption(options?: PStateProps | CallBack) {
+  if (typeof options === 'undefined') {
+    throw new ReferenceError('callback function is not defined');
+  }
+  if (typeof options !== 'function') {
+    throw new TypeError('callback is not function');
+  }
+}
 // eslint-disable-next-line consistent-return
 function makeMethodPresent(
   slider: JQuery,
-  method?: IPState | string,
-  options?: IPState | CallBack,
+  method?: PStateProps | string,
+  options?: PStateProps | CallBack,
 ): JQuery<HTMLElement> | StateProps | StateProps[] | void {
   switch (method) {
     case methodTypes.SUBSCRIBE:
-      if (typeof options === 'undefined') {
-        throw new ReferenceError('callback function is not defined');
-      }
-      if (typeof options !== 'function') {
-        throw new TypeError('callback is not function');
-      }
+      checkTypeOption(options);
       slider.each((_, element) => {
         $(element)
           .data('sliderRqik')
@@ -36,12 +38,8 @@ function makeMethodPresent(
       });
       break;
     case methodTypes.UNSUBSCRIBE:
-      if (typeof options === 'undefined') {
-        throw new ReferenceError('callback function is not defined');
-      }
-      if (typeof options !== 'function') {
-        throw new TypeError('callback is not function');
-      }
+      checkTypeOption(options);
+
       slider.each((_, element) => {
         $(element)
           .data('sliderRqik')
@@ -53,7 +51,7 @@ function makeMethodPresent(
         slider.each((_, element) => {
           $(element)
             .data('sliderRqik')
-            .setState(options as IPState);
+            .setState(options as PStateProps);
         });
         return slider;
       }

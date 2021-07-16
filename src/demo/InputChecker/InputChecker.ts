@@ -2,7 +2,7 @@ import { boundMethod } from 'autobind-decorator';
 
 import {
   CallBack,
-  IPState,
+  PStateProps,
   StateProps,
   UniversalState,
 } from '../../slider/types/interfaces';

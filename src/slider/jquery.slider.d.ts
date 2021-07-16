@@ -1,10 +1,10 @@
-import { CallBack, IPState, StateProps } from './types/interfaces';
+import { CallBack, PStateProps, StateProps } from './types/interfaces';
 
 declare global {
   interface JQuery {
     sliderRqik(
-      method?: IPState | string,
-      options?: IPState | CallBack,
-    ): JQuery | JQuery<HTMLElement> | StateProps | StateProps[] | any;
+      method?: PStateProps | string,
+      options?: PStateProps | CallBack,
+    ): JQuery | JQuery<HTMLElement> | StateProps | StateProps[] | any ;
   }
 }

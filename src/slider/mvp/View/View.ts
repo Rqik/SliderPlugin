@@ -1,6 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
 
-import { ICoords, IState } from '../../types/interfaces';
+import { CoordsType, StateProps } from '../../types/interfaces';
 import { keyChanges, rotation } from '../../types/constants';
 import { EventObserver as Observer } from '../../utils/EventObserver';
 import { Button, Interval, SliderRange, Tooltip } from './SubView';
@@ -33,18 +33,18 @@ class View {
 
   public observer: Observer;
 
-  private state: IState;
+  private state: StateProps;
 
   private sliderClass: SliderRange;
 
-  private coords: ICoords = {
+  private coords: CoordsType = {
     x: 0,
     y: 0,
     width: 0,
     height: 0,
   };
 
-  constructor(state: IState) {
+  constructor(state: StateProps) {
     this.state = state;
     this.observer = new Observer();
     this.tooltipLeft = new Tooltip(this.state.rotate);
@@ -56,7 +56,7 @@ class View {
     this.init(this.state.selector);
   }
 
-  setState(newState: IState): void {
+  setState(newState: StateProps): void {
     this.state = {
       ...this.state,
       ...newState,
@@ -147,7 +147,7 @@ class View {
           y,
           width,
           height,
-        },
+        } as CoordsType,
       });
     }
   }
@@ -217,7 +217,7 @@ class View {
     }
 
     this.observer.broadcast({
-      [keyChanges.INTERVAL]: value.textContent,
+      [keyChanges.INTERVAL]: Number(value.textContent),
     });
 
     this.eventButton(this.state.step);

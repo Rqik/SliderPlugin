@@ -1,4 +1,4 @@
-import { CallBack } from '../types/interfaces';
+import { CallBack, UniversalState } from '../types/interfaces';
 
 class EventObserver {
   observers: CallBack[];
@@ -17,7 +17,7 @@ class EventObserver {
     this.observers = this.observers.filter((subscriber) => subscriber !== fn);
   }
 
-  broadcast(data: unknown): void {
+  broadcast(data: UniversalState): void {
     this.observers.forEach((subscriber) => {
       if (typeof subscriber === 'function') {
         subscriber(data);

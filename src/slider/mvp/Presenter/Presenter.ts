@@ -1,9 +1,9 @@
 import { boundMethod } from 'autobind-decorator';
 
 import {
-  IState,
-  UniversalSate,
-  IStateEl, CallBack,
+  StateProps,
+  UniversalState,
+  CallBack,
 } from '../../types/interfaces';
 import { Model } from '../Model/Model';
 import { View } from '../View/View';
@@ -19,11 +19,11 @@ class Presenter {
     this.init();
   }
 
-  getState(): IState {
+  getState(): StateProps {
     return this.model.getState;
   }
 
-  setState(options: IStateEl): void {
+  setState(options: StateProps): void {
     this.model.setStateValid(options, true);
     this.view.setState(this.model.getState);
     this.view.render();
@@ -41,12 +41,12 @@ class Presenter {
 
   private init(): void {
     this.model.observer.subscribe(this.setStateView);
-    this.view.observer.subscribe(this.setStateModel);
+    this.view.observer.subscribe(this.setStateModel as CallBack);
     this.view.render();
   }
 
   @boundMethod
-  private setStateModel(data: UniversalSate): void {
+  private setStateModel(data: UniversalState): void {
     this.model.setState(data);
   }
 

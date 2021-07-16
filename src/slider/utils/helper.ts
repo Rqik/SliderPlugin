@@ -1,5 +1,5 @@
 import { Presenter } from '../mvp/Presenter/Presenter';
-import { CallBack, IPState, IState, IStateEl } from '../types/interfaces';
+import { CallBack, IPState, StateProps } from '../types/interfaces';
 import { methodTypes } from '../types/constants';
 
 function callPresent(element: HTMLElement, ind: number): Presenter {
@@ -10,7 +10,7 @@ function callPresent(element: HTMLElement, ind: number): Presenter {
   slider.classList.add(className);
 
   const present = new Presenter(`.${className}`);
-  present.setState({ ...slider.dataset } as IStateEl);
+  present.setState({ ...slider.dataset } as unknown as StateProps);
 
   return present;
 }
@@ -20,7 +20,7 @@ function makeMethodPresent(
   slider: JQuery,
   method?: IPState | string,
   options?: IPState | CallBack,
-): JQuery<HTMLElement> | IState | IState[] | void {
+): JQuery<HTMLElement> | StateProps | StateProps[] | void {
   switch (method) {
     case methodTypes.SUBSCRIBE:
       if (typeof options === 'undefined') {
@@ -58,7 +58,7 @@ function makeMethodPresent(
         return slider;
       }
       // eslint-disable-next-line no-case-declarations
-      const states: IState[] = [];
+      const states: StateProps[] = [];
       slider.each((_, element) => {
         states.push($(element).data('sliderRqik').getState());
       });
@@ -67,10 +67,10 @@ function makeMethodPresent(
       }
 
       if (states.length <= 1) {
-        return states[0] as IState;
+        return states[0] as StateProps;
       }
 
-      return states as IState[];
+      return states as StateProps[];
     default:
       throw new Error(`${method} is not found`);
   }

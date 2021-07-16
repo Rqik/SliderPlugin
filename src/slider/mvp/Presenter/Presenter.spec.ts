@@ -3,7 +3,7 @@ import { rotation } from '../../types/constants';
 import { View } from '../View/View';
 import { Presenter } from './Presenter';
 import {defaultState} from "../Model/default-state";
-import {CallBack} from "../../types/interfaces";
+import {CallBack, StateProps} from "../../types/interfaces";
 
 const ObserverMock = EventObserver as jest.MockedClass<typeof EventObserver>;
 beforeEach(() => {
@@ -40,10 +40,10 @@ describe('Presenter test', () => {
     expect(init).toHaveBeenCalled();
     expect(render).toHaveBeenCalled();
     // present.model.getState.rotate = rotation.HORIZONTAL;
-    present.setState({ rotate: rotation.HORIZONTAL });
+    present.setState({ rotate: rotation.HORIZONTAL } as StateProps);
 
     // present.model.getState.rotate = rotation.VERTICAL;
-    present.setState({ rotate: rotation.VERTICAL });
+    present.setState({ rotate: rotation.VERTICAL } as StateProps);
 
     expect(init).toHaveBeenCalled();
     expect(init).toHaveBeenCalledTimes(1);

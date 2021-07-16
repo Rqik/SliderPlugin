@@ -2,20 +2,33 @@ import { keyChanges, rotation } from './constants';
 
 type Rotate = rotation.HORIZONTAL | rotation.VERTICAL;
 type Range = 'one' | 'two';
-type CallBack = (args?: any) => void;
+type CallBack = (args?: UniversalState) => void;
 
-interface ICoords {
+type CoordsType = {
   x: number;
   y: number;
   width: number;
   height: number;
 }
+type CoordsProps = {
+  [keyChanges.COORDINATES]: CoordsType,
+}
+type ActiveButton = {
+  [keyChanges.ACTIVE]: number
+}
+type PositionProps = {
+  [keyChanges.POSITION]: number | string
+}
+type IntervalProps = {
+  [keyChanges.INTERVAL]: number
+}
 
 interface ISlider {
   data: (opt: IStateEl) => ISlider;
-  getData: () => IState[];
+  getData: () => StateProps[];
 }
-interface IState {
+
+type StateProps = {
   selector: string;
   min: number;
   max: number;
@@ -32,30 +45,37 @@ interface IState {
   step: number;
   isActiveLeft: boolean;
   [keyChanges.INTERVAL_STEP]: number;
-
-  [k: string]: Options;
+  widthSlider: number;
+  heightSlider: number;
 }
 
 interface IStateEl {
   [k: string]: Options;
 }
 
-type UniversalSate = {
-  [keyChanges.ACTIVE]?: number;
-  [keyChanges.COORDINATES]?: ICoords;
-} & IStateEl | IState;
+type UniversalState =
+  CoordsProps
+  | StateProps
+  | ActiveButton
+  | PositionProps
+  | IntervalProps
+  | IPState;
 
 type Options = number | string | boolean;
-type IPState = Partial<IState>
+type IPState = Partial<StateProps>
 export {
   IPState,
-  ICoords,
-  IState,
+  CoordsType,
+  StateProps,
   Rotate,
   Range,
   CallBack,
   Options,
   IStateEl,
   ISlider,
-  UniversalSate,
+  ActiveButton,
+  UniversalState,
+  CoordsProps,
+  IntervalProps,
+  PositionProps,
 };

@@ -1,7 +1,7 @@
-import { IState } from '../../types/interfaces';
+import { StateProps } from '../../types/interfaces';
 import { keyChanges, rotation } from '../../types/constants';
 
-const defaultState: IState = {
+const defaultState: StateProps = {
   selector: 'slider-rqik', // селектор
   min: 0, // минимальное значение
   max: 100, // максимальное значение

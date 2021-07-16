@@ -1,9 +1,9 @@
 import {EventObserver} from '../../utils/EventObserver';
-import {IState} from '../../types/interfaces';
+import {StateProps} from '../../types/interfaces';
 import {keyChanges, rotation} from '../../types/constants';
 import {View} from './View';
 
-const state: IState = {
+const state: StateProps = {
   selector: 'slider-rqik', // селектор
   min: 0, // минимальное значение
   max: 120, // максимальное значение
@@ -15,16 +15,16 @@ const state: IState = {
   stepSize: 1, // шаг движения указателя
   maxValue: 0, // установка значений в числах
   minValue: 70, // установка значений в числах
-  pixelSize: '6',
-
   [keyChanges.SHIFT_LEFT]: 0,
   [keyChanges.SHIFT_RIGHT]: 100,
   step: 3,
   isActiveLeft: false,
   [keyChanges.INTERVAL_STEP]: 0,
+  widthSlider: 0,
+  heightSlider: 0,
 };
 
-const state2: IState = {
+const state2: StateProps = {
   selector: 'slider-rqik', // селектор
   min: 0, // минимальное значение
   max: 120, // максимальное значение
@@ -36,12 +36,13 @@ const state2: IState = {
   stepSize: 20, // шаг движения указателя
   maxValue: 0, // установка значений в числах
   minValue: 70, // установка значений в числах
-  pixelSize: '6',
   [keyChanges.SHIFT_LEFT]: 0,
   [keyChanges.SHIFT_RIGHT]: 200,
   step: 3,
   isActiveLeft: false,
   [keyChanges.INTERVAL_STEP]: 0,
+  widthSlider: 0,
+  heightSlider: 0,
 };
 
 jest.mock('../../utils/EventObserver.ts');

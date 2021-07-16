@@ -1,9 +1,9 @@
 import { EventObserver } from '../../utils/EventObserver';
 import {
-  ICoords,
-  IState,
+  CoordsType,
+  StateProps,
   IStateEl,
-  UniversalSate,
+  UniversalState,
 } from '../../types/interfaces';
 import { keyChanges, rotation } from '../../types/constants';
 import { defaultState } from './default-state';
@@ -11,14 +11,14 @@ import { defaultState } from './default-state';
 class Model {
   public observer: EventObserver;
 
-  public coords: ICoords = {
+  public coords: CoordsType = {
     x: 0,
     y: 0,
     height: 0,
     width: 0,
   };
 
-  private state: IState = defaultState;
+  private state: StateProps = defaultState;
 
   private stateKey= [
     'selector',
@@ -38,8 +38,7 @@ class Model {
     'intervalStep',
     'widthSlider',
     'heightSlider',
-    'round',
-  ];
+  ] as const;
 
   private percent = 0;
 
@@ -48,47 +47,55 @@ class Model {
     this.observer = new EventObserver();
   }
 
-  get getState(): IState {
+  get getState(): StateProps {
     return { ...this.state };
   }
 
-  setState(data: UniversalSate): void {
+  setState(data: UniversalState): void {
     const stateOld = this.getState;
     switch (Object.keys(data)[0]) {
       case keyChanges.ACTIVE:
-        this.activeButton(data[keyChanges.ACTIVE] as number);
+        if ('isActiveLeft' in data) {
+          this.activeButton(data[keyChanges.ACTIVE] as number);
+        }
         break;
       case keyChanges.SHIFT_LEFT:
-        this.setStateValid(data);
+        this.setStateValid(data as StateProps);
         this.defineLeftVal();
         break;
       case keyChanges.SHIFT_RIGHT:
-        this.setStateValid(data);
+        this.setStateValid(data as StateProps);
         this.defineRightVal();
         break;
       case keyChanges.POSITION:
-        this.defineStep(Number(data[keyChanges.POSITION]));
+        if ('position' in data) {
+          this.defineStep(Number(data[keyChanges.POSITION]));
+        }
         break;
       case keyChanges.COORDINATES:
-        this.updateCoordinate(data[keyChanges.COORDINATES] as ICoords);
+        if ('coordinates' in data) {
+          this.updateCoordinate(data[keyChanges.COORDINATES] as CoordsType);
+        }
         break;
       case keyChanges.INTERVAL:
-        this.state.step = Model.convertCorrectNumber(
-          this.convertNumberInPercent(Number(data[keyChanges.INTERVAL])),
-        );
-        this.setStateValid(data);
+        if ('interval' in data) {
+          this.state.step = Model.convertCorrectNumber(
+            this.convertNumberInPercent(Number(data[keyChanges.INTERVAL])),
+          );
+        }
+        this.setStateValid(data as StateProps);
         this.defineLeftVal();
         this.defineRightVal();
         break;
       default:
-        this.setStateValid(data, true);
+        this.setStateValid(data as StateProps, true);
         break;
     }
     this.notify(stateOld, Object.keys(data)[0]);
   }
 
-  setStateValid(state: IStateEl, validate = false): void {
-    const stateOld = this.getState;
+  setStateValid(state: StateProps, validate = false): void {
+    const stateOld: StateProps = this.getState;
 
     this.state = {
       ...this.state,
@@ -102,7 +109,7 @@ class Model {
     });
   }
 
-  private notify(state: IState, key: string): void {
+  private notify(state: StateProps, key: string): void {
     const newProps: IStateEl = {};
     if (key === keyChanges.POSITION) {
       this.observer.broadcast({ [keyChanges.POSITION]: this.getState.step });
@@ -112,11 +119,13 @@ class Model {
       this.observer.broadcast({ [keyChanges.COORDINATES]: this.coords });
       return;
     }
+
     this.stateKey.forEach((element) => {
       if (state[element] !== this.getState[element]) {
         newProps[element] = this.getState[element];
       }
     });
+
     if (Object.keys(newProps).length !== 0) {
       this.observer.broadcast({ ...newProps });
     }
@@ -148,7 +157,7 @@ class Model {
     this.state[keyChanges.INTERVAL_STEP] = this.defineIntervalStep();
   }
 
-  private updateCoordinate(coords: ICoords): void {
+  private updateCoordinate(coords: CoordsType): void {
     this.coords = {
       ...this.coords,
       ...coords,

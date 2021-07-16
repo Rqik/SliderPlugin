@@ -1,21 +1,23 @@
-import { IState, CallBack, IPState } from './types/interfaces';
+import { StateProps, CallBack, IPState } from './types/interfaces';
 import { callPresent, makeMethodPresent } from './utils/helper';
 
 (function IIFE(jQuery) {
   const $ = jQuery;
   function init(index: number, element: HTMLElement) {
-    if (!$(element).length) throw new ReferenceError('Connection to non-existent element');
+    if (!$(element).length) {
+      throw new ReferenceError('Connection to non-existent element');
+    }
 
     const dataFromAttributes = $(element).data();
     const present = callPresent(element, index);
-    present.setState(dataFromAttributes);
+    present.setState(dataFromAttributes as StateProps);
     $(element).data('sliderRqik', present);
   }
 
   $.fn.sliderRqik = function initialPlugin(
     method?: IPState | string,
     options?: IPState | CallBack,
-  ): JQuery | JQuery<HTMLElement> | IState | IState[] | any {
+  ): JQuery | JQuery<HTMLElement> | StateProps | StateProps[] | any {
     const $this = $(this);
 
     if (!$this.first().data('sliderRqik')) {

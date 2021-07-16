@@ -1,8 +1,8 @@
-import { IState } from '../../types/interfaces';
+import {IntervalProps, StateProps} from '../../types/interfaces';
 import { keyChanges, rotation } from '../../types/constants';
 import { Model } from './Model';
 
-const stateHorizontal: IState = {
+const stateHorizontal: StateProps = {
   selector: 'slider-rqik', // селектор
   min: 10, // минимальное значение
   max: 120, // максимальное значение
@@ -19,9 +19,11 @@ const stateHorizontal: IState = {
   step: 0,
   isActiveLeft: false,
   [keyChanges.INTERVAL_STEP]: 0,
+  widthSlider: 0,
+  heightSlider: 0,
 };
 
-const stateVertical: IState = {
+const stateVertical: StateProps = {
   selector: 'slider-rqik', // селектор
   min: 112, // минимальное значение
   max: 120, // максимальное значение
@@ -38,9 +40,11 @@ const stateVertical: IState = {
   step: 0,
   isActiveLeft: false,
   [keyChanges.INTERVAL_STEP]: 0,
+  widthSlider: 0,
+  heightSlider: 0,
 };
 
-const stateHorCorrect: IState = {
+const stateHorCorrect: StateProps = {
   selector: 'slider-rqik', // селектор
   min: 10, // минимальное значение
   max: 120, // максимальное значение
@@ -60,7 +64,7 @@ const stateHorCorrect: IState = {
   widthSlider: 0,
   heightSlider: 0,
 };
-const stateVerCorrect: IState = {
+const stateVerCorrect: StateProps = {
   selector: 'slider-rqik', // селектор
   min: 112, // минимальное значение
   max: 120, // максимальное значение
@@ -97,13 +101,13 @@ describe('Model test', () => {
     expect(model.getState).toEqual(stateVerCorrect);
   });
   test('editMode', () => {
-    model.setStateValid({
+    model.setStateValid(({
       min: '232',
       max: '322',
       intervalCount: '5',
       maxValue: '190',
       minValue: '290',
-    } , true);
+    } as unknown as StateProps ), true);
 
     expect(model.getState.min).not.toEqual('232');
     expect(model.getState.min).toEqual(232);
@@ -139,16 +143,15 @@ describe('Model test', () => {
       Model.prototype as any,
       'mathPositionToPercent',
     );
-    model.setState({ shiftLeft: '44' });
+    model.setState({ shiftLeft: 44 } as StateProps);
     expect(defineLeftVal).toHaveBeenCalled();
     expect(setState).toHaveBeenCalled();
 
-    model.setState({ shiftRight: '44' });
+    model.setState({ shiftRight: 44 } as StateProps);
     expect(setState).toHaveBeenCalledTimes(2);
     expect(defineRightVal).toHaveBeenCalled();
 
-    model.setState({ notCorrect: '44' });
-    expect(setState).toHaveBeenCalledTimes(3);
+
 
     model.setState({ position: '44' });
     expect(defineStep).toHaveBeenCalled();
@@ -163,26 +166,26 @@ describe('Model test', () => {
     expect(activeButton).toHaveBeenCalled();
     expect(checkExtremePoint).toHaveBeenCalled();
 
-    model.setState({[keyChanges.INTERVAL]:20})
-    model.setState({ [keyChanges.SHIFT_LEFT]: 24 });
-    model.setState({ [keyChanges.SHIFT_RIGHT]: 24 });
-    model.setStateValid({ step: 10 });
+    model.setState({[keyChanges.INTERVAL]:20} as IntervalProps)
+    model.setState({ [keyChanges.SHIFT_LEFT]: 24 } as StateProps);
+    model.setState({ [keyChanges.SHIFT_RIGHT]: 24 } as StateProps);
+    model.setStateValid({ step: 10 } as StateProps);
     model.setState({ [keyChanges.ACTIVE]: 55 });
     expect(checkExtremePoint).toHaveBeenCalledTimes(2);
     expect(model.getState.isActiveLeft).toEqual(false);
 
-    model.setStateValid({ step: 97 });
+    model.setStateValid({ step: 97 }as StateProps);
     model.setState({ [keyChanges.ACTIVE]: -10 });
     expect(model.getState.isActiveLeft).toEqual(true);
   });
 
   test('call validStep methods', () => {
-    model.setState({ stepSize: 42 });
-    model.setState({ stepSize: -42 });
+    model.setState({ stepSize: 42 } as StateProps);
+    model.setState({ stepSize: -42 } as StateProps);
 
     const defineStep = jest.spyOn(Model.prototype as any, 'defineStep');
     const validStep = jest.spyOn(Model.prototype as any, 'validStep');
-    model.setStateValid({ max: 10, min: 10 });
+    model.setStateValid({ max: 10, min: 10 } as StateProps);
 
     model.setState({ [keyChanges.POSITION]: 5 });
     expect(defineStep).toHaveBeenCalled();
@@ -199,13 +202,13 @@ describe('Model test', () => {
     model.setState({ position: '44' });
     expect(mathPositionToPercent).toHaveBeenCalled();
     expect(mathPositionToPercent).toHaveBeenCalledTimes(1);
-    model.setStateValid({ stepSize: 10 });
+    model.setStateValid({ stepSize: 10 }as StateProps);
     model.setState({ position: '23' });
     expect(mathPositionToPercent).toHaveBeenCalledTimes(2);
     model.setState({ position: '13' });
     expect(mathPositionToPercent).toHaveBeenCalledTimes(3);
 
-    model.setStateValid({ rotate: 'vertical' });
+    model.setStateValid({ rotate: 'vertical' }as StateProps);
     model.setState({ position: '73' });
     expect(mathPositionToPercent).toHaveBeenCalledTimes(4);
   });

@@ -1,6 +1,11 @@
 import { boundMethod } from 'autobind-decorator';
 
-import { IPState } from '../../slider/types/interfaces';
+import {
+  CallBack,
+  IPState,
+  StateProps,
+  UniversalState,
+} from '../../slider/types/interfaces';
 import { IInputChecker, IMakeEventCheck } from './types';
 
 class InputChecker {
@@ -53,7 +58,7 @@ class InputChecker {
   }
 
   private addEventSlider(): void {
-    this.$slider.sliderRqik('subscribe', this.onChange);
+    this.$slider.sliderRqik('subscribe', this.onChange as CallBack);
     this.$inputRotate.on('click', this.addClassForm);
     this.$inputRange.on('change', this.disabledInputCurrentLeft);
   }
@@ -77,7 +82,7 @@ class InputChecker {
   }
 
   @boundMethod
-  private onChange(data: IPState): void {
+  private onChange(data: StateProps): void {
     if (data.minValue) {
       this.$inputCurrentLeft.val(Number(data.minValue));
     }

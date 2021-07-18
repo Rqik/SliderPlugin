@@ -257,7 +257,7 @@ class View {
     }
 
     if (event instanceof MouseEvent) {
-      target = <HTMLElement>event.target;
+      target = <HTMLElement>event.currentTarget;
     } else {
       target = <HTMLElement>event.targetTouches[0].target;
     }

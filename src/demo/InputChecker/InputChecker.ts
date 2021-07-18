@@ -1,11 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
 
-import {
-  CallBack,
-  PStateProps,
-  StateProps,
-  UniversalState,
-} from '../../slider/types/interfaces';
+import { CallBack, StateProps } from '../../slider/types/interfaces';
 import { IInputChecker, IMakeEventCheck } from './types';
 
 class InputChecker {

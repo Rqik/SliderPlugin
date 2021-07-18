@@ -9,6 +9,11 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
+let mode = 'development';
+
+if (isProd) {
+  mode = 'production';
+}
 
 const PATHS = {
   src: path.join(__dirname, './src'),
@@ -64,7 +69,7 @@ module.exports = {
   stats: { errorDetails: true, children: true },
 
   context: PATHS.src,
-  mode: 'development',
+  mode: mode,
   entry: {
     index: './demo/page/page.ts',
     slider: './slider/slider.ts',
@@ -72,6 +77,7 @@ module.exports = {
 
   output: {
     filename: 'js/[name]-[contenthash:5]-bundle.js',
+    chunkFilename: '[name].[contenthash:3]-bundle.js',
     path: PATHS.dist,
     publicPath: '',
   },
@@ -79,6 +85,7 @@ module.exports = {
   optimization: {
     minimize: isProd,
     minimizer: minimizer(),
+    splitChunks: { chunks: 'all' },
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],

@@ -257,7 +257,7 @@ class View {
     }
 
     if (event instanceof MouseEvent) {
-      target = <HTMLElement>event.currentTarget;
+      target = <HTMLElement>event.target;
     } else {
       target = <HTMLElement>event.targetTouches[0].target;
     }
@@ -360,7 +360,10 @@ class View {
 
   @boundMethod
   private onClickMove(event: MouseEvent | TouchEvent): void {
+    let target;
     this.resizeSlider();
+    event.preventDefault();
+
     if (event.cancelable) {
       event.preventDefault();
     }
@@ -368,6 +371,18 @@ class View {
     this.observerPosition(event);
     if (this.state.range === 'two') {
       this.overridingButtons(this.state.isActiveLeft);
+    }
+
+    if (event instanceof MouseEvent) {
+      target = <HTMLElement>event.target;
+    } else {
+      target = <HTMLElement>event.targetTouches[0].target;
+    }
+
+    const isTargetButton = target === this.buttonRight.button || target === this.buttonLeft.button;
+
+    if (isTargetButton) {
+      return;
     }
     this.eventButton(this.state.step);
   }

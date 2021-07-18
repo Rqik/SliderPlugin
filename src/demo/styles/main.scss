@@ -1,7 +1,6 @@
 @import '~normalize.css';
-@import './variables.scss';
-@import '../assets/fonts/montserrat.css';
-@import '../../slider/styles/slider';
+@import 'variables.scss';
+@import 'font.scss';
 
 * {
   box-sizing: border-box;

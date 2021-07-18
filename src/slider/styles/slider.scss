@@ -1,4 +1,4 @@
-@import './variables';
+@import 'variables';
 @import 'interval-point';
 
 .slider-range {
@@ -47,7 +47,7 @@
     min-height: 20px;
     box-shadow: $inner-shadow;
     box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', 'Arial', sans-serif;
     font-weight: bold;
     font-size: 13px;
     line-height: 20px;

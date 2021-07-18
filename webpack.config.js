@@ -1,8 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -13,7 +15,7 @@ const PATHS = {
   dist: path.join(__dirname, './dist'),
 };
 
-const plugins = (entry) => {
+const plugins = () => {
   const base = [
     new CleanWebpackPlugin(),
 
@@ -38,25 +40,34 @@ const plugins = (entry) => {
     }),
   ];
   if (isDev) {
-    base.push(new webpack.HotModuleReplacementPlugin() ,
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'windows.jQuery': 'jquery',
-    }),);
+    base.push(
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'windows.jQuery': 'jquery',
+      }),
+    );
   }
 
   return base;
 };
 
+const minimizer = () => {
+  if (isProd) {
+    return [new TerserPlugin(), new CssMinimizerPlugin()];
+  }
+  return [];
+};
+
 module.exports = {
-  stats: {errorDetails: true, children: true},
+  stats: { errorDetails: true, children: true },
 
   context: PATHS.src,
   mode: 'development',
   entry: {
     index: './demo/page/page.ts',
-    slider: './slider/slider.ts'
+    slider: './slider/slider.ts',
   },
 
   output: {
@@ -67,6 +78,7 @@ module.exports = {
 
   optimization: {
     minimize: isProd,
+    minimizer: minimizer(),
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
@@ -81,7 +93,7 @@ module.exports = {
     port: 8008,
     hot: true,
   },
-  plugins: plugins(  ),
+  plugins: plugins(),
 
   module: {
     rules: [
@@ -98,11 +110,11 @@ module.exports = {
           isDev
             ? 'style-loader'
             : {
-              loader: MiniCssExtractPlugin.loader,
-              options: {
-                publicPath: '../',
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  publicPath: '../',
+                },
               },
-            },
           'css-loader',
           'postcss-loader',
           'sass-loader',

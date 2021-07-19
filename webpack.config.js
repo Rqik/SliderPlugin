@@ -74,9 +74,12 @@ module.exports = {
   context: PATHS.src,
 
   mode: mode,
-
+  target: isDev ? 'web' : 'browserslist',
   entry: {
-    index: ['./demo/page/page.ts', './demo/page/page.scss'],
+    index: {
+      dependOn: 'slider',
+      import: ['./demo/page/page.ts', './demo/page/page.scss'],
+    },
     slider: ['./slider/slider.ts', './slider/styles/slider.scss'],
   },
 

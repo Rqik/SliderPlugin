@@ -1,6 +1,5 @@
 import { StateProps, CallBack, PStateProps } from './types/interfaces';
 import { callPresent, makeMethodPresent } from './utils/helper';
-import './styles/slider.scss';
 
 (function IIFE(jQuery) {
   const $ = jQuery;

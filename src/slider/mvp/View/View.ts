@@ -81,6 +81,7 @@ class View {
   private init(selector: string): void {
     this.slider = <HTMLElement>document.querySelector(selector);
     this.slider.style.position = 'relative';
+    this.render();
   }
 
   private renderInterval(): void {
@@ -257,7 +258,7 @@ class View {
     }
 
     if (event instanceof MouseEvent) {
-      target = <HTMLElement>event.currentTarget;
+      target = <HTMLElement>event.target;
     } else {
       target = <HTMLElement>event.targetTouches[0].target;
     }
@@ -362,7 +363,6 @@ class View {
   private onClickMove(event: MouseEvent | TouchEvent): void {
     let target;
     this.resizeSlider();
-    event.preventDefault();
 
     if (event.cancelable) {
       event.preventDefault();

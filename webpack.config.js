@@ -66,18 +66,22 @@ const minimizer = () => {
 };
 
 module.exports = {
-  stats: { errorDetails: true, children: true },
+  stats: {
+    errorDetails: true,
+    children: true,
+  },
 
   context: PATHS.src,
+
   mode: mode,
+
   entry: {
-    index: './demo/page/page.ts',
-    slider: './slider/slider.ts',
+    index: ['./demo/page/page.ts', './demo/page/page.scss'],
+    slider: ['./slider/slider.ts', './slider/styles/slider.scss'],
   },
 
   output: {
     filename: 'js/[name]-[contenthash:5]-bundle.js',
-    chunkFilename: '[name].[contenthash:3]-bundle.js',
     path: PATHS.dist,
     publicPath: '',
   },
@@ -85,8 +89,8 @@ module.exports = {
   optimization: {
     minimize: isProd,
     minimizer: minimizer(),
-    splitChunks: { chunks: 'all' },
   },
+
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
     alias: {
@@ -95,11 +99,13 @@ module.exports = {
       '@': path.resolve(__dirname, 'src'),
     },
   },
+
   devServer: {
     contentBase: PATHS.dist,
     port: 8008,
     hot: true,
   },
+
   plugins: plugins(),
 
   module: {

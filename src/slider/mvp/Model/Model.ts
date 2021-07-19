@@ -20,7 +20,7 @@ class Model {
 
   private state: StateProps = defaultState;
 
-  private stateKey= [
+  private stateKey = [
     'selector',
     'min',
     'max',
@@ -78,7 +78,7 @@ class Model {
         }
         break;
       case keyChanges.INTERVAL:
-        if ('interval' in data) {
+        if ('intervalAction' in data) {
           this.state.step = Model.convertCorrectNumber(
             this.convertNumberInPercent(Number(data[keyChanges.INTERVAL])),
           );

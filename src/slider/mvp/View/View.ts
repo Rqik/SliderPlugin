@@ -283,7 +283,9 @@ class View {
 
     const { target } = event;
     const isNotTooltip = target === this.sliderRange
-      || target === this.sliderClass.sliderActiveZone;
+      || target === this.sliderClass.sliderActiveZone
+      || target === this.tooltipGeneral.element
+      || this.state[keyChanges.SHIFT_LEFT] === this.state[keyChanges.SHIFT_RIGHT];
     if (isNotTooltip) {
       this.positionEventTarget = 0;
     }

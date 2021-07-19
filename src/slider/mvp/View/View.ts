@@ -24,7 +24,7 @@ class View {
 
   private buttonWidth = 10;
 
-  private tooltipEventPosition = 0;
+  private positionEventTarget = 0;
 
   // абстрактный тумблер
   private currentButton: HTMLElement = this.buttonRight.button;
@@ -101,19 +101,6 @@ class View {
   private addAction(): void {
     this.sliderRange.addEventListener('mousedown', this.onClickMove);
     this.sliderRange.addEventListener('touchstart', this.onClickMove);
-    this.tooltipLeft.element.addEventListener('mousedown', this.handlerTooltip);
-    this.tooltipRight.element.addEventListener(
-      'mousedown',
-      this.handlerTooltip,
-    );
-    this.tooltipLeft.element.addEventListener(
-      'touchstart',
-      this.handlerTooltip,
-    );
-    this.tooltipRight.element.addEventListener(
-      'touchstart',
-      this.handlerTooltip,
-    );
 
     this.interval.items.forEach((item) => {
       item.addEventListener('mousedown', this.onClickInterval);
@@ -173,12 +160,12 @@ class View {
     }
     if (this.state.showTooltip) {
       this.tooltipRight.element.style.opacity = '1';
-      this.slider.append(this.tooltipRight.element);
+      this.sliderRange.append(this.tooltipRight.element);
     } else {
       this.tooltipGeneral.element.remove();
       this.tooltipLeft.element.remove();
       this.tooltipRight.element.remove();
-      this.tooltipEventPosition = 0;
+      this.positionEventTarget = 0;
     }
   }
 
@@ -186,7 +173,7 @@ class View {
     this.sliderRange.append(this.buttonLeft.button);
     if (this.state.showTooltip) {
       this.tooltipLeft.element.style.opacity = '1';
-      this.slider.append(this.tooltipLeft.element);
+      this.sliderRange.append(this.tooltipLeft.element);
     }
   }
 
@@ -246,45 +233,16 @@ class View {
     this.currentButton.ondragstart = () => false;
   }
 
-  @boundMethod
-  private handlerTooltip(event: MouseEvent | TouchEvent): void {
-    let target;
-    const { cordClient } = this.getCordClientAndEvent(event);
-
-    this.resizeSlider();
-
-    if (event.cancelable) {
-      event.preventDefault();
-    }
-
-    if (event instanceof MouseEvent) {
-      target = <HTMLElement>event.target;
-    } else {
-      target = <HTMLElement>event.targetTouches[0].target;
-    }
+  private getPositionEventTarget(target: HTMLElement, cordClient: number) {
     if (this.state.rotate === rotation.HORIZONTAL) {
-      this.tooltipEventPosition = cordClient
+      this.positionEventTarget = cordClient
         - target.getBoundingClientRect().left
         - target.offsetWidth / 2;
     } else {
-      this.tooltipEventPosition = cordClient
+      this.positionEventTarget = cordClient
         - target.getBoundingClientRect().top
         - target.offsetHeight / 2;
     }
-
-    if (this.tooltipLeft.element === target) {
-      this.overridingButtons(true);
-    } else {
-      this.overridingButtons(false);
-    }
-    if (event instanceof MouseEvent) {
-      document.addEventListener('mousemove', this.onMouseMove);
-      document.addEventListener('mouseup', this.removeMouse);
-    } else {
-      document.addEventListener('touchmove', this.onMouseMove);
-      document.addEventListener('touchend', this.removeTouch);
-    }
-    this.currentButton.ondragstart = () => false;
   }
 
   @boundMethod
@@ -324,19 +282,19 @@ class View {
     const { cordClient, event } = this.getCordClientAndEvent(evt);
 
     const { target } = event;
-    const isNotTooltip = target !== this.tooltipRight.element
-      && target !== this.tooltipLeft.element;
+    const isNotTooltip = target === this.sliderRange
+      || target === this.sliderClass.sliderActiveZone;
     if (isNotTooltip) {
-      this.tooltipEventPosition = 0;
+      this.positionEventTarget = 0;
     }
 
     this.observer.broadcast({
-      [keyChanges.POSITION]: cordClient - this.tooltipEventPosition,
+      [keyChanges.POSITION]: cordClient - this.positionEventTarget,
     });
 
     if (this.state.range === 'two') {
       this.observer.broadcast({
-        [keyChanges.ACTIVE]: cordClient - this.tooltipEventPosition,
+        [keyChanges.ACTIVE]: cordClient - this.positionEventTarget,
       });
     }
   }
@@ -361,17 +319,14 @@ class View {
 
   @boundMethod
   private onClickMove(event: MouseEvent | TouchEvent): void {
-    let target;
-    this.resizeSlider();
-
     if (event.cancelable) {
       event.preventDefault();
     }
-    this.buttonAction(event);
-    this.observerPosition(event);
-    if (this.state.range === 'two') {
-      this.overridingButtons(this.state.isActiveLeft);
-    }
+
+    let target;
+    this.resizeSlider();
+
+    const { cordClient } = this.getCordClientAndEvent(event);
 
     if (event instanceof MouseEvent) {
       target = <HTMLElement>event.target;
@@ -379,12 +334,20 @@ class View {
       target = <HTMLElement>event.targetTouches[0].target;
     }
 
-    const isTargetButton = target === this.buttonRight.button || target === this.buttonLeft.button;
+    this.getPositionEventTarget(target, cordClient);
 
-    if (isTargetButton) {
-      return;
+    this.buttonAction(event);
+    this.observerPosition(event);
+    if (this.state.range === 'two') {
+      this.overridingButtons(this.state.isActiveLeft);
     }
-    this.eventButton(this.state.step);
+
+    const isTargetSlider = target === this.sliderRange
+      || target === this.sliderClass.sliderActiveZone;
+
+    if (isTargetSlider) {
+      this.eventButton(this.state.step);
+    }
   }
 
   private overridingButtons(bool: boolean): void {

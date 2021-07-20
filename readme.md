@@ -181,7 +181,7 @@ $('.plug').sliderRqik({
 });
 ```
 
-### tooltipRightValue и tooltipLeftValue
+### maxValue и minValue
 
 ---
 
@@ -191,7 +191,7 @@ $('.plug').sliderRqik({
 ```javascript
 $('.plug').sliderRqik({
   maxValue: 10, // правая кнопка
-  mштValue: 0, // левая кнопка
+  minValue: 0, // левая кнопка
 });
 ```
 
@@ -218,7 +218,7 @@ $('.plug').sliderRqik({ range: 'one' });
 $('.plug').sliderRqik({ rotate: 'vertical' });
 ```
 
-### show
+### showTooltip
 
 ---
 

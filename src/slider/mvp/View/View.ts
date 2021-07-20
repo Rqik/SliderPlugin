@@ -286,6 +286,7 @@ class View {
       || target === this.sliderClass.sliderActiveZone
       || target === this.tooltipGeneral.element
       || this.state[keyChanges.SHIFT_LEFT] === this.state[keyChanges.SHIFT_RIGHT];
+
     if (isNotTooltip) {
       this.positionEventTarget = 0;
     }

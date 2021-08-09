@@ -1,6 +1,11 @@
 # **_SliderRqik_ - плагин для JQ**
+
+Плагин для управления диапазоном доступных значений. От минимального до максимального или для интервала значений.
+Допустимы любые числовые значения. Направление движения ползунков не зависит от значений слайдера.
+
 _Плагин написан в целях обучения_
-___
+
+---
 
 <a href="https://www.npmjs.com/"><img src="https://img.shields.io/badge/npm-v7.13.0-blue?style=for-the-badge"></a>
 <a href="https://nodejs.org/en/"><img src="https://img.shields.io/badge/node->=15.10.0-ff0062?style=for-the-badge"></a>

@@ -3,7 +3,7 @@
     "stylelint-scss",
     "stylelint-order",
     "stylelint-declaration-block-no-ignored-properties",
-		"stylelint-prettier"
+    "stylelint-prettier"
   ],
   "extends": [
     "stylelint-config-standard",

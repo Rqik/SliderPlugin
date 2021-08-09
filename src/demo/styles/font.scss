@@ -1,9 +1,9 @@
 @font-face {
   src:
-    url('../assets/fonts/Montserrat-Bold.woff2') format('woff2'),
-    url('../assets/fonts/Montserrat-Bold.woff') format('woff'),
-    url('../assets/fonts/Montserrat-Bold.ttf') format('truetype'),
-    url('../assets/fonts/Montserrat-Bold.svg#Montserrat-Bold') format('svg');
+    url('@fonts/montserrat-bold.woff2') format('woff2'),
+    url('@fonts/montserrat-bold.woff') format('woff'),
+    url('@fonts/montserrat-bold.ttf') format('truetype'),
+    url('@fonts/montserrat-bold.svg#montserrat-bold') format('svg');
   font-family: 'Montserrat';
   font-weight: bold;
   font-style: normal;
@@ -12,10 +12,10 @@
 
 @font-face {
   src:
-    url('../assets/fonts/Montserrat-Regular.woff2') format('woff2'),
-    url('../assets/fonts/Montserrat-Regular.woff') format('woff'),
-    url('../assets/fonts/Montserrat-Regular.ttf') format('truetype'),
-    url('../assets/fonts/Montserrat-Regular.svg#Montserrat-Regular')
+    url('@fonts/montserrat-regular.woff2') format('woff2'),
+    url('@fonts/montserrat-regular.woff') format('woff'),
+    url('@fonts/montserrat-regular.ttf') format('truetype'),
+    url('@fonts/montserrat-regular.svg#montserrat-regular')
     format('svg');
   font-family: 'Montserrat';
   font-weight: normal;

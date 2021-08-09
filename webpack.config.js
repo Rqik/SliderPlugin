@@ -97,8 +97,8 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
     alias: {
-      '@assets': path.resolve(__dirname, 'src/assets'),
-      '@fonts': path.resolve(__dirname, 'src/assets/fonts'),
+      '@assets': path.resolve(__dirname, 'src/demo/assets'),
+      '@fonts': path.resolve(__dirname, 'src/demo/assets/fonts'),
       '@': path.resolve(__dirname, 'src'),
     },
   },

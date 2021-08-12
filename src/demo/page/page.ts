@@ -1,4 +1,4 @@
-import { InputChecker } from '../InputChecker/InputChecker';
+import InputChecker from '../InputChecker/InputChecker';
 import '../styles/main.scss';
 import './page.scss';
 

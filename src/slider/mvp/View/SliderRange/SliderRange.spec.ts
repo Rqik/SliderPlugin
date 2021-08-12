@@ -1,5 +1,5 @@
 import { rotation, slider as className } from '../../../types/constants';
-import { SliderRange } from './SliderRange';
+import  SliderRange  from './SliderRange';
 
 describe('SliderRange test', () => {
   let slider: SliderRange;

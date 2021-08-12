@@ -42,4 +42,6 @@ const enum slider {
   SLIDER_ACTIVE_ZONE = 'slider-range__active-zone',
 }
 
-export { methodTypes, keyChanges, interval, tooltipValue, button, slider, rotation };
+export {
+  methodTypes, keyChanges, interval, tooltipValue, button, slider, rotation,
+};

@@ -1,12 +1,8 @@
 import { boundMethod } from 'autobind-decorator';
 
-import {
-  StateProps,
-  UniversalState,
-  CallBack,
-} from '../../types/interfaces';
-import { Model } from '../Model/Model';
-import { View } from '../View/View';
+import { StateProps, UniversalState, CallBack } from '../../types/interfaces';
+import Model from '../Model/Model';
+import View from '../View/View';
 
 class Presenter {
   model: Model;
@@ -30,12 +26,12 @@ class Presenter {
   }
 
   @boundMethod
-  subscribe(callBack: CallBack):void {
+  subscribe(callBack: CallBack): void {
     this.model.observer.subscribe(callBack);
   }
 
   @boundMethod
-  unsubscribe(callBack: CallBack):void {
+  unsubscribe(callBack: CallBack): void {
     this.model.observer.unsubscribe(callBack);
   }
 
@@ -56,4 +52,4 @@ class Presenter {
   }
 }
 
-export { Presenter };
+export default Presenter;

@@ -26,4 +26,4 @@ class EventObserver {
   }
 }
 
-export { EventObserver };
+export default EventObserver;

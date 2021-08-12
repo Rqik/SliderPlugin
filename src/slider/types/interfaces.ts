@@ -2,31 +2,26 @@ import { keyChanges, rotation } from './constants';
 
 type Rotate = rotation.HORIZONTAL | rotation.VERTICAL;
 type Range = 'one' | 'two';
-type CallBack = (args?: UniversalState) => void;
+type Options = number | string | boolean;
 
 type CoordsType = {
   x: number;
   y: number;
   width: number;
   height: number;
-}
+};
 type CoordsProps = {
-  [keyChanges.COORDINATES]: CoordsType,
-}
+  [keyChanges.COORDINATES]: CoordsType;
+};
 type ActiveButton = {
-  [keyChanges.ACTIVE]: number
-}
+  [keyChanges.ACTIVE]: number;
+};
 type PositionProps = {
-  [keyChanges.POSITION]: number | string
-}
+  [keyChanges.POSITION]: number | string;
+};
 type IntervalProps = {
-  [keyChanges.INTERVAL]: number
-}
-
-interface ISlider {
-  data: (opt: IStateEl) => ISlider;
-  getData: () => StateProps[];
-}
+  [keyChanges.INTERVAL]: number;
+};
 
 type StateProps = {
   selector: string;
@@ -47,22 +42,28 @@ type StateProps = {
   [keyChanges.INTERVAL_STEP]: number;
   widthSlider: number;
   heightSlider: number;
-}
+};
 
 interface IStateEl {
   [k: string]: Options;
 }
 
+interface ISlider {
+  data: (opt: IStateEl) => ISlider;
+  getData: () => StateProps[];
+}
+type PStateProps = Partial<StateProps>;
+
 type UniversalState =
-  CoordsProps
+  | CoordsProps
   | StateProps
   | ActiveButton
   | PositionProps
   | IntervalProps
   | PStateProps;
 
-type Options = number | string | boolean;
-type PStateProps = Partial<StateProps>
+type CallBack = (args?: UniversalState) => void;
+
 export {
   PStateProps,
   CoordsType,

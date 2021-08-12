@@ -1,7 +1,7 @@
-import {EventObserver} from '../../utils/EventObserver';
-import {StateProps} from '../../types/interfaces';
-import {keyChanges, rotation} from '../../types/constants';
-import {View} from './View';
+import EventObserver from '../../utils/EventObserver';
+import { StateProps } from '../../types/interfaces';
+import { keyChanges, rotation } from '../../types/constants';
+import View from './View';
 
 const state: StateProps = {
   selector: 'slider-rqik', // селектор
@@ -160,7 +160,6 @@ describe('View test', () => {
       expect(buttonAction).toHaveBeenCalled();
       expect(buttonAction).toHaveBeenCalledTimes(2);
 
-
       const onClickInterval = jest.spyOn(
         View.prototype as any,
         'onClickInterval',
@@ -209,8 +208,6 @@ describe('View test', () => {
       // @ts-ignore
       view.removeMouse();
       expect(removeMouse).toHaveBeenCalled();
-
-
     });
 
     test('call render', () => {

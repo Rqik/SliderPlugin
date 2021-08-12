@@ -40,4 +40,4 @@ class SliderRange {
   }
 }
 
-export { SliderRange };
+export default SliderRange;

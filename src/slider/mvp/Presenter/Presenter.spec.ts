@@ -1,9 +1,9 @@
-import { EventObserver } from '../../utils/EventObserver';
+import EventObserver from '../../utils/EventObserver';
 import { rotation } from '../../types/constants';
-import { View } from '../View/View';
-import { Presenter } from './Presenter';
-import {defaultState} from "../Model/default-state";
-import {CallBack, StateProps} from "../../types/interfaces";
+import View from '../View/View';
+import Presenter from './Presenter';
+import defaultState from '../Model/default-state';
+import { CallBack, StateProps } from '../../types/interfaces';
 
 const ObserverMock = EventObserver as jest.MockedClass<typeof EventObserver>;
 beforeEach(() => {
@@ -48,19 +48,17 @@ describe('Presenter test', () => {
     expect(init).toHaveBeenCalled();
     expect(init).toHaveBeenCalledTimes(1);
   });
-  test('getState method' , ()=>{
-    let state = present.getState()
-    expect(state).toEqual(defaultState)
-  })
-  test('subscribe method', ()=>{
-    const fn:CallBack = (data)=>{
-
-    }
-    present.subscribe(fn)
-    expect(present.model.observer.observers.length).toEqual(2)
-    present.unsubscribe(fn)
-    expect(present.model.observer.observers.length).toEqual(1)
-  })
+  test('getState method', () => {
+    let state = present.getState();
+    expect(state).toEqual(defaultState);
+  });
+  test('subscribe method', () => {
+    const fn: CallBack = (data) => {};
+    present.subscribe(fn);
+    expect(present.model.observer.observers.length).toEqual(2);
+    present.unsubscribe(fn);
+    expect(present.model.observer.observers.length).toEqual(1);
+  });
   test('unsubscribe ', () => {
     const kek = jest.fn((el) => el * 2);
 

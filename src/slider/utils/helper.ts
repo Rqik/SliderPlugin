@@ -1,4 +1,4 @@
-import { Presenter } from '../mvp/Presenter/Presenter';
+import Presenter from '../mvp/Presenter/Presenter';
 import { CallBack, PStateProps, StateProps } from '../types/interfaces';
 import { methodTypes } from '../types/constants';
 

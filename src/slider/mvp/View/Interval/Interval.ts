@@ -97,4 +97,4 @@ class Interval {
   }
 }
 
-export { Interval };
+export default Interval;

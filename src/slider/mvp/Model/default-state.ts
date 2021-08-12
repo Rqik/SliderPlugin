@@ -22,4 +22,4 @@ const defaultState: StateProps = {
   heightSlider: 0,
 };
 
-export { defaultState };
+export default defaultState;

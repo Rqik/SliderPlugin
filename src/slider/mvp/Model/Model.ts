@@ -1,4 +1,4 @@
-import { EventObserver } from '../../utils/EventObserver';
+import EventObserver from '../../utils/EventObserver';
 import {
   CoordsType,
   StateProps,
@@ -6,7 +6,7 @@ import {
   UniversalState,
 } from '../../types/interfaces';
 import { keyChanges, rotation } from '../../types/constants';
-import { defaultState } from './default-state';
+import defaultState from './default-state';
 
 class Model {
   public observer: EventObserver;
@@ -278,4 +278,4 @@ class Model {
   }
 }
 
-export { Model };
+export default Model;

@@ -2,8 +2,10 @@ import { boundMethod } from 'autobind-decorator';
 
 import { CoordsType, StateProps } from '../../types/interfaces';
 import { keyChanges, rotation } from '../../types/constants';
-import { EventObserver as Observer } from '../../utils/EventObserver';
-import { Button, Interval, SliderRange, Tooltip } from './SubView';
+import Observer from '../../utils/EventObserver';
+import {
+  Button, Interval, SliderRange, Tooltip,
+} from './SubView';
 
 class View {
   private slider: HTMLElement = document.createElement('div');
@@ -112,7 +114,9 @@ class View {
 
   @boundMethod
   private resizeSlider(): void {
-    const { x, y, width, height } = this.slider.getBoundingClientRect();
+    const {
+      x, y, width, height,
+    } = this.slider.getBoundingClientRect();
     const isChanged = width !== this.coords.width
       || height !== this.coords.height
       || x !== this.coords.x
@@ -121,9 +125,13 @@ class View {
   }
 
   private notifyCoords(isNotify: boolean) {
-    const { x, y, width, height } = this.slider.getBoundingClientRect();
+    const {
+      x, y, width, height,
+    } = this.slider.getBoundingClientRect();
     if (isNotify) {
-      this.coords = { x, y, width, height };
+      this.coords = {
+        x, y, width, height,
+      };
       this.observer.broadcast({
         [keyChanges.WIDTH]: this.sliderRange.offsetWidth,
         [keyChanges.HEIGHT]: this.sliderRange.offsetHeight,
@@ -457,4 +465,4 @@ class View {
   }
 }
 
-export { View };
+export default View;

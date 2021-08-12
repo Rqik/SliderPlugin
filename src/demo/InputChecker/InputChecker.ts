@@ -161,4 +161,4 @@ class InputChecker {
   }
 }
 
-export { InputChecker };
+export default InputChecker;

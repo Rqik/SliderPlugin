@@ -22,6 +22,7 @@
     "order/order": [
       "custom-properties",
       "dollar-variables",
+      "at-rules",
       "declarations",
       {
         "type": "at-rule",
@@ -90,11 +91,9 @@
         "selector": ".* &"
       },
       {
-        "type": "at-rule",
-        "name": "include",
-        "hasBlock": true
-      },
-      "at-rules"
+        "type": "rule",
+        "selector": "&_"
+      }
     ],
     "order/properties-alphabetical-order": null,
     "order/properties-order": [
@@ -468,9 +467,6 @@
         "unspecified": "bottomAlphabetical"
       }
     ],
-    "at-rule-blacklist": [
-      "extend"
-    ],
     "at-rule-empty-line-before": [
       "always",
       {
@@ -705,16 +701,6 @@
     "string-no-newline": true,
     "string-quotes": "single",
     "time-min-milliseconds": 10,
-    "unit-blacklist": [
-      "ch",
-      "cm",
-      "ex",
-      "in",
-      "mm",
-      "pc",
-      "pt",
-      "q"
-    ],
     "unit-case": "lower",
     "unit-no-unknown": true,
     "unit-whitelist": null,

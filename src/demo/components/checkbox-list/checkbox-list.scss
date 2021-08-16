@@ -5,6 +5,10 @@
   justify-content: space-between;
   gap: 20px;
 
+  &__input:checked ~ &__text {
+    background-color: $input-active;
+  }
+
   &__element {
     display: flex;
     flex-flow: row wrap;
@@ -25,9 +29,5 @@
     padding: 7px 10px;
     background-color: $input-disable;
     transition: background-color 0.3s ease-in-out;
-  }
-
-  &__input:checked ~ &__text {
-    background-color: $input-active;
   }
 }

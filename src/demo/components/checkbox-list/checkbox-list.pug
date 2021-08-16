@@ -3,7 +3,7 @@
 mixin checkBox({ checkElements })
   .checkbox-list
     each check in checkElements
-      - const {text , name , checked = false} = check
+      - const {text, name, checked = false} = check
       label.checkbox-list__element
-        input.checkbox-list__input(type="checkbox" name=name checked=checked)
+        input.checkbox-list__input(type="checkbox" name = name checked = checked)
         span.checkbox-list__text= text

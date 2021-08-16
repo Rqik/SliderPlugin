@@ -8,28 +8,36 @@ class InputChecker {
 
   private $slider: JQuery;
 
-  private $inputRotate: JQuery;
+  private $inputRotate!: JQuery ;
 
-  private $inputCurrentLeft: JQuery;
+  private $inputCurrentLeft!: JQuery;
 
-  private $inputCurrentRight: JQuery;
+  private $inputCurrentRight!: JQuery;
 
-  private $inputRange: JQuery;
+  private $inputRange!: JQuery;
 
-  private readonly inputNames: string[];
+  private inputNames!: string[];
 
-  private readonly inputCheck: [string, Array<string | boolean>][];
+  private inputCheck!: [string, Array<string | boolean>][];
 
   private readonly classRotate: string;
 
   constructor({ $form, $sliderDOM, classRotate }: IInputChecker) {
     this.$form = $form;
     this.$slider = $sliderDOM;
+    this.classRotate = classRotate;
+    this.findFormInput();
+    this.setDefaultProps();
+  }
+
+  findFormInput():void {
     this.$inputRotate = this.$form.find("input[name='rotate']");
     this.$inputRange = this.$form.find("input[name='range']");
     this.$inputCurrentLeft = this.$form.find("input[name='minValue']");
     this.$inputCurrentRight = this.$form.find("input[name='maxValue']");
-    this.classRotate = classRotate;
+  }
+
+  setDefaultProps():void {
     this.inputNames = [
       'max',
       'min',
@@ -86,7 +94,7 @@ class InputChecker {
     }
   }
 
-  private makeEventCheck({
+  private makeHandleCheck({
     nameAtr,
     active,
     disable,
@@ -105,7 +113,7 @@ class InputChecker {
     const $input = this.$form.find(`input[name='${nameAtr}']`);
     const value = $input.val() || 0;
 
-    $input.on('change', this.makeEventInputChange(nameAtr));
+    $input.on('change', this.makeHandleInputChange(nameAtr));
     const isValidVal = value !== '-' || value !== undefined;
 
     if (isValidVal) {
@@ -114,7 +122,7 @@ class InputChecker {
   }
 
   @boundMethod
-  private makeEventInputChange(nameAtr: string): () => void {
+  private makeHandleInputChange(nameAtr: string): () => void {
     const $input = this.$form.find(`input[name='${nameAtr}']`);
     let value = $input.val() || 0;
     const { $slider } = this;
@@ -146,7 +154,7 @@ class InputChecker {
     const [active, disable] = value;
     const item: JQuery = this.$form.find(`input[name='${nameAtr}']`);
 
-    item.on('click', this.makeEventCheck({ nameAtr, active, disable }));
+    item.on('click', this.makeHandleCheck({ nameAtr, active, disable }));
 
     if (item.prop('checked')) {
       this.$slider.sliderRqik({ [nameAtr]: active });

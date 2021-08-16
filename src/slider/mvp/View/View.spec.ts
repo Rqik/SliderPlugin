@@ -160,16 +160,16 @@ describe('View test', () => {
       expect(buttonAction).toHaveBeenCalled();
       expect(buttonAction).toHaveBeenCalledTimes(2);
 
-      const onClickInterval = jest.spyOn(
+      const handleIntervalClick = jest.spyOn(
         View.prototype as any,
-        'onClickInterval',
+        'handleIntervalClick',
       );
 
       // @ts-ignore
-      view.onClickInterval(eventMouse);
+      view.handleIntervalClick(eventMouse);
 
-      expect(onClickInterval).toHaveBeenCalled();
-      expect(onClickInterval).toHaveBeenCalledTimes(1);
+      expect(handleIntervalClick).toHaveBeenCalled();
+      expect(handleIntervalClick).toHaveBeenCalledTimes(1);
 
       const responsiveCurrent = jest.spyOn(
         View.prototype as any,
@@ -194,9 +194,9 @@ describe('View test', () => {
 
       expect(onMouseMove).toHaveBeenCalledTimes(1);
       // @ts-ignore
-      view.onClickInterval(eventMouse);
+      view.handleIntervalClick(eventMouse);
 
-      expect(onClickInterval).toHaveBeenCalledTimes(2);
+      expect(handleIntervalClick).toHaveBeenCalledTimes(2);
 
       const removeTouch = jest.spyOn(View.prototype as any, 'removeTouch');
       const removeMouse = jest.spyOn(View.prototype as any, 'removeMouse');

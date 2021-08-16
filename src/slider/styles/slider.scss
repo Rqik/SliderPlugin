@@ -22,6 +22,9 @@
       height: 100%;
       background: $active-zone-background-vertical;
     }
+    .slider-range__current-value{
+      width: min-content;
+    }
   }
 
   &__active-zone {
@@ -44,6 +47,7 @@
     border: 2px solid white;
     border-radius: 14px;
     padding: 3px 8px;
+    width: max-content;
     min-height: 20px;
     box-shadow: $inner-shadow;
     box-sizing: border-box;

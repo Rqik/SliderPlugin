@@ -101,19 +101,19 @@ class View {
   }
 
   private addAction(): void {
-    this.sliderRange.addEventListener('mousedown', this.onClickMove);
-    this.sliderRange.addEventListener('touchstart', this.onClickMove);
+    this.sliderRange.addEventListener('mousedown', this.handleClickMove);
+    this.sliderRange.addEventListener('touchstart', this.handleClickMove);
 
     this.interval.items.forEach((item) => {
-      item.addEventListener('mousedown', this.onClickInterval);
-      item.addEventListener('touchstart', this.onClickInterval);
+      item.addEventListener('mousedown', this.handleIntervalClick);
+      item.addEventListener('touchstart', this.handleIntervalClick);
     });
 
-    window.addEventListener('resize', this.resizeSlider);
+    window.addEventListener('resize', this.handleResizeSlider);
   }
 
   @boundMethod
-  private resizeSlider(): void {
+  private handleResizeSlider(): void {
     const {
       x, y, width, height,
     } = this.slider.getBoundingClientRect();
@@ -200,8 +200,8 @@ class View {
   }
 
   @boundMethod
-  private onClickInterval(event: MouseEvent | TouchEvent): void {
-    this.resizeSlider();
+  private handleIntervalClick(event: MouseEvent | TouchEvent): void {
+    this.handleResizeSlider();
     if (event.cancelable) {
       event.preventDefault();
     }
@@ -329,13 +329,13 @@ class View {
   }
 
   @boundMethod
-  private onClickMove(event: MouseEvent | TouchEvent): void {
+  private handleClickMove(event: MouseEvent | TouchEvent): void {
     if (event.cancelable) {
       event.preventDefault();
     }
 
     let target;
-    this.resizeSlider();
+    this.handleResizeSlider();
 
     const { cordClient } = this.getCordClientAndEvent(event);
 
@@ -429,7 +429,6 @@ class View {
       this.tooltipRight.element.style.opacity = '0';
       this.tooltipGeneral.element.style.opacity = '1';
       this.tooltipGeneral.element.style.display = 'block';
-
       if (this.state.minValue === this.state.maxValue) {
         this.tooltipGeneral.text(`${this.state.minValue}`);
       } else {

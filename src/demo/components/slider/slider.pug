@@ -2,6 +2,6 @@ include ../slider-form/slider-form
 
 mixin slider({ className, id , isResizable })
   .slider
-    .slider__view-block(class=isResizable? "slider__view-block_resizable":"")
-      .slider__rqik(class = className data-min='-200' data-max='2220')&attributes(attributes)
+    .slider__view-block(class = isResizable ? "slider__view-block_resizable" : "")
+      .slider__rqik(class = className data-min='-200' data-max='2220')
     +sliderForm({ id })

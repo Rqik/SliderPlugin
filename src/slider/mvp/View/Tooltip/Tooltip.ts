@@ -28,9 +28,9 @@ class Tooltip {
   }
 
   positionVertical(shiftX: string | number): void {
+    this.element.style.left = `-${this.element.getBoundingClientRect().width + 15}px`;
     this.element.style.top = `calc(${shiftX}% -
     ${this.element.offsetHeight / 2}px)`;
-    this.element.style.left = `-${this.element.getBoundingClientRect().width + 15}px`;
   }
 
   setRotate(orientation: Rotate): void {

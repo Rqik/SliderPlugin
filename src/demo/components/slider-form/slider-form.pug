@@ -9,6 +9,7 @@ mixin sliderForm(props)
       maxValue = 50, minValue = 0
     } = props
     const sliderForm = require("@/demo/components/slider-form/slider-form.json")
+
   form.slider-form(id=id)
     +field({ name: "min", text: "Min", value: min })
     +field({ name: "max", text: "Max", value: max })

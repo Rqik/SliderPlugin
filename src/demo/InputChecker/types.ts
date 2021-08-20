@@ -1,7 +1,6 @@
 interface IInputChecker {
   $form: JQuery;
   $sliderDOM: JQuery;
-  classRotate: string;
 }
 interface IMakeEventCheck {
   nameAtr: string;

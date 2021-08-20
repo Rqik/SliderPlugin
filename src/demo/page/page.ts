@@ -16,21 +16,18 @@ $(() => {
   new InputChecker({
     $form: $form1,
     $sliderDOM: $plug1,
-    classRotate: 'slider_vertical',
+
   }).init();
   new InputChecker({
     $form: $form2,
     $sliderDOM: $plug2,
-    classRotate: 'slider_vertical',
   }).init();
   new InputChecker({
     $form: $form3,
     $sliderDOM: $plug3,
-    classRotate: 'slider_vertical',
   }).init();
   new InputChecker({
     $form: $form4,
     $sliderDOM: $plug4,
-    classRotate: 'slider_vertical',
   }).init();
 });

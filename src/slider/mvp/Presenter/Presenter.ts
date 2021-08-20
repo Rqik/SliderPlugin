@@ -21,8 +21,13 @@ class Presenter {
 
   setState(options: StateProps): void {
     this.model.setStateValid(options, true);
-    this.view.setState(this.model.getState);
-    this.view.render();
+    const stay = new Promise((resolve) => {
+      this.view.setState(this.model.getState);
+      resolve(null);
+    });
+    stay.then(() => {
+      this.view.render();
+    });
   }
 
   @boundMethod
@@ -36,14 +41,13 @@ class Presenter {
   }
 
   private init(): void {
-    this.model.observer.subscribe(this.setStateView);
     this.view.observer.subscribe(this.setStateModel as CallBack);
+    this.model.observer.subscribe(this.setStateView);
     this.view.render();
   }
 
   @boundMethod
   private setStateModel(data: UniversalState): void {
-    // console.log(this.getState());
     this.model.setState(data);
   }
 

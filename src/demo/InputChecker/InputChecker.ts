@@ -24,12 +24,11 @@ class InputChecker {
 
   private inputCheck!: [string, Array<string | boolean>][];
 
-  private readonly classRotate: string;
+  private classRotate!: string;
 
-  constructor({ $form, $sliderDOM, classRotate }: IInputChecker) {
+  constructor({ $form, $sliderDOM }: IInputChecker) {
     this.$form = $form;
     this.$slider = $sliderDOM;
-    this.classRotate = classRotate;
     this.findFormInput();
     this.setDefaultProps();
   }
@@ -44,6 +43,7 @@ class InputChecker {
   }
 
   setDefaultProps():void {
+    this.classRotate = 'slider__rqik_vertical';
     this.inputNames = [
       'max',
       'min',
@@ -148,7 +148,6 @@ class InputChecker {
         return;
       }
       $slider.sliderRqik({ [nameAtr]: Number(value) });
-      // console.log(this.state.minValue);
 
       const isCurrentInput = nameAtr === 'stepSize';
       if (isCurrentInput) {

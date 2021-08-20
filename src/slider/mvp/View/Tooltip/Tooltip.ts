@@ -47,9 +47,11 @@ class Tooltip {
 
   rectRight(): number {
     const clientRect = this.element.getBoundingClientRect();
+
     if (this.orientation === rotation.HORIZONTAL) {
       return clientRect.right;
     }
+
     return clientRect.bottom;
   }
 

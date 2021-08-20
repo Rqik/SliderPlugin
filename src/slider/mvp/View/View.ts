@@ -425,8 +425,8 @@ class View {
   private responsiveCurrent(oneCurrent: boolean): void {
     if (oneCurrent) {
       this.sliderRange.append(this.tooltipGeneral.element);
-      this.tooltipLeft.element.style.opacity = '0.4';
-      this.tooltipRight.element.style.opacity = '0.4';
+      this.tooltipLeft.element.style.opacity = '0';
+      this.tooltipRight.element.style.opacity = '0';
       this.tooltipGeneral.element.style.opacity = '1';
       this.tooltipGeneral.element.style.display = 'block';
       if (this.state.minValue === this.state.maxValue) {

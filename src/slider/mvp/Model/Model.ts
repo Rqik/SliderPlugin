@@ -96,11 +96,11 @@ class Model {
 
   setStateValid(state: StateProps, validate = false): void {
     const stateOld: StateProps = this.getState;
-
     this.state = {
       ...this.state,
       ...state,
     };
+
     if (validate) {
       this.convertToValidNumber();
     }
@@ -109,8 +109,9 @@ class Model {
     });
   }
 
-  private notify(state: StateProps, key: string): void {
+  private notify(state: StateProps, key?: string): void {
     const newProps: IStateEl = {};
+
     if (key === keyChanges.POSITION) {
       this.observer.broadcast({ [keyChanges.POSITION]: this.getState.step });
       return;
@@ -134,11 +135,14 @@ class Model {
   private convertToValidNumber(): void {
     this.state.min = Model.convertCorrectNumber(this.state.min);
     this.state.max = Model.convertCorrectNumber(this.state.max);
-
+    if (this.state.min > this.state.max) {
+      [this.state.max, this.state.min] = [this.state.min, this.state.max];
+    }
     this.state.stepSize = Model.convertCorrectNumber(this.state.stepSize);
     this.state.stepSize = this.state.stepSize <= 0 ? 0 : this.state.stepSize;
     this.state.maxValue = Model.convertCorrectNumber(this.state.maxValue);
     this.state.minValue = Model.convertCorrectNumber(this.state.minValue);
+
     this.state.shiftLeft = this.validStep(
       this.convertNumberInPercent(this.state.minValue),
     );

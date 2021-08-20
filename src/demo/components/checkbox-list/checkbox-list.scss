@@ -1,12 +1,20 @@
 .checkbox-list {
   display: flex;
+  flex: 1 0;
   flex-flow: row wrap;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 20px;
 
   &__input:checked ~ &__text {
-    background-color: $input-active;
+    color: white;
+    background:
+      $input-active
+      linear-gradient(
+        -90deg,
+        rgba(102, 204, 204, 1) 0%,
+        rgba(102, 133, 204, 1) 100%
+      );
   }
 
   &__element {
@@ -25,9 +33,15 @@
   }
 
   &__text {
-    border-radius: 5px;
+    border-radius: 2px;
     padding: 7px 10px;
-    background-color: $input-disable;
+    background:
+      $input-disable
+      linear-gradient(
+        -90deg,
+        rgba(102, 204, 204, 0.2) 0%,
+        rgba(102, 133, 204, 0.2) 100%
+      );
     transition: background-color 0.3s ease-in-out;
   }
 }

@@ -45,6 +45,16 @@
       background-color: white;
       resize: both;
 
+      &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        border: 15px solid transparent;
+        border-right: 15px solid $resize-block-border;
+        border-bottom: 15px solid $resize-block-border;
+      }
+
       .slider__rqik {
         margin-top: 0;
         margin-left: 0;

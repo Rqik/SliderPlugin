@@ -10,6 +10,10 @@ class InputChecker {
 
   private $inputRotate!: JQuery ;
 
+  private $min!: JQuery ;
+
+  private $max!: JQuery ;
+
   private $inputCurrentLeft!: JQuery;
 
   private $inputCurrentRight!: JQuery;
@@ -35,6 +39,8 @@ class InputChecker {
     this.$inputRange = this.$form.find("input[name='range']");
     this.$inputCurrentLeft = this.$form.find("input[name='minValue']");
     this.$inputCurrentRight = this.$form.find("input[name='maxValue']");
+    this.$min = this.$form.find("input[name='min']");
+    this.$max = this.$form.find("input[name='max']");
   }
 
   setDefaultProps():void {
@@ -86,11 +92,21 @@ class InputChecker {
 
   @boundMethod
   private onChange(data: StateProps): void {
-    if (data.minValue) {
+    if (data.minValue !== undefined) {
+      this.$inputCurrentLeft.attr('value', Number(data.minValue));
       this.$inputCurrentLeft.val(Number(data.minValue));
     }
-    if (data.maxValue) {
+    if (data.maxValue !== undefined) {
+      this.$inputCurrentRight.attr('value', Number(data.maxValue));
       this.$inputCurrentRight.val(Number(data.maxValue));
+    }
+    if (data.max !== undefined) {
+      this.$max.attr('value', Number(data.max));
+      this.$max.val(Number(data.max));
+    }
+    if (data.min !== undefined) {
+      this.$min.attr('value', Number(data.min));
+      this.$min.val(Number(data.min));
     }
   }
 
@@ -132,6 +148,7 @@ class InputChecker {
         return;
       }
       $slider.sliderRqik({ [nameAtr]: Number(value) });
+      // console.log(this.state.minValue);
 
       const isCurrentInput = nameAtr === 'stepSize';
       if (isCurrentInput) {
@@ -139,10 +156,9 @@ class InputChecker {
         this.$inputCurrentRight.attr('step', Number(value));
       }
 
-      const s = $slider.sliderRqik('settings')[nameAtr];
-
-      $input.attr('value', Number(s));
-      $input.val(Number(s));
+      const val = $slider.sliderRqik('settings')[nameAtr];
+      $input.attr('value', Number(val));
+      $input.val(Number(val));
     };
   }
 

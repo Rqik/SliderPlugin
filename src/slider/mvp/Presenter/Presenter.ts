@@ -43,6 +43,7 @@ class Presenter {
 
   @boundMethod
   private setStateModel(data: UniversalState): void {
+    // console.log(this.getState());
     this.model.setState(data);
   }
 

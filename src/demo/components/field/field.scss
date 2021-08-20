@@ -16,6 +16,7 @@
     width: 100%;
     font-weight: 600;
     font-size: 18px;
+    transition: background 0.3s ease-in-out;
 
     &:disabled {
       content: '';
@@ -30,6 +31,11 @@
       background-position: center;
       background-color: $background-color;
       opacity: 0.7;
+
+      + .field__text {
+        opacity: 0.4;
+        cursor: default;
+      }
     }
   }
 
@@ -39,6 +45,7 @@
     width: 100%;
     line-height: 1.4;
     background-color: white;
+    transition: opacity 0.3s ease-in-out;
     cursor: pointer;
   }
 }

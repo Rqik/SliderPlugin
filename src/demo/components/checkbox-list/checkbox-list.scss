@@ -6,7 +6,9 @@
   justify-content: flex-start;
   gap: 20px;
 
-  &__input:checked ~ &__text {
+  &__input:checked ~ &__text,
+  &__input:checked ~ &__text-swiper_active {
+    display: block;
     color: white;
     background:
       $input-active
@@ -15,6 +17,28 @@
         rgba(102, 204, 204, 1) 0%,
         rgba(102, 133, 204, 1) 100%
       );
+  }
+
+  &__input:checked + &__text-swiper {
+    display: none;
+  }
+
+  &__text,
+  &__text-swiper {
+    border-radius: 2px;
+    padding: 7px 10px;
+    background:
+      $input-disable
+      linear-gradient(
+        -90deg,
+        rgba(102, 204, 204, 0.2) 0%,
+        rgba(102, 133, 204, 0.2) 100%
+      );
+    transition: background-color 0.3s ease-in-out;
+
+    &_active {
+      display: none;
+    }
   }
 
   &__element {
@@ -30,18 +54,5 @@
     display: none;
     align-self: center;
     width: 15px;
-  }
-
-  &__text {
-    border-radius: 2px;
-    padding: 7px 10px;
-    background:
-      $input-disable
-      linear-gradient(
-        -90deg,
-        rgba(102, 204, 204, 0.2) 0%,
-        rgba(102, 133, 204, 0.2) 100%
-      );
-    transition: background-color 0.3s ease-in-out;
   }
 }

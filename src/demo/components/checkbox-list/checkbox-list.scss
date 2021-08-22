@@ -6,9 +6,7 @@
   justify-content: flex-start;
   gap: 20px;
 
-  &__input:checked ~ &__text,
-  &__input:checked ~ &__text-swiper_active {
-    display: block;
+  &__input:checked ~ &__text {
     color: white;
     background:
       $input-active
@@ -19,12 +17,23 @@
       );
   }
 
-  &__input:checked + &__text-swiper {
+  &__input:checked ~ &__text &__text-swiper {
     display: none;
   }
 
-  &__text,
-  &__text-swiper {
+  &__input:not(:checked) ~ &__text &__text-swiper {
+    display: block;
+  }
+
+  &__input:checked ~ &__text &__text-swiper_active {
+    display: block;
+  }
+
+  &__input:not(:checked) ~ &__text &__text-swiper_active {
+    display: none;
+  }
+
+  &__text {
     border-radius: 2px;
     padding: 7px 10px;
     background:

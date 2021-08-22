@@ -9,7 +9,8 @@ mixin checkBox({ checkElements})
       label.checkbox-list__element
         input.checkbox-list__input(type="checkbox" name = name checked = checked)
         if text_check
-          span.checkbox-list__text-swiper= text
-          span.checkbox-list__text-swiper.checkbox-list__text-swiper_active= text_check
+          .checkbox-list__text
+            span.checkbox-list__text-swiper= text
+            span.checkbox-list__text-swiper.checkbox-list__text-swiper_active= text_check
         else
           span.checkbox-list__text= text

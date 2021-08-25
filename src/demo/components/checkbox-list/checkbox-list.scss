@@ -1,6 +1,6 @@
 .checkbox-list {
   display: flex;
-  flex: 1 0;
+  flex-shrink: 1;
   flex-flow: row wrap;
   align-items: flex-start;
   justify-content: flex-start;
